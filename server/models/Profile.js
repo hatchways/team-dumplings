@@ -11,7 +11,7 @@ const profileSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    description: string,
+    description: String,
     gender: {
         type: String,
         required: true,
