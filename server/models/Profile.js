@@ -32,7 +32,14 @@ const profileSchema = new mongoose.Schema({
     address: {
         type: String,
         required: true
-    }
+    },
+    availability: [
+        {
+            from: Date,
+            to: Date
+        }
+    ],
+    timezone: Number
 });
 
 module.exports = Profile = mongoose.model("profile", profileSchema);
