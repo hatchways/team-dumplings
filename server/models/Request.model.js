@@ -19,9 +19,6 @@ const requestSchema = new mongoose.Schema(
       lowercase: true,
       enum: ["pending", "declined", "accepted", "paid", "progress", "done"],
     },
-    accepted: Boolean,
-    declined: Boolean,
-    paid: Boolean,
   },
   {
     timestamps: true,
