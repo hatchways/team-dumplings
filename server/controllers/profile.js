@@ -1,5 +1,7 @@
 const express = require('express');
 const Profile = require('../models/Profile');
+const User = require('../models/User');
+
 const asyncHandler = require("express-async-handler");
 
 // @route POST /profile
@@ -7,6 +9,7 @@ const asyncHandler = require("express-async-handler");
 // @access Private
 exports.createProfile = asyncHandler(async (req, res, next) => {
     const profile = new Profile(req.body);
+    profile.user = req.user.id;
 
     await profile.save(); 
     res.status(201).json({ success: { profile }});
@@ -16,12 +19,23 @@ exports.createProfile = asyncHandler(async (req, res, next) => {
 // @desc update profile
 // @access Private
 exports.updateProfile = asyncHandler(async (req, res, next) => {
-    const id = req.params.id;
-    const updates = Object.keys(req.body);
-    const allowedUpdates = ['firstName', 'lastName', 'gender', 'phoneNumber', 'address', 'availability', 'description'];
-    const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+    const userId = req.user.id;
+    const profileId = req.params.id;
+    
+    const profile = await Profile.findById(profileId)
 
-    if (! isValidOperation){
+    const isProfileOwner =  profile.user.toString() === userId;
+
+    if (!isProfileOwner) {
+        res.status(400)
+        throw new Error('This profile does not belong to you!');
+    }
+    
+    const profileUpdates = Object.keys(req.body);
+    const allowedUpdates = ['firstName', 'lastName', 'gender', 'phoneNumber', 'address', 'availability', 'description'];
+    const isValidOperation = profileUpdates.every((update) => allowedUpdates.includes(update));
+
+    if (!isValidOperation){
         res.status(404);
         throw new Error('Invalid Update');
     }
@@ -29,7 +43,7 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
     const updates = req.body;
     const options = { new: true };
 
-    const updatedProfile = await Profile.findByIdAndUpdate(id, updates, options);
+    const updatedProfile = await Profile.findByIdAndUpdate(profileId, updates, options);
     res.status(200).json({ success: { updatedProfile }});
 });
 
@@ -47,7 +61,7 @@ exports.getProfile = asyncHandler(async (req, res, next) => {
 // @desc get all profiles
 // @access Public
 exports.getAllProfiles = asyncHandler(async (req, res, next) => {
-    const profiles = await Profile.find();
+    const profiles = await Profile.find().populate({path: "user", select: { password: 0 }});
     res.status(200).json({ success: { profiles } });
 });
 
