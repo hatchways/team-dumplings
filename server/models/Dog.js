@@ -13,7 +13,6 @@ const dogSchema = new mongoose.Schema(
       lowercase: true,
       enum: ["xs", "s", "m", "l", "g"],
     },
-
     gender: {
       type: String,
       required: true,
