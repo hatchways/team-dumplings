@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const currentYear = new Date().getFullYear();
-// update the validation function in request (start>=end) Model & addressing code review comments
+
 const dogSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
