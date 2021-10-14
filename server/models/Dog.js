@@ -3,7 +3,7 @@ const currentYear = new Date().getFullYear();
 
 const dogSchema = new mongoose.Schema(
   {
-    user: { type: mongoose.Types.ObjectId, required: true, ref: "user" },
+    userId: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
     name: { type: String, required: true, trim: true, maxlength: 50 },
     breed: { type: String, required: true, trim: true, maxlength: 50 },
     size: {
@@ -42,4 +42,4 @@ const dogSchema = new mongoose.Schema(
   }
 );
 
-module.exports = dog = mongoose.model("dog", dogSchema);
+module.exports = dog = mongoose.model("Dog", dogSchema);
