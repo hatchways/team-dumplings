@@ -5,21 +5,21 @@ exports.validateCreateUpdateDog = [
   check("breed", "Please enter a breed").not().isEmpty(),
   check("size", "Please select a size").not().isEmpty(),
   check("gender", "Please select a gender").not().isEmpty(),
-  check("yearofbirth", "Please select a year of birth").not().isEmpty(),
+  check("yearOfBirth", "Please select a year of birth").not().isEmpty(),
   check("neutered", "neutered is a boolean !").not().isBoolean(),
   check("chipped", "chipped is a boolean !").not().isBoolean(),
   check("vaccinated", "vaccinated is a boolean !").not().isBoolean(),
-  check("House_trained", "House_trained is a boolean !").not().isBoolean(),
-  check("friendly_with_dogs", "friendly_with_dogs is a boolean !")
+  check("HouseTrained", "HouseTrained is a boolean !").not().isBoolean(),
+  check("friendlyWithDogs", "friendlyWithDogs is a boolean !")
     .not()
     .isBoolean(),
-  check("friendly_with_cats", "friendly_with_cats is a boolean !")
+  check("friendlyWithCats", "friendlyWithCats is a boolean !")
     .not()
     .isBoolean(),
-  check("friendly_with_kids", "friendly_with_kids is a boolean !")
+  check("friendlyWithKids", "friendlyWithKids is a boolean !")
     .not()
     .isBoolean(),
-  check("friendly_with_adults", "friendly_with_adults is a boolean !")
+  check("friendlyWithAdults", "friendlyWithAdults is a boolean !")
     .not()
     .isBoolean(),
   check(
@@ -31,7 +31,6 @@ exports.validateCreateUpdateDog = [
   (req, res, next) => {
     const errors = validationResult(req);
 
-    console.log(errors);
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() });
     next();
