@@ -11,8 +11,8 @@ const logger = require("morgan");
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
-const requestRouter = require("./routes/request.route");
-const dogRouter = require("./routes/dog.route");
+const requestRouter = require("./routes/request");
+const dogRouter = require("./routes/dog");
 
 const { json, urlencoded } = express;
 
