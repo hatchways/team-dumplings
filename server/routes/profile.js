@@ -9,12 +9,12 @@ const {
 } = require('../controllers/profile');
 
 
-router.route('/').post(createProfile);
+router.route('/').post(protect, createProfile);
 
 router.route('/:id').patch(protect, updateProfile);
 
 router.route('/:id').get(protect, getProfile);
 
-router.route('/').get(protect, getAllProfiles);
+router.route('/').get(getAllProfiles);
 
-module.exports = router
+module.exports = router;
