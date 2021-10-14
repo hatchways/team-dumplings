@@ -7,7 +7,6 @@ const dogSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true, maxlength: 50 },
     breed: { type: String, required: true, trim: true, maxlength: 50 },
     size: {
-      // [extra small | small | meduim | large | giant]
       type: String,
       required: true,
       trim: true,
@@ -22,7 +21,7 @@ const dogSchema = new mongoose.Schema(
       lowercase: true,
       enum: ["male", "female"],
     },
-    yearofbirth: {
+    yearOfBirth: {
       type: Number,
       required: true,
       min: currentYear - 40,
@@ -31,11 +30,11 @@ const dogSchema = new mongoose.Schema(
     neutered: { type: Boolean, default: false },
     chipped: { type: Boolean, default: false },
     vaccinated: { type: Boolean, default: false },
-    House_trained: { type: Boolean, default: false },
-    friendly_with_dogs: { type: Boolean, default: false },
-    friendly_with_cats: { type: Boolean, default: false },
-    friendly_with_kids: { type: Boolean, default: false },
-    friendly_with_adults: { type: Boolean, default: false },
+    HouseTrained: { type: Boolean, default: false },
+    friendlyWithDogs: { type: Boolean, default: false },
+    friendlyWithCats: { type: Boolean, default: false },
+    friendlyWithKids: { type: Boolean, default: false },
+    friendlyWithAdults: { type: Boolean, default: false },
     description: { type: String, trim: true, maxlength: 1024 },
   },
   {
@@ -43,4 +42,4 @@ const dogSchema = new mongoose.Schema(
   }
 );
 
-module.exports = Dog = mongoose.model("dog", dogSchema);
+module.exports = dog = mongoose.model("dog", dogSchema);
