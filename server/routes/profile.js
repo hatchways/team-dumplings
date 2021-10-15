@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const protect = require('../middleware/auth');
+const isProfileValidInputs = require('../middleware/isProfileValidInputs');
 const { 
     createProfile, 
     updateProfile, 
@@ -9,9 +10,9 @@ const {
 } = require('../controllers/profile');
 
 
-router.route('/').post(protect, createProfile);
+router.route('/').post(protect, isProfileValidInputs, createProfile);
 
-router.route('/:id').patch(protect, updateProfile);
+router.route('/:id').patch(protect, isProfileValidInputs, updateProfile);
 
 router.route('/:id').get(protect, getProfile);
 

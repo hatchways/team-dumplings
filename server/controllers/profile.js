@@ -1,6 +1,7 @@
 const express = require('express');
 const Profile = require('../models/Profile');
 const User = require('../models/User');
+const isProfileValidInputs = require('../utils/isProfileValidInputs');
 
 const asyncHandler = require("express-async-handler");
 
@@ -31,14 +32,14 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
         throw new Error('This profile does not belong to you!');
     }
     
-    const profileUpdates = Object.keys(req.body);
-    const allowedUpdates = ['firstName', 'lastName', 'gender', 'phoneNumber', 'address', 'availability', 'description'];
-    const isValidOperation = profileUpdates.every((update) => allowedUpdates.includes(update));
+    // const profileUpdates = Object.keys(req.body);
+    // const allowedUpdates = ['firstName', 'lastName', 'gender', 'phoneNumber', 'address', 'availability', 'description'];
+    // const isValidOperation = profileUpdates.every((update) => allowedUpdates.includes(update));
 
-    if (!isValidOperation){
-        res.status(404);
-        throw new Error('Invalid Update');
-    }
+    // if (!isValidOperation){
+    //     res.status(404);
+    //     throw new Error('Invalid Update');
+    // }
 
     const updates = req.body;
     const options = { new: true };
