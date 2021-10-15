@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const profileSchema = new mongoose.Schema({
     user: {
         type: mongoose.Types.ObjectId,
-        ref: "user"
+        ref: "User"
     },
     firstName: {
         type: String,
@@ -41,4 +41,4 @@ const profileSchema = new mongoose.Schema({
     timezone: Number
 });
 
-module.exports = Profile = mongoose.model("profile", profileSchema);
+module.exports = Profile = mongoose.model("Profile", profileSchema);
