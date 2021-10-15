@@ -1,7 +1,7 @@
-const isProfileValidInputs = (req, res, next) {
+const isProfileValidInputs = (req, res, next) => {
     const inputs = Object.keys(req.body);
     const allowedInputs = ['firstName', 'lastName', 'gender', 'phoneNumber', 'address', 'availability', 'description'];
-    const isValidOperation = profileUpdates.every((input) => allowedInputs.includes(input));
+    const isValidOperation = inputs.every((input) => allowedInputs.includes(input));
 
     if (!isValidOperation) {
         res.status(400);
