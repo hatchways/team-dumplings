@@ -20,7 +20,7 @@ exports.loadDog = asyncHandler(async (req, res, next) => {
 });
 
 // @route GET /dogs
-// @desc Get dogs for logged in user
+// @desc Get dogs for logged in user (dog owner)
 // @access Private
 exports.listDogs = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
@@ -29,7 +29,7 @@ exports.listDogs = asyncHandler(async (req, res, next) => {
     throw new Error("Not authorized");
   }
 
-  const dogs = await Dog.find({ userId: ObjectId(user._id) });
+  const dogs = await Dog.find({ ownerId: ObjectId(user._id) });
   res.status(200).json({
     success: {
       dogs,
@@ -59,7 +59,7 @@ exports.createDog = asyncHandler(async (req, res, next) => {
   } = req.body);
 
   const dog = await Dog.create({
-    userId: ObjectId(req.user.id),
+    ownerId: ObjectId(req.user.id),
     ...newDog,
   });
 
