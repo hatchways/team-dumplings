@@ -16,7 +16,7 @@ exports.loadRequest = asyncHandler(async (req, res, next) => {
         request,
       },
     });
-  } else res.status(400).json({ errors: "Bad request !" });
+  } else res.sendStatus(404);
 });
 
 // @route GET /requests
@@ -59,8 +59,8 @@ exports.createRequest = asyncHandler(async (req, res, next) => {
       },
     });
   } else {
-    res.status(400);
-    throw new Error("Invalid request data");
+    res.status(500);
+    throw new Error("Internal Server Error");
   }
 });
 
@@ -68,8 +68,14 @@ exports.createRequest = asyncHandler(async (req, res, next) => {
 // @desc Del request for logged in user (dog owner)
 // @access Private
 exports.deleteRequest = asyncHandler(async (req, res, next) => {
-  let id = req.params.id;
-  const removedRequest = await Request.findByIdAndRemove(id);
+  const id = req.params.id;
+  const authenticatedUserId = req.user.id;
+
+  const removedRequest = await Request.findOneAndDelete({
+    _id: id,
+    ownerId: authenticatedUserId,
+    status: { $in: ["pending", "declined", "done"] },
+  });
 
   if (removedRequest) {
     res.status(200).send({
@@ -77,8 +83,7 @@ exports.deleteRequest = asyncHandler(async (req, res, next) => {
         request: removedRequest,
       },
     });
-  } else
-    res.status(400).json({ errors: "Bad request, Request does not exist !" });
+  } else res.sendStatus(404);
 });
 
 // @route BATCH /requests/:id
@@ -86,18 +91,32 @@ exports.deleteRequest = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.updateRequest = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const newRequestData = ({ sitterId, dogId, start, end, status } = req.body);
+  const authenticatedUserId = req.user.id;
 
-  const updatedRequest = await Request.findByIdAndUpdate(id, newRequestData, {
-    runValidators: true,
-    new: true,
-  });
+  const user = await User.findById(authenticatedUserId);
+  if (!user) {
+    res.status(401);
+    throw new Error("Not authorized");
+  }
+
+  const newRequestData = ({ sitterId, dogId, start, end, status } = req.body);
+  const updatedRequest = await Request.findOneAndUpdate(
+    {
+      _id: id,
+      status: "pending",
+    },
+    newRequestData,
+    {
+      runValidators: true,
+      new: true,
+    }
+  );
+
   if (updatedRequest) {
     res.status(200).send({
       success: {
         request: updatedRequest,
       },
     });
-  } else
-    res.status(400).json({ errors: "Bad request, Request does not exist !" });
+  } else res.sendStatus(404);
 });
