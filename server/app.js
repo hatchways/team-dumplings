@@ -11,6 +11,8 @@ const logger = require("morgan");
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
+const requestRouter = require("./routes/request");
+const dogRouter = require("./routes/dog");
 
 const { json, urlencoded } = express;
 
@@ -43,6 +45,9 @@ app.use((req, res, next) => {
 
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
+
+app.use("/requests", requestRouter);
+app.use("/dogs", dogRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
