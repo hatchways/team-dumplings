@@ -29,7 +29,7 @@ exports.listRequests = asyncHandler(async (req, res, next) => {
     throw new Error("Not authorized");
   }
 
-  const requests = await Request.find({ userId: ObjectId(user._id) });
+  const requests = await Request.find({ sitterId: ObjectId(user._id) });
 
   res.status(200).json({
     success: {
@@ -45,7 +45,7 @@ exports.createRequest = asyncHandler(async (req, res, next) => {
   const { sitterId, dogId, start, end, status } = req.body;
 
   const request = await Request.create({
-    userId: ObjectId(req.user.id),
+    ownerId: ObjectId(req.user.id),
     sitterId: ObjectId(sitterId),
     dogId: ObjectId(dogId),
     start,
