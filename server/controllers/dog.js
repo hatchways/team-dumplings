@@ -16,7 +16,7 @@ exports.loadDog = asyncHandler(async (req, res, next) => {
         dog,
       },
     });
-  } else res.status(400).json({ errors: "Bad request !" });
+  } else res.sendStatus(404);
 });
 
 // @route GET /dogs
@@ -70,8 +70,8 @@ exports.createDog = asyncHandler(async (req, res, next) => {
       },
     });
   } else {
-    res.status(400);
-    throw new Error("Invalid dog data");
+    res.status(500);
+    throw new Error("Internal Server Error");
   }
 });
 
@@ -79,8 +79,13 @@ exports.createDog = asyncHandler(async (req, res, next) => {
 // @desc Del dog for logged in user (dog owner)
 // @access Private
 exports.deleteDog = asyncHandler(async (req, res, next) => {
-  let id = req.params.id;
-  const removedDog = await Dog.findByIdAndRemove(id);
+  const id = req.params.id;
+  const authenticatedOwnerId = req.user.id;
+
+  const removedDog = await Dog.findOneAndDelete({
+    _id: id,
+    ownerId: authenticatedOwnerId,
+  });
 
   if (removedDog) {
     res.status(200).send({
@@ -88,7 +93,7 @@ exports.deleteDog = asyncHandler(async (req, res, next) => {
         dog: removedDog,
       },
     });
-  } else res.status(400).json({ errors: "Bad request, Dog does not exist !" });
+  } else res.sendStatus(404);
 });
 
 // @route BATCH /dogs/:id
@@ -96,8 +101,10 @@ exports.deleteDog = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.updateDog = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
+  const authenticatedOwnerId = req.user.id;
+
   const newDogData = ({
-    userId,
+    ownerId,
     name,
     breed,
     size,
@@ -114,6 +121,11 @@ exports.updateDog = asyncHandler(async (req, res, next) => {
     description,
   } = req.body);
 
+  if (!(authenticatedOwnerId === ownerId)) {
+    res.status(403);
+    throw new Error("You don’t have permission to access this resource.");
+  }
+
   const updatedDog = await Dog.findByIdAndUpdate(id, newDogData, {
     runValidators: true,
     new: true,
@@ -124,5 +136,5 @@ exports.updateDog = asyncHandler(async (req, res, next) => {
         dog: updatedDog,
       },
     });
-  } else res.status(400).json({ errors: "Bad request, Dog does not exist !" });
+  } else res.sendStatus(404);
 });
