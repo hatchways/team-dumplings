@@ -3,7 +3,7 @@ const currentYear = new Date().getFullYear();
 
 const dogSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
+    ownerId: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
     name: { type: String, required: true, trim: true, maxlength: 50 },
     breed: { type: String, required: true, trim: true, maxlength: 50 },
     size: {
