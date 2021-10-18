@@ -8,9 +8,13 @@ const asyncHandler = require("express-async-handler");
 // @access Private
 exports.createProfile = asyncHandler(async (req, res, next) => {
     const profile = new Profile(req.body);
+    const user = await User.findById(req.user.id);
+
     profile.user = req.user.id;
+    user.profile = profile._id;
 
     await profile.save(); 
+    await user.save();
     res.status(201).json({ success: { profile }});
 });
 
