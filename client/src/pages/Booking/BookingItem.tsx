@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
@@ -11,13 +12,26 @@ import {
   Typography,
 } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
+import moment from 'moment';
 import { useState } from 'react';
+import { CustomButton } from '../../components/Button/CustomButton';
 import useStyles from './useStyles';
 
-const BookingItem = () => {
+interface Props {
+  _id: string;
+  fullName: string;
+  start: Date;
+  end: Date;
+  status: string;
+  username?: string;
+  sitterId?: string;
+}
+
+const BookingItem = ({ fullName, start, end, status, _id }: Props): JSX.Element => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
@@ -44,12 +58,10 @@ const BookingItem = () => {
               elevation={0}
             >
               <MenuItem onClick={handleClose}>View</MenuItem>
-              <MenuItem onClick={handleClose}>Accept</MenuItem>
-              <MenuItem onClick={handleClose}>Decline</MenuItem>
             </Menu>
           </>
         }
-        title="5 April 2020, 10-12 AM"
+        title={`${moment(start).format('DD MMMM  YYYY, h:mm a')} | | ${moment(end).format('DD-MM-YY, h:mm a')}`}
       />
       <CardContent className={classes.currentBookingCardContent}>
         <Box className={classes.avatarContainer}>
@@ -59,14 +71,23 @@ const BookingItem = () => {
             component="span"
             className={classes.avatarFullName}
           ></Typography>
-          <Avatar aria-label="next booking" alt="Hatch ways.." src="https://i.pravatar.cc/300" />
+          <Avatar aria-label="booking" alt="Hatch ways.." src="https://i.pravatar.cc/300" />
           <Typography variant="h6" color="textSecondary" component="span" className={classes.avatarFullName}>
-            Kayden Boyle
+            {fullName}
           </Typography>
         </Box>
-        <Typography variant="h6" color="textSecondary" component="span" className={classes.bookingStatus}>
-          ACCEPTED
-        </Typography>
+        <Grid container direction="column" justifyContent="center" alignItems="center">
+          <Typography
+            variant="button"
+            color="textPrimary"
+            component="h6"
+            className={classes.bookingStatus}
+            align={'center'}
+          >
+            {status}
+          </Typography>
+          <CustomButton linkTo={'/'} btnText={'checkout'} style={'checkout'} disable={status !== 'accepted' && true} />
+        </Grid>
       </CardContent>
     </Card>
   );
