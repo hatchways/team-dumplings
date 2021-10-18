@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     cursor: 'pointer',
   },
-  leftLogoImg: {},
+
   leftLogoText: {
     marginLeft: theme.spacing(1),
     fontSize: 22,
