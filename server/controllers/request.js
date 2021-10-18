@@ -12,9 +12,7 @@ exports.loadRequest = asyncHandler(async (req, res, next) => {
 
   if (request) {
     res.status(200).send({
-      success: {
-        request,
-      },
+      request,
     });
   } else res.sendStatus(404);
 });
@@ -29,12 +27,12 @@ exports.listRequests = asyncHandler(async (req, res, next) => {
     throw new Error("Not authorized");
   }
 
-  const requests = await Request.find({ sitterId: ObjectId(user._id) });
+  const requests = await Request.find({
+    sitterId: ObjectId(user._id),
+  }).populate("sitterId", "username");
 
   res.status(200).json({
-    success: {
-      requests,
-    },
+    requests,
   });
 });
 
@@ -54,9 +52,7 @@ exports.createRequest = asyncHandler(async (req, res, next) => {
   });
   if (request) {
     res.status(201).json({
-      success: {
-        request,
-      },
+      request,
     });
   } else {
     res.status(500);
@@ -79,9 +75,7 @@ exports.deleteRequest = asyncHandler(async (req, res, next) => {
 
   if (removedRequest) {
     res.status(200).send({
-      success: {
-        request: removedRequest,
-      },
+      request: removedRequest,
     });
   } else res.sendStatus(404);
 });
@@ -114,9 +108,7 @@ exports.updateRequest = asyncHandler(async (req, res, next) => {
 
   if (updatedRequest) {
     res.status(200).send({
-      success: {
-        request: updatedRequest,
-      },
+      request: updatedRequest,
     });
   } else res.sendStatus(404);
 });

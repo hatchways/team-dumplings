@@ -12,9 +12,7 @@ exports.loadDog = asyncHandler(async (req, res, next) => {
 
   if (dog) {
     res.status(200).send({
-      success: {
-        dog,
-      },
+      dog,
     });
   } else res.sendStatus(404);
 });
@@ -31,9 +29,7 @@ exports.listDogs = asyncHandler(async (req, res, next) => {
 
   const dogs = await Dog.find({ ownerId: ObjectId(user._id) });
   res.status(200).json({
-    success: {
-      dogs,
-    },
+    dogs,
   });
 });
 
@@ -65,9 +61,7 @@ exports.createDog = asyncHandler(async (req, res, next) => {
 
   if (dog) {
     res.status(201).json({
-      success: {
-        dog,
-      },
+      dog,
     });
   } else {
     res.status(500);
@@ -89,9 +83,7 @@ exports.deleteDog = asyncHandler(async (req, res, next) => {
 
   if (removedDog) {
     res.status(200).send({
-      success: {
-        dog: removedDog,
-      },
+      dog: removedDog,
     });
   } else res.sendStatus(404);
 });
@@ -132,9 +124,7 @@ exports.updateDog = asyncHandler(async (req, res, next) => {
   });
   if (updatedDog) {
     res.status(200).send({
-      success: {
-        dog: updatedDog,
-      },
+      dog: updatedDog,
     });
   } else res.sendStatus(404);
 });
