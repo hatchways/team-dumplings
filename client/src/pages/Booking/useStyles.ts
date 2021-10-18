@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: '100vh',
-
+    background: '#fafafa',
     '& .MuiInput-underline:before': {
       borderBottom: '1.2px solid rgba(0, 0, 0, 0.2)',
     },
@@ -19,24 +19,28 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100%',
     border: 'none',
     display: 'flex',
+    backgroundColor: 'transparent',
     flexDirection: 'column',
   },
   nextBooking: {
+    display: 'none',
     paddingTop: theme.spacing(1),
     paddingRight: theme.spacing(10),
     paddingLeft: theme.spacing(10),
     '& .MuiCardHeader-title': {
       fontWeight: 600,
       fontSize: 12,
+      textTransform: 'uppercase',
     },
   },
-  currentBooking: {
+  bookingsBox: {
     paddingTop: theme.spacing(2),
     paddingRight: theme.spacing(10),
     paddingLeft: theme.spacing(10),
     '& .MuiCardHeader-title': {
       fontWeight: 600,
       fontSize: 12,
+      textTransform: 'uppercase',
     },
   },
   nextBookingCardContent: {
@@ -58,13 +62,15 @@ const useStyles = makeStyles((theme) => ({
   avatarContainer: {
     display: 'flex',
     alignItems: 'center',
+    marginRight: theme.spacing(25),
   },
-  currentBookingList: {
+  bookingList: {
     overflowY: 'scroll',
-    height: '50vh',
+    height: '100%',
   },
   bookingStatus: {
-    marginRight: theme.spacing(4),
+    marginRight: theme.spacing(1),
+    textTransform: 'uppercase',
   },
   currentBookingCardHeader: {
     paddingBottom: 0,
@@ -91,16 +97,26 @@ const useStyles = makeStyles((theme) => ({
   },
   datePicker: {
     display: 'flex',
+    position: 'fixed',
     alignItems: 'center',
+    maxWidth: '55%',
     justifyContent: 'start',
-    paddingTop: theme.spacing(1),
+    marginTop: theme.spacing(1),
+
     '& .MuiPickersBasePicker-pickerView': {
+      display: 'flex',
+      alignItems: 'center',
       maxWidth: '100%',
       minWidth: '100%',
       minHeight: '100%',
       padding: theme.spacing(1),
     },
-    '& .MuiPickersStaticWrapper-staticWrapperRoot': {},
+    '& .MuiPickersStaticWrapper-staticWrapperRoot': {
+      maxWidth: '100%',
+      minWidth: '100%',
+      minHeight: '100%',
+      borderRadius: 5,
+    },
     '& .MuiTypography-body1 ': {
       color: theme.palette.primary.main,
     },
