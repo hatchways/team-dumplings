@@ -8,7 +8,7 @@ const NavMenu = (): JSX.Element => {
     <Box className={buttonContainer}>
       <CustomButton linkTo={'/sitters'} btnText={'My Sitters'} style={'mySitters'} />
       <CustomButton linkTo={'/messages'} btnText={'Messages'} style={'messages'} status={'active'} />
-      <Avatar alt="Hatch ways.." src="https://i.pravatar.cc/300" />
+      <Avatar alt="Marketplace for Dog Sitters, Dog Owners" src="https://i.pravatar.cc/300" />
     </Box>
   );
 };
