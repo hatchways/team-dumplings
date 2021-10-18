@@ -54,7 +54,6 @@ const Booking = (): JSX.Element => {
     };
 
     async function getRequests() {
-      // send request to back end
       setLoading(true);
       const response = await listRequests();
 
@@ -95,7 +94,7 @@ const Booking = (): JSX.Element => {
               <CardHeader title="next bookings:" />
 
               <CardContent className={classes.bookingList}>
-                {loading === false &&
+                {!loading &&
                   nextBooking.map((request, index) => (
                     <BookingItem
                       _id={request._id}
@@ -105,10 +104,10 @@ const Booking = (): JSX.Element => {
                       status={request.status}
                       username={request.ownerId}
                       sitterId={request.sitterId._id}
-                      key={index}
+                      key={request._id}
                     />
                   ))}
-                {loading === false && nextBooking.length === 0 && (
+                {!loading && nextBooking.length === 0 && (
                   <Typography variant="body1" color="textSecondary">
                     No <b> Next </b> Bookings in the Selected Date.
                   </Typography>
@@ -122,7 +121,7 @@ const Booking = (): JSX.Element => {
               <CardHeader title="current bookings:" />
 
               <CardContent className={classes.bookingList}>
-                {loading === false &&
+                {!loading &&
                   currentBookings.map((request, index) => (
                     <BookingItem
                       _id={request._id}
@@ -132,10 +131,10 @@ const Booking = (): JSX.Element => {
                       status={request.status}
                       username={request.ownerId}
                       sitterId={request.sitterId._id}
-                      key={index}
+                      key={request._id}
                     />
                   ))}
-                {loading === false && currentBookings.length === 0 && (
+                {!loading && currentBookings.length === 0 && (
                   <Typography variant="body1" color="textSecondary">
                     No <b> Current </b> Bookings in the Selected Date.
                   </Typography>
@@ -144,7 +143,7 @@ const Booking = (): JSX.Element => {
 
               <CardHeader title="past bookings:" />
               <CardContent className={classes.bookingList}>
-                {loading === false &&
+                {!loading &&
                   pastBookings.map((request, index) => (
                     <BookingItem
                       _id={request._id}
@@ -154,10 +153,10 @@ const Booking = (): JSX.Element => {
                       status={request.status}
                       username={request.ownerId}
                       sitterId={request.sitterId._id}
-                      key={index}
+                      key={request._id}
                     />
                   ))}
-                {loading === false && pastBookings.length === 0 && (
+                {!loading && pastBookings.length === 0 && (
                   <Typography variant="body1" color="textSecondary">
                     No <b> past </b> Bookings
                   </Typography>
@@ -168,7 +167,16 @@ const Booking = (): JSX.Element => {
         </Grid>
 
         <Grid item md={6} className={classes.rightContainer}>
-          <Box className={classes.datePicker} component={Paper} borderRadius={5}>
+          <Box
+            className={classes.datePicker}
+            component={Paper}
+            borderRadius={5}
+            display="flex"
+            alignItems="center"
+            justifyContent="start"
+            maxWidth="55%"
+            position="fixed"
+          >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker
                 autoOk={true}

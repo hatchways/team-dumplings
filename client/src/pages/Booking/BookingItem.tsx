@@ -16,6 +16,7 @@ import moment from 'moment';
 import { useState } from 'react';
 import { CustomButton } from '../../components/Button/CustomButton';
 import useStyles from './useStyles';
+import { useTheme } from '@material-ui/core/styles';
 
 interface Props {
   _id: string;
@@ -28,6 +29,7 @@ interface Props {
 }
 
 const BookingItem = ({ fullName, start, end, status, _id }: Props): JSX.Element => {
+  const theme = useTheme();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -64,14 +66,14 @@ const BookingItem = ({ fullName, start, end, status, _id }: Props): JSX.Element 
         title={`${moment(start).format('DD MMMM  YYYY, h:mm a')} | | ${moment(end).format('DD-MM-YY, h:mm a')}`}
       />
       <CardContent className={classes.currentBookingCardContent}>
-        <Box className={classes.avatarContainer}>
+        <Box display="flex" alignItems="center" marginRight={`${theme.spacing(25)}px`}>
           <Typography
             variant="h6"
             color="textSecondary"
             component="span"
             className={classes.avatarFullName}
           ></Typography>
-          <Avatar aria-label="booking" alt="Hatch ways.." src="https://i.pravatar.cc/300" />
+          <Avatar aria-label="booking" alt="Marketplace for Dog Sitters, Dog Owners" src="https://i.pravatar.cc/300" />
           <Typography variant="h6" color="textSecondary" component="span" className={classes.avatarFullName}>
             {fullName}
           </Typography>
