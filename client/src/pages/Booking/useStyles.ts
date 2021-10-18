@@ -34,9 +34,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   bookingsBox: {
-    paddingTop: theme.spacing(2),
-    paddingRight: theme.spacing(10),
-    paddingLeft: theme.spacing(10),
+    padding: theme.spacing(2, 10, 0, 10),
     '& .MuiCardHeader-title': {
       fontWeight: 600,
       fontSize: 12,
@@ -58,11 +56,6 @@ const useStyles = makeStyles((theme) => ({
     border: '0.5px solid rgba(0, 0, 0, 0.2)',
     borderRadius: 1,
     marginBottom: theme.spacing(2),
-  },
-  avatarContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    marginRight: theme.spacing(25),
   },
   bookingList: {
     overflowY: 'scroll',
@@ -96,13 +89,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   datePicker: {
-    display: 'flex',
-    position: 'fixed',
-    alignItems: 'center',
-    maxWidth: '55%',
-    justifyContent: 'start',
-    marginTop: theme.spacing(1),
-
+    marginTop: theme.spacing(2),
     '& .MuiPickersBasePicker-pickerView': {
       display: 'flex',
       alignItems: 'center',
