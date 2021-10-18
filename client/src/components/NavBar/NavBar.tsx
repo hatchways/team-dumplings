@@ -12,7 +12,7 @@ export default function NavBar(): JSX.Element {
     <AppBar position="fixed">
       <Toolbar className={toolbar}>
         <Paper variant="outlined" className={leftLogoContainer}>
-          <img src="/assets/logo.png" />
+          <img src="/assets/logo.png" alt="Marketplace for Dog Sitters, Dog Owners" />
           <Typography variant="h4" className={leftLogoText}>
             LovingSitter.
           </Typography>
