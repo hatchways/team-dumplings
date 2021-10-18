@@ -1,30 +1,76 @@
 import DateFnsUtils from '@date-io/date-fns';
-import {
-  Avatar,
-  Badge,
-  Box,
-  Card,
-  CardContent,
-  CardHeader,
-  CssBaseline,
-  Grid,
-  IconButton,
-  Menu,
-  MenuItem,
-  Paper,
-  Typography,
-} from '@material-ui/core';
-import SettingsIcon from '@material-ui/icons/Settings';
+import { Badge, Box, Card, CardContent, CardHeader, Grid, Paper, Typography } from '@material-ui/core';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { useState } from 'react';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar/NavBar';
+import { listRequests } from '../../helpers/APICalls/listRequests';
+import { Request } from '../../interface/Request';
 import BookingItem from './BookingItem';
 import useStyles from './useStyles';
 
-const Booking = () => {
+const Booking = (): JSX.Element => {
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [nextBooking, setNextBooking] = useState<Request[]>([]);
+  const [currentBookings, setCurrentBookings] = useState<Request[]>([]);
+  const [pastBookings, setPastBookings] = useState<Request[]>([]);
+  const [bookingDays, setBookingDays] = useState<string[]>([]);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [loading, setLoading] = useState<undefined | boolean>(undefined);
+  const [date, setDate] = useState(new Date() as MaterialUiPickersDate);
 
+  const saveRequests = (requests: Request[]) => {
+    setRequests(requests);
+  };
+
+  useEffect(() => {
+    let ignore = true;
+
+    const initBookingDays = (requests: Request[]) => {
+      const dates = requests.map((request) => {
+        return moment(request.start).format('MM/DD/YYYY');
+      });
+      setBookingDays(dates);
+      const nxtBkn: Request[] = [];
+      const crntBkns: Request[] = [];
+      const pstBkns: Request[] = [];
+      const selectedDate = moment(date).startOf('day');
+
+      requests.forEach((booking) => {
+        const startDate = moment(booking.start).startOf('day');
+        if (startDate.diff(selectedDate, 'days') > 0) {
+          nxtBkn.push(booking);
+        } else if (startDate.diff(selectedDate, 'days') === 0) {
+          crntBkns.push(booking);
+        } else {
+          pstBkns.push(booking);
+        }
+      });
+      setNextBooking(nxtBkn);
+      setCurrentBookings(crntBkns);
+      setPastBookings(pstBkns);
+    };
+
+    async function getRequests() {
+      // send request to back end
+      setLoading(true);
+      const response = await listRequests();
+
+      if (ignore && response && response.requests) {
+        saveRequests(response.requests);
+        initBookingDays(response.requests);
+      }
+      setLoading(false);
+    }
+    getRequests();
+    return () => {
+      ignore = false;
+    };
+  }, [date]);
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
@@ -33,66 +79,96 @@ const Booking = () => {
     setAnchorEl(null);
   };
 
-  const items = [...Array(10).keys()];
+  const onDateChange = (date: MaterialUiPickersDate): MaterialUiPickersDate => {
+    setDate(date);
+    return date;
+  };
 
   return (
     <>
-      <NavBar isActive={true} />
+      <NavBar />
 
       <Grid container className={classes.root}>
-        <CssBaseline />
         <Grid item md={6} className={classes.leftContainer}>
-          <Box className={classes.nextBooking}>
+          <Box className={classes.bookingsBox}>
             <Card component={Paper}>
-              <CardHeader
-                action={
-                  <>
-                    <IconButton
-                      aria-label="settings"
-                      aria-controls="simple-menu1"
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <SettingsIcon />
-                    </IconButton>
-                    <Menu
-                      id="simple-menu1"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                      elevation={0}
-                    >
-                      <MenuItem onClick={handleClose}>View</MenuItem>
-                      <MenuItem onClick={handleClose}>Accept</MenuItem>
-                      <MenuItem onClick={handleClose}>Decline</MenuItem>
-                    </Menu>
-                  </>
-                }
-                title=" YOUR NEXT BOOKING"
-                subheader="5 April 2020, 10-12 AM "
-              />
-              <CardContent className={classes.nextBookingCardContent}>
-                <Avatar aria-label="next booking" alt="Hatch ways.." src="https://i.pravatar.cc/300" />
-                <Typography variant="h6" color="textSecondary" component="span" className={classes.avatarFullName}>
-                  Nama Byers
-                </Typography>
+              <CardHeader title="next bookings:" />
+
+              <CardContent className={classes.bookingList}>
+                {loading === false &&
+                  nextBooking.map((request, index) => (
+                    <BookingItem
+                      _id={request._id}
+                      fullName={request.sitterId.username}
+                      start={request.start}
+                      end={request.end}
+                      status={request.status}
+                      username={request.ownerId}
+                      sitterId={request.sitterId._id}
+                      key={index}
+                    />
+                  ))}
+                {loading === false && nextBooking.length === 0 && (
+                  <Typography variant="body1" color="textSecondary">
+                    No <b> Next </b> Bookings in the Selected Date.
+                  </Typography>
+                )}
               </CardContent>
             </Card>
           </Box>
-          <Box className={classes.currentBooking}>
+
+          <Box className={classes.bookingsBox}>
             <Card component={Paper}>
-              <CardHeader title="CURRENT BOOKINGS" />
-              <CardContent className={classes.currentBookingList}>
-                {items.map((item, index) => (
-                  <BookingItem key={index} />
-                ))}
+              <CardHeader title="current bookings:" />
+
+              <CardContent className={classes.bookingList}>
+                {loading === false &&
+                  currentBookings.map((request, index) => (
+                    <BookingItem
+                      _id={request._id}
+                      fullName={request.sitterId.username}
+                      start={request.start}
+                      end={request.end}
+                      status={request.status}
+                      username={request.ownerId}
+                      sitterId={request.sitterId._id}
+                      key={index}
+                    />
+                  ))}
+                {loading === false && currentBookings.length === 0 && (
+                  <Typography variant="body1" color="textSecondary">
+                    No <b> Current </b> Bookings in the Selected Date.
+                  </Typography>
+                )}
+              </CardContent>
+
+              <CardHeader title="past bookings:" />
+              <CardContent className={classes.bookingList}>
+                {loading === false &&
+                  pastBookings.map((request, index) => (
+                    <BookingItem
+                      _id={request._id}
+                      fullName={request.sitterId.username}
+                      start={request.start}
+                      end={request.end}
+                      status={request.status}
+                      username={request.ownerId}
+                      sitterId={request.sitterId._id}
+                      key={index}
+                    />
+                  ))}
+                {loading === false && pastBookings.length === 0 && (
+                  <Typography variant="body1" color="textSecondary">
+                    No <b> past </b> Bookings
+                  </Typography>
+                )}
               </CardContent>
             </Card>
           </Box>
         </Grid>
+
         <Grid item md={6} className={classes.rightContainer}>
-          <Box className={classes.datePicker}>
+          <Box className={classes.datePicker} component={Paper} borderRadius={5}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker
                 autoOk={true}
@@ -100,13 +176,13 @@ const Booking = () => {
                 variant="static"
                 label="Only calendar"
                 helperText="No year selection"
-                value={new Date(2020, 3, 5)}
-                onChange={() => onchange}
+                value={date}
+                onChange={onDateChange}
                 renderDay={(day, selectedDate, isInCurrentMonth, dayComponent) => {
-                  const date = day?.getDate();
-                  const isSelected = date === 5 || date === 8;
-
-                  return <Badge className={isSelected ? 'day ' + classes.selectedDay : 'day'}>{dayComponent}</Badge>;
+                  const calendarDay = moment(day).format('MM/DD/YYYY');
+                  const isSelected = bookingDays.includes(calendarDay);
+                  const badgeStyle = isSelected ? 'day ' + classes.selectedDay : 'day';
+                  return <Badge className={badgeStyle}>{dayComponent}</Badge>;
                 }}
               />
             </MuiPickersUtilsProvider>
