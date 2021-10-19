@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-const protect = (req, res, next) => {
+const protect = async (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
@@ -12,7 +13,12 @@ const protect = (req, res, next) => {
 
     req.user = decoded;
 
-    next();
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      res.status(401).send("Not authorized");
+    } else {
+      next();
+    }
   } catch (err) {
     res.status(401).send("Token is not valid");
   }
