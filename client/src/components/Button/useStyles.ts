@@ -26,7 +26,13 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent',
       color: '#f04040',
     },
-
+    '&.findMyDog': {
+      textTransform: 'uppercase',
+      width: '38%',
+      [theme.breakpoints.down('sm')]: {
+        width: '50%',
+      },
+    },
     '&.mySitters': {
       padding: theme.spacing(1, 4, 1, 4),
       backgroundColor: 'transparent',
@@ -73,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.common.white,
       },
       [theme.breakpoints.down('sm')]: {
-        color: '#f04040',
+        color: '#f04040 !important',
       },
     },
     '&.signup': {
