@@ -6,8 +6,14 @@ import Button from '@material-ui/core/Button';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 
+import { editProfile } from '../../helpers/APICalls/profile';
+import { useSnackBar } from '../../context/useSnackbarContext';
+
+import { useAuth } from '../../context/useAuthContext';
+
 export default function EditProfile(): JSX.Element {
   const classes = useStyles();
+  const { updateSnackBarMessage } = useSnackBar();
 
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
@@ -17,6 +23,24 @@ export default function EditProfile(): JSX.Element {
   const [phone, setPhone] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [desc, setDesc] = useState<string>('');
+
+  const auth = useAuth();
+
+  const onSave = () => {
+    const inputs = { firstName, lastName, gender, birthDate, phone, address, desc };
+    const id = auth.loggedInUser ? auth.loggedInUser.profile : '';
+
+    editProfile(inputs, id).then((data) => {
+      if (data.error) {
+        updateSnackBarMessage(data.error.error);
+      } else if (data.success) {
+        updateSnackBarMessage('Your profile has been updated successfully');
+      } else {
+        console.error({ data });
+        updateSnackBarMessage('An unexpected error occurred. Please try again');
+      }
+    });
+  };
 
   return (
     <React.Fragment>
@@ -184,6 +208,7 @@ export default function EditProfile(): JSX.Element {
                   <Button
                     variant="contained"
                     size="large"
+                    onClick={onSave}
                     style={{
                       width: '50%',
                       height: 60,
