@@ -6,7 +6,6 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100vh',
   },
   right: {
-    padding: theme.spacing(3),
     position: 'relative',
   },
   background: {
