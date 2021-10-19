@@ -1,6 +1,7 @@
-import { createMuiTheme } from '@material-ui/core';
+import { createTheme } from '@material-ui/core';
 
-export const theme = createMuiTheme({
+export const theme = createTheme({
+  spacing: 8,
   typography: {
     fontFamily: '"Open Sans", "sans-serif", "Roboto"',
     fontSize: 12,
@@ -10,7 +11,8 @@ export const theme = createMuiTheme({
     },
   },
   palette: {
-    primary: { main: '#3A8DFF' },
+    primary: { main: '#f04040' },
+    success: { main: '#32CD32' },
   },
   shape: {
     borderRadius: 5,
