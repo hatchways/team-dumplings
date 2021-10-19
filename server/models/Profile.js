@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const profileSchema = new mongoose.Schema({
     user: {
         type: mongoose.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
     firstName: {
         type: String,
@@ -25,7 +26,7 @@ const profileSchema = new mongoose.Schema({
     },
     birthDate: Date,
     phoneNumber: {
-        type: Number,
+        type: string,
         trim: true
     },
     address: {
@@ -34,8 +35,9 @@ const profileSchema = new mongoose.Schema({
     },
     availability: [
         {
-            from: Date,
-            to: Date
+            from: string,
+            to: string,
+            day: Date
         }
     ],
     timezone: Number
