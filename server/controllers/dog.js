@@ -22,10 +22,6 @@ exports.loadDog = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.listDogs = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
-  if (!user) {
-    res.status(401);
-    throw new Error("Not authorized");
-  }
 
   const dogs = await Dog.find({ ownerId: ObjectId(user._id) });
   res.status(200).json({
