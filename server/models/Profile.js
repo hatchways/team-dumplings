@@ -33,13 +33,20 @@ const profileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    availability: [
-        {
-            from: string,
-            to: string,
-            day: Date
-        }
-    ],
+    availability: {
+        isAvailable: {
+            type: Boolean,
+            default: true
+        },
+        day: {
+            type: String,
+            required: true,
+            lowercase: true,
+            enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        },
+        price: Number
+    },
+
     timezone: Number
 });
 
