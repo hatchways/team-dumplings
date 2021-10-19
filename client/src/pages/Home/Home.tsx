@@ -4,6 +4,8 @@ import useStyles from './useStyles';
 import clsx from 'clsx';
 import { CustomButton } from '../../components/Button/CustomButton';
 import { CustomInput } from '../../components/Input/CustomInput';
+import { styled } from '@material-ui/core/styles';
+import { spacing } from '@material-ui/system';
 
 const FormElement = ({ children }: { children: JSX.Element[] | JSX.Element }): JSX.Element => {
   return (
@@ -13,14 +15,15 @@ const FormElement = ({ children }: { children: JSX.Element[] | JSX.Element }): J
   );
 };
 
+const HomeGrid = styled(Grid)(spacing);
+
 const Home = (): JSX.Element => {
-  const theme = useTheme();
   const { root, leftLogoContainer, leftLogoText, leftBodyContainer, slogan, label, dateInOff, right, background } =
     useStyles();
   return (
     <>
-      <Grid container className={root}>
-        <Grid item xs={12} md={6} style={{ padding: theme.spacing(4) }}>
+      <HomeGrid container className={root}>
+        <HomeGrid item xs={12} md={6} p={4}>
           <Paper variant="outlined" className={leftLogoContainer}>
             <img src="/assets/logo.png" alt={'Marketplace for Dog Sitters, Dog Owners'} />
             <Typography variant="h4" className={leftLogoText}>
@@ -52,31 +55,16 @@ const Home = (): JSX.Element => {
               </FormElement>
             </form>
           </Container>
-        </Grid>
-        <Grid item xs={12} md={6} className={right}>
+        </HomeGrid>
+        <HomeGrid item xs={12} md={6} p={3} className={right}>
           <img src="/assets/bg.jpg" alt={'Marketplace for Dog Sitters, Dog Owners'} className={background} />
           <Box display="flex" justifyContent="flex-end">
-            <CustomButton
-              linkTo={'/'}
-              btnText={'Become a sitter'}
-              style={'sitter'}
-              cssStyle={{
-                color: 'white',
-                textDecorationLine: 'underline',
-                textDecorationStyle: 'solid',
-                textDecorationColor: 'white',
-              }}
-            />
-            <CustomButton
-              linkTo={'/signin'}
-              btnText={'Login'}
-              style={'login'}
-              cssStyle={{ color: 'white', border: '1px solid #dfaf7a' }}
-            />
+            <CustomButton linkTo={'/'} btnText={'Become a sitter'} style={clsx('sitter', 'home')} />
+            <CustomButton linkTo={'/signin'} btnText={'Login'} style={clsx('login', 'home')} />
             <CustomButton linkTo={'/signup'} btnText={'Signup'} style={'signup'} />
           </Box>
-        </Grid>
-      </Grid>
+        </HomeGrid>
+      </HomeGrid>
     </>
   );
 };
