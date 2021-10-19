@@ -10,7 +10,7 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
   let users;
   if (searchString) {
     users = await User.find({
-      username: { $regex: searchString, $options: "i" }
+      username: { $regex: searchString, $options: "i" },
     });
   }
 
