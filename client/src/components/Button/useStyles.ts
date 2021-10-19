@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
       },
     },
-    '&.login': {
+    '&.login, &.home': {
       textTransform: 'uppercase',
       padding: theme.spacing(1, 4, 1, 4),
       color: '#f04040',
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
         color: '#f04040 !important',
       },
     },
-    '&.signup': {
+    '&.signup, &.report': {
       textTransform: 'uppercase',
       padding: theme.spacing(1, 4, 1, 4),
     },
