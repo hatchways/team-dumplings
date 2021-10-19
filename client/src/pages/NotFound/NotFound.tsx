@@ -22,7 +22,7 @@ const NotFound = (): JSX.Element => {
             problem.
           </Typography>
           <Box marginTop={6} display="flex" alignContent="center" justifyContent="center">
-            <CustomButton linkTo={'/'} btnText={'return home'} style={'home'} />
+            <CustomButton linkTo={'/'} btnText={'return home'} style={'notFoundHome'} />
             <CustomButton linkTo={'/'} btnText={'report problem'} style={'report'} />
           </Box>
         </Grid>
