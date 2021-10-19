@@ -22,11 +22,6 @@ exports.loadRequest = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.listRequests = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
-  if (!user) {
-    res.status(401);
-    throw new Error("Not authorized");
-  }
-
   const requests = await Request.find({
     sitterId: ObjectId(user._id),
   }).populate("sitterId", "username");
@@ -85,15 +80,8 @@ exports.deleteRequest = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.updateRequest = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
-  const authenticatedUserId = req.user.id;
-
-  const user = await User.findById(authenticatedUserId);
-  if (!user) {
-    res.status(401);
-    throw new Error("Not authorized");
-  }
-
   const newRequestData = ({ sitterId, dogId, start, end, status } = req.body);
+
   const updatedRequest = await Request.findOneAndUpdate(
     {
       _id: id,
