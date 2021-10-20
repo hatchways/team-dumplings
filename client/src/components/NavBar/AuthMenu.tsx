@@ -1,11 +1,9 @@
 import { Box } from '@material-ui/core';
 import { CustomButton } from '../Button/CustomButton';
-import useStyles from './useStyles';
 
 const AuthMenu = (): JSX.Element => {
-  const { buttonContainer } = useStyles();
   return (
-    <Box className={buttonContainer}>
+    <Box display="flex" justifyContent="flex-end">
       <CustomButton linkTo={'/'} btnText={'Become a sitter'} style={'sitter'} />
       <CustomButton linkTo={'/signin'} btnText={'Login'} style={'login'} />
       <CustomButton linkTo={'/signup'} btnText={'Signup'} style={'signup'} />

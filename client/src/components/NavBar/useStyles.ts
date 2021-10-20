@@ -95,10 +95,6 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(1, 4, 1, 4),
     },
   },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
 }));
 
 export default useStyles;
