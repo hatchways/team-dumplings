@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import useStyles from './useStyles';
+import DemoUser from '../../../components/DemoUser/DemoUser';
 
 interface Props {
   handleSubmit: (
@@ -187,6 +188,7 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
               </Link>
             </Typography>
           </Box>
+          <DemoUser />
         </form>
       )}
     </Formik>
