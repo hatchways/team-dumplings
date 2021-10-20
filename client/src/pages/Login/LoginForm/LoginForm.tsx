@@ -5,7 +5,8 @@ import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, InputLabel } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 interface Props {
   handleSubmit: (
@@ -27,7 +28,7 @@ interface Props {
 }
 
 export default function Login({ handleSubmit }: Props): JSX.Element {
-  const classes = useStyles();
+  const { form, caption, link, label, inputs, submit, circularProgress } = useStyles();
 
   return (
     <Formik
@@ -45,51 +46,65 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
       onSubmit={handleSubmit}
     >
       {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
-        <form onSubmit={handleSubmit} className={classes.form} noValidate>
+        <form onSubmit={handleSubmit} className={form} noValidate>
+          <InputLabel htmlFor="email" className={label}>
+            Email
+          </InputLabel>
           <TextField
             id="email"
-            label={<Typography className={classes.label}>E-mail address</Typography>}
             fullWidth
             margin="normal"
             InputLabelProps={{
               shrink: true,
             }}
             InputProps={{
-              classes: { input: classes.inputs },
+              classes: { input: inputs },
+              disableUnderline: true,
             }}
             name="email"
             autoComplete="email"
+            placeholder="Email"
             autoFocus
             helperText={touched.email ? errors.email : ''}
             error={touched.email && Boolean(errors.email)}
             value={values.email}
             onChange={handleChange}
           />
+          <InputLabel htmlFor="password" className={label}>
+            Password
+          </InputLabel>
           <TextField
             id="password"
-            label={<Typography className={classes.label}>Password</Typography>}
             fullWidth
             margin="normal"
             InputLabelProps={{
               shrink: true,
             }}
             InputProps={{
-              classes: { input: classes.inputs },
-              endAdornment: <Typography className={classes.forgot}>Forgot?</Typography>,
+              classes: { input: inputs },
+              disableUnderline: true,
             }}
             type="password"
             autoComplete="current-password"
+            placeholder="Password"
             helperText={touched.password ? errors.password : ''}
             error={touched.password && Boolean(errors.password)}
             value={values.password}
             onChange={handleChange}
           />
           <Box textAlign="center">
-            <Button type="submit" size="large" variant="contained" color="primary" className={classes.submit}>
-              {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Login'}
+            <Button type="submit" size="large" variant="contained" color="primary" className={submit}>
+              {isSubmitting ? <CircularProgress className={circularProgress} /> : 'Login'}
             </Button>
           </Box>
-          <div style={{ height: 95 }} />
+          <Box textAlign="center">
+            <Typography className={caption}>
+              Don&apos;t have an account? &nbsp;
+              <Link className={link} to="/signup">
+                Signup
+              </Link>
+            </Typography>
+          </Box>
         </form>
       )}
     </Formik>
