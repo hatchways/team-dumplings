@@ -26,7 +26,7 @@ const profileSchema = new mongoose.Schema({
     },
     birthDate: Date,
     phoneNumber: {
-        type: string,
+        type: String,
         trim: true
     },
     address: {
