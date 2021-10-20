@@ -29,7 +29,6 @@ export default function EditProfile(): JSX.Element {
     const id = auth.loggedInUser ? auth.loggedInUser.profile : '';
     editProfile(inputs, id).then((data) => {
       if (data.error) {
-        console.log(data.error);
         updateSnackBarMessage(data.error);
       } else if (data.success) {
         updateSnackBarMessage('Your profile has been updated successfully');
@@ -147,9 +146,7 @@ export default function EditProfile(): JSX.Element {
                 </Grid>
                 <Grid item container>
                   <Grid item className={classes.gridItem} xs={4} sm={4} md={4} lg={4}>
-                    <Typography className={classes.typography} style={{ marginRight: '0.25em' }}>
-                      where you live
-                    </Typography>
+                    <Typography className={classes.address}>where you live</Typography>
                   </Grid>
                   <Grid item xs={8} sm={8} md={8} lg={8}>
                     <TextField

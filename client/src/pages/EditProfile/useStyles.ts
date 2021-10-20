@@ -32,6 +32,14 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '1em',
     borderRadius: 5,
   },
+  address: {
+    fontWeight: 700,
+    [theme.breakpoints.down('md')]: {
+      fontSize: 10,
+    },
+    textTransform: 'uppercase',
+    marginRight: '0.25em',
+  },
 }));
 
 export default useStyles;
