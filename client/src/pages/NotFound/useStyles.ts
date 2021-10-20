@@ -32,23 +32,10 @@ const useStyles = makeStyles((theme) => ({
   },
   subTitle: {
     textTransform: 'uppercase',
+    marginBottom: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       fontSize: 20,
     },
-  },
-  card: {
-    position: 'absolute',
-    top: 0,
-    bottom: 405,
-    left: 0,
-    right: 0,
-    margin: 'auto',
-    maxWidth: 46,
-    maxHeight: 36,
-    zIndex: 2,
-    backgroundColor: 'transparent',
-    border: 'none',
-    boxShadow: 'none',
   },
   media: {
     border: 'none',
