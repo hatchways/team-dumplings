@@ -107,7 +107,7 @@ const Booking = (): JSX.Element => {
                       key={request._id}
                     />
                   ))}
-                {!loading && nextBooking.length === 0 && (
+                {!loading && !nextBooking.length && (
                   <Typography variant="body1" color="textSecondary">
                     No <b> Next </b> Bookings in the Selected Date.
                   </Typography>
