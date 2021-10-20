@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.common.white,
     border: '1px solid #ced4da',
     fontSize: 16,
-    //width: '80%',
     height: '100%',
     padding: theme.spacing(2),
     marginTop: 0,
