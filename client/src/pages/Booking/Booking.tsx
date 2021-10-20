@@ -1,10 +1,11 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { Badge, Box, Card, CardContent, CardHeader, Grid, Paper, Typography } from '@material-ui/core';
+import { Badge, Box, Card, CardContent, CardHeader, Grid, Paper, Typography, useMediaQuery } from '@material-ui/core';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar/NavBar';
+import { useSnackBar } from '../../context/useSnackbarContext';
 import { listRequests } from '../../helpers/APICalls/listRequests';
 import { Request } from '../../interface/Request';
 import BookingItem from './BookingItem';
@@ -17,9 +18,9 @@ const Booking = (): JSX.Element => {
   const [pastBookings, setPastBookings] = useState<Request[]>([]);
   const [bookingDays, setBookingDays] = useState<string[]>([]);
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
   const [loading, setLoading] = useState<undefined | boolean>(undefined);
   const [date, setDate] = useState(new Date() as MaterialUiPickersDate);
+  const { updateSnackBarMessage } = useSnackBar();
 
   const saveRequests = (requests: Request[]) => {
     setRequests(requests);
@@ -42,7 +43,7 @@ const Booking = (): JSX.Element => {
         const startDate = moment(booking.start).startOf('day');
         if (startDate.diff(selectedDate, 'days') > 0) {
           nxtBkn.push(booking);
-        } else if (startDate.diff(selectedDate, 'days') === 0) {
+        } else if (!startDate.diff(selectedDate, 'days')) {
           crntBkns.push(booking);
         } else {
           pstBkns.push(booking);
@@ -53,36 +54,33 @@ const Booking = (): JSX.Element => {
       setPastBookings(pstBkns);
     };
 
-    async function getRequests() {
+    function getRequests() {
       setLoading(true);
-      const response = await listRequests();
+      listRequests().then((response) => {
+        if (response.error) {
+          updateSnackBarMessage(response.error.message);
+        } else if (response.requests) {
+          if (ignore) {
+            saveRequests(response.requests);
+            initBookingDays(response.requests);
+          }
+        } else {
+          updateSnackBarMessage('An unexpected error has occurred. Please try again later.');
+        }
+      });
 
-      if (ignore && response && response.requests) {
-        saveRequests(response.requests);
-        initBookingDays(response.requests);
-      }
       setLoading(false);
     }
     getRequests();
     return () => {
       ignore = false;
     };
-  }, [date]);
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const handleClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  }, [date, updateSnackBarMessage]);
 
   const onDateChange = (date: MaterialUiPickersDate): MaterialUiPickersDate => {
     setDate(date);
     return date;
   };
-
   return (
     <>
       <NavBar />
@@ -95,7 +93,7 @@ const Booking = (): JSX.Element => {
 
               <CardContent className={classes.bookingList}>
                 {!loading &&
-                  nextBooking.map((request, index) => (
+                  nextBooking.map((request) => (
                     <BookingItem
                       _id={request._id}
                       fullName={request.sitterId.username}
@@ -122,7 +120,7 @@ const Booking = (): JSX.Element => {
 
               <CardContent className={classes.bookingList}>
                 {!loading &&
-                  currentBookings.map((request, index) => (
+                  currentBookings.map((request) => (
                     <BookingItem
                       _id={request._id}
                       fullName={request.sitterId.username}
@@ -134,7 +132,7 @@ const Booking = (): JSX.Element => {
                       key={request._id}
                     />
                   ))}
-                {!loading && currentBookings.length === 0 && (
+                {!loading && !currentBookings.length && (
                   <Typography variant="body1" color="textSecondary">
                     No <b> Current </b> Bookings in the Selected Date.
                   </Typography>
@@ -144,7 +142,7 @@ const Booking = (): JSX.Element => {
               <CardHeader title="past bookings:" />
               <CardContent className={classes.bookingList}>
                 {!loading &&
-                  pastBookings.map((request, index) => (
+                  pastBookings.map((request) => (
                     <BookingItem
                       _id={request._id}
                       fullName={request.sitterId.username}
@@ -156,7 +154,7 @@ const Booking = (): JSX.Element => {
                       key={request._id}
                     />
                   ))}
-                {!loading && pastBookings.length === 0 && (
+                {!loading && !pastBookings.length && (
                   <Typography variant="body1" color="textSecondary">
                     No <b> past </b> Bookings
                   </Typography>
