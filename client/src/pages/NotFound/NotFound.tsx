@@ -15,7 +15,7 @@ const NotFound = (): JSX.Element => {
             404
           </Typography>
           <Typography variant="h3" className={classes.subTitle}>
-            opps! page not found
+            Oops! page not found
           </Typography>
           <Typography variant="body2" style={{ marginTop: 10 }}>
             Sorry, the page you&apos;re looking for doesn&apos;t exist. if you think something is broken, report a
