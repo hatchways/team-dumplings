@@ -4,7 +4,7 @@ import { CustomButton } from '../Button/CustomButton';
 const AuthMenu = (): JSX.Element => {
   return (
     <Box display="flex" justifyContent="flex-end">
-      <CustomButton linkTo={'/login'} btnText={'Login'} style={'login'} />
+      <CustomButton linkTo={'/signin'} btnText={'Login'} style={'login'} />
       <CustomButton linkTo={'/signup'} btnText={'Signup'} style={'signup'} />
     </Box>
   );
