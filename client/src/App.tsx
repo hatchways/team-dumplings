@@ -10,7 +10,7 @@ import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import NotFound from './pages/NotFound/NotFound';
 import Signup from './pages/SignUp/SignUp';
-import { theme } from './themes/theme';
+import theme from './themes/theme';
 
 function App(): JSX.Element {
   return (
