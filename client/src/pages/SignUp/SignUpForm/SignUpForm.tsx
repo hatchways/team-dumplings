@@ -183,7 +183,7 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
           <Box textAlign="center">
             <Typography className={caption}>
               Already a member? &nbsp;
-              <Link className={link} to="/login">
+              <Link className={link} to="/signin">
                 Login
               </Link>
             </Typography>
