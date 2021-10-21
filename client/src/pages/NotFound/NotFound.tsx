@@ -23,7 +23,7 @@ const NotFound = (): JSX.Element => {
           <img src="assets/logo.png" className={media} alt="Marketplace for Dog Sitters, Dog Owners" />
         </Box>
         <Grid item container xs={11} md={6} square component={Paper} className={wrapper}>
-          <Typography variant="h1" className={title}>
+          <Typography variant="h5" className={title}>
             404
           </Typography>
           <Typography variant="h3" className={subTitle}>

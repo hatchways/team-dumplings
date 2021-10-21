@@ -1,7 +1,7 @@
 import { AuthApiData } from '../../interface/AuthApiData';
 import { FetchOptions } from '../../interface/FetchOptions';
 
-const register = async (username: string, email: string, password: string): Promise<AuthApiData> => {
+const register = async (username: string, email: string, password: string, role: string): Promise<AuthApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

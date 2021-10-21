@@ -13,11 +13,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     cursor: 'pointer',
   },
-
   leftLogoText: {
     marginLeft: theme.spacing(1),
-    fontSize: 22,
     fontWeight: 700,
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
   },
   link: {
     textDecoration: 'none',

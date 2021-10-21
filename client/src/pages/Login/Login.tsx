@@ -1,20 +1,32 @@
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Paper from '@material-ui/core/Paper';
+import { CircularProgress, useMediaQuery } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import { FormikHelpers } from 'formik';
+import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import useStyles from './useStyles';
-import login from '../../helpers/APICalls/login';
-import LoginForm from './LoginForm/LoginForm';
-import AuthHeader from '../../components/AuthHeader/AuthHeader';
+import { FormikHelpers } from 'formik';
+import { useHistory } from 'react-router-dom';
+import NavBar from '../../components/NavBar/NavBar';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
+import login from '../../helpers/APICalls/login';
+import LoginForm from './LoginForm/LoginForm';
+import useStyles from './useStyles';
+import { useTheme } from '@material-ui/core/styles';
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
-  const { updateLoginContext } = useAuth();
+  const { updateLoginContext, loggedInUser } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'), {
+    defaultMatches: true,
+  });
+  const history = useHistory();
+
+  if (loggedInUser) {
+    history.push('/booking');
+    return <CircularProgress />;
+  }
 
   const handleSubmit = (
     { email, password }: { email: string; password: string },
@@ -27,34 +39,37 @@ export default function Login(): JSX.Element {
       } else if (data.success) {
         updateLoginContext(data.success);
       } else {
-        // should not get here from backend but this catch is for an unknown issue
-        console.error({ data });
-
         setSubmitting(false);
-        updateSnackBarMessage('An unexpected error occurred. Please try again');
+        updateSnackBarMessage('An unexpected error occurred. Please try again !');
       }
     });
   };
 
   return (
-    <Grid container component="main" className={classes.root}>
-      <CssBaseline />
-      <Grid item xs={12} sm={8} md={7} elevation={6} component={Paper} square>
-        <Box className={classes.authWrapper}>
-          <AuthHeader linkTo="/signup" asideText="Don't have an account?" btnText="Create account" />
-          <Box width="100%" maxWidth={450} p={3} alignSelf="center">
-            <Grid container>
-              <Grid item xs>
-                <Typography className={classes.welcome} component="h1" variant="h5">
-                  Welcome back!
+    <>
+      <NavBar />
+      <Grid container component="main" className={classes.root}>
+        <Grid item xs={6} sm={8} md={4} elevation={0} component={Paper} square>
+          <Box
+            display={'flex'}
+            alignItems={'flex-start'}
+            justifyContent={'space-between'}
+            flexDirection={'column'}
+            minHeight={'100vh'}
+            paddingTop={3}
+            width={isMobile ? '100%' : '80%'}
+          >
+            <Box width={'100%'} maxWidth={450} p={3} alignSelf={'center'}>
+              <Box textAlign="center">
+                <Typography variant="h2" className={classes.welcome}>
+                  Sign in
                 </Typography>
-              </Grid>
-            </Grid>
-            <LoginForm handleSubmit={handleSubmit} />
+              </Box>
+              <LoginForm handleSubmit={handleSubmit} />
+            </Box>
           </Box>
-          <Box p={1} alignSelf="center" />
-        </Box>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }
