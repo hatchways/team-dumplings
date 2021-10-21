@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 3,
   },
   title: {
-    fontSize: 100,
     fontWeight: 900,
     letterSpacing: 6,
     background: 'linear-gradient(180deg, rgba(189,45,10,1) 0%, rgba(251,2,2,1) 7%, rgba(255,255,255,1) 100%)',
