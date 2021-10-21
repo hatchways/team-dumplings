@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
   },
   leftLogoText: {
     marginLeft: theme.spacing(1),
-    fontSize: 26,
     fontWeight: 900,
   },
   dateInOff: {
@@ -66,7 +65,6 @@ const useStyles = makeStyles((theme) => ({
   slogan: {
     marginTop: theme.spacing(6),
     marginBottom: theme.spacing(6),
-    fontSize: 50,
     fontWeight: 600,
     [theme.breakpoints.down('sm')]: {
       fontSize: 35,

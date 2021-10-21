@@ -51,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
   circularProgress: {
     color: theme.palette.common.white,
   },
-
   linkDemo: {
     textDecoration: 'none',
     color: theme.palette.primary.main,

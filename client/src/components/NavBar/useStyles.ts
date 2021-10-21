@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
   },
   leftLogoText: {
     marginLeft: theme.spacing(1),
-    fontSize: 22,
     fontWeight: 700,
     [theme.breakpoints.down('xs')]: {
       display: 'none',
