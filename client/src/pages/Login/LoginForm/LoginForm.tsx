@@ -99,7 +99,7 @@ export default function Login({ handleSubmit }: Props): JSX.Element {
           </Box>
           <Box textAlign="center">
             <Typography className={caption}>
-              Don&apos;t have an account? &nbsp;
+              { "Don't have an account? "}
               <Link className={link} to="/signup">
                 Signup
               </Link>
