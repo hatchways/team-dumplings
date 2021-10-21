@@ -13,6 +13,8 @@ const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 
 const profileRouter = require("./routes/profile");
+const requestRouter = require("./routes/request");
+const dogRouter = require("./routes/dog");
 
 const requestRouter = require("./routes/request");
 const dogRouter = require("./routes/dog");

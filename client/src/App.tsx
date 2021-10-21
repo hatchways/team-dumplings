@@ -8,6 +8,7 @@ import Booking from './pages/Booking/Booking';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
+import NotFound from './pages/NotFound/NotFound';
 import Signup from './pages/SignUp/SignUp';
 import { theme } from './themes/theme';
 
@@ -24,6 +25,9 @@ function App(): JSX.Element {
                 <Route exact path={'/'} component={Home} />
                 <PrivateRoute component={Booking} path={'/booking'} />
                 <PrivateRoute component={Dashboard} path="/dashboard" />
+
+                <Route exact path={'*'} component={NotFound} />
+
               </Switch>
             </SocketProvider>
           </AuthProvider>
