@@ -1,7 +1,7 @@
 import { MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
-import { AuthProvider, PrivateRoute } from './context/useAuthContext';
+import { AuthProvider } from './context/useAuthContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 import { SocketProvider } from './context/useSocketContext';
 import Booking from './pages/Booking/Booking';
@@ -22,8 +22,8 @@ function App(): JSX.Element {
                 <Route exact path="/signin" component={Login} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path={'/'} component={Home} />
-                <PrivateRoute component={Booking} path={'/booking'} />
-                <PrivateRoute component={Dashboard} path="/dashboard" />
+                <Route component={Booking} path={'/booking'} />
+                <Route component={Dashboard} path="/dashboard" />
               </Switch>
             </SocketProvider>
           </AuthProvider>
