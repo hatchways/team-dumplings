@@ -11,7 +11,6 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(10),
   },
   welcome: {
-    fontSize: 26,
     paddingBottom: 20,
     color: theme.palette.common.black,
     fontWeight: 700,

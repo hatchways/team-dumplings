@@ -13,7 +13,7 @@ export default function NavBar(): JSX.Element {
       <Toolbar className={toolbar}>
         <Paper variant="outlined" className={leftLogoContainer}>
           <img src="/assets/logo.png" alt="Marketplace for Dog Sitters, Dog Owners" />
-          <Typography variant="h4" className={leftLogoText}>
+          <Typography variant="h2" className={leftLogoText}>
             LovingSitter.
           </Typography>
         </Paper>
