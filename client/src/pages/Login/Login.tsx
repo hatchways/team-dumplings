@@ -57,7 +57,7 @@ export default function Login(): JSX.Element {
           >
             <Box width={'100%'} maxWidth={450} p={3} alignSelf={'center'}>
               <Box textAlign="center">
-                <Typography variant="h5" className={classes.welcome}>
+                <Typography variant="h2" className={classes.welcome}>
                   Sign in
                 </Typography>
               </Box>
