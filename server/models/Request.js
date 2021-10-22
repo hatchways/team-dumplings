@@ -5,8 +5,8 @@ const requestSchema = new mongoose.Schema(
     ownerId: { type: mongoose.ObjectId, required: true, ref: "User" },
     sitterId: { type: mongoose.ObjectId, required: true, ref: "User" },
     dogId: { type: mongoose.ObjectId, required: true, ref: "Dog" },
-    start: { type: Date, required: true, trim: true },
-    end: { type: Date, required: true, trim: true },
+    fromHour: { type: Number, required: true, min: 0, max: 23 },
+    toHour: { type: Number, required: true, min: 0, max: 23 },
     status: {
       type: String,
       trim: true,
