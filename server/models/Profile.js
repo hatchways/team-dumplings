@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
 
-const dayAvalSchema = new mongoose.Schema({
-    from: String,
-    to: String,
-    isAvailable: {
-        type: Boolean,
-        default: true
+const dayAvailabilitySchema = new mongoose.Schema({
+    startTime: {
+        type: Number,
+        min: 0,
+        max: 23
     },
-    price: Number
+    endTime: {
+        type: Number,
+        min: 0,
+        max: 23
+    }
 })
 
 const profileSchema = new mongoose.Schema({
@@ -44,16 +47,16 @@ const profileSchema = new mongoose.Schema({
         required: true
     },
     availability: {
-        0: [dayAvalSchema],
-        1: [dayAvalSchema],
-        2: [dayAvalSchema],
-        3: [dayAvalSchema],
-        4: [dayAvalSchema],
-        5: [dayAvalSchema],
-        6: [dayAvalSchema],
+        0: [dayAvailabilitySchema],
+        1: [dayAvailabilitySchema],
+        2: [dayAvailabilitySchema],
+        3: [dayAvailabilitySchema],
+        4: [dayAvailabilitySchema],
+        5: [dayAvailabilitySchema],
+        6: [dayAvailabilitySchema],
     },
-
-    timezone: Number
+    timezone: Number,
+    rate: Number
 });
 
 module.exports = Profile = mongoose.model("Profile", profileSchema);
