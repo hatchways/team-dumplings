@@ -37,6 +37,17 @@ theme.overrides = {
     h5: {
       fontSize: 100,
     },
+    // listing item full name
+    h3: {
+      fontSize: 24,
+    },
+    // listing item subtitle
+    subtitle1: {
+      fontFamily: '"Roboto"',
+      fontSize: 12,
+      fontWeight: 600,
+      color: theme.palette.grey[600],
+    },
   },
 };
 export default theme;
