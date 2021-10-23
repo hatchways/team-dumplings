@@ -10,6 +10,7 @@ import { SocketProvider } from './context/useSocketContext';
 import Booking from './pages/Booking/Booking';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Home from './pages/Home/Home';
+import Listing from './pages/Listing/Listing';
 import Login from './pages/Login/Login';
 import NotFound from './pages/NotFound/NotFound';
 import Signup from './pages/SignUp/SignUp';
@@ -29,6 +30,7 @@ function App(): JSX.Element {
                 <Route exact path={'/'} component={Home} />
                 <Route component={Booking} path={'/booking'} />
                 <Route component={Dashboard} path="/dashboard" />
+                <Route component={Listing} path="/listing" />
                 <Route exact path={'*'} component={NotFound} />
               </Switch>
             </SocketProvider>
