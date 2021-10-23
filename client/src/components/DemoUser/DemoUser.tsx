@@ -27,7 +27,7 @@ const DemoUser = (): JSX.Element => {
     <>
       <Box textAlign="center" borderTop={'1px dotted red'} pt={1} mt={2} borderRadius={25}>
         <Typography className={captionDemo}>
-          Sign in as a demo user &nbsp;
+          Sign in as a demo user
           <Button className={linkDemo} onClick={() => handleDemoSubmit(ownerDemo)}>
             Owner
           </Button>
