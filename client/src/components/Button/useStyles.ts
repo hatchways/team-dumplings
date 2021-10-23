@@ -26,6 +26,17 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent',
       color: theme.palette.primary.main,
     },
+    '&.showmore': {
+      textTransform: 'uppercase',
+      backgroundColor: 'transparent',
+      border: 1,
+      borderStyle: 'solid',
+      borderColor: theme.palette.grey[500],
+      color: theme.palette.common.black,
+      [theme.breakpoints.down('sm')]: {
+        width: '50%',
+      },
+    },
     '&.findMyDog': {
       textTransform: 'uppercase',
       width: '38%',
