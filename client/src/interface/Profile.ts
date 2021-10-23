@@ -6,10 +6,11 @@ export interface Profile {
   phoneNumber: string;
   address: string;
   description: string;
+  _id?: string;
 }
 
 export interface ProfileApiDataSuccess {
-  updatedProfile: Profile;
+  profile: Profile;
 }
 
 export interface ProfileApiData {

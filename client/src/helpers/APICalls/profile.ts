@@ -12,3 +12,15 @@ export const editProfile = async (inputs: Profile, id: string): Promise<ProfileA
     .then((res) => res.json())
     .catch((error) => ({ error }));
 };
+
+export const createProfile = async (inputs: Profile): Promise<ProfileApiData> => {
+  const fetchOptions: FetchOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(inputs),
+    credentials: 'include',
+  };
+  return await fetch(`/profile/`, fetchOptions)
+    .then((res) => res.json())
+    .catch((error) => ({ error }));
+};

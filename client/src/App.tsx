@@ -7,7 +7,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
-import EditProfile from './pages/EditProfile/EditProfile';
+import MyProfile from './pages/MyProfile/MyProfile';
 
 import './App.css';
 
@@ -21,7 +21,7 @@ function App(): JSX.Element {
               <Switch>
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
-                <Route exact path="/edit-profile" component={EditProfile} />
+                <Route exact path="/myprofile" component={MyProfile} />
                 <Route exact path="/dashboard">
                   <Dashboard />
                 </Route>
