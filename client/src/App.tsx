@@ -1,15 +1,19 @@
 import { MuiThemeProvider } from '@material-ui/core';
-import { theme } from './themes/theme';
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
-import Login from './pages/Login/Login';
-import Signup from './pages/SignUp/SignUp';
-import Dashboard from './pages/Dashboard/Dashboard';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import './App.css';
 import { AuthProvider } from './context/useAuthContext';
-import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 import ProfileDetails from './pages/ProfileDetails/ProfileDetails';
 
 import './App.css';
+import { SocketProvider } from './context/useSocketContext';
+import Booking from './pages/Booking/Booking';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Home from './pages/Home/Home';
+import Login from './pages/Login/Login';
+import NotFound from './pages/NotFound/NotFound';
+import Signup from './pages/SignUp/SignUp';
+import theme from './themes/theme';
 
 function App(): JSX.Element {
   return (
@@ -19,15 +23,13 @@ function App(): JSX.Element {
           <AuthProvider>
             <SocketProvider>
               <Switch>
-                <Route exact path="/login" component={Login} />
+                <Route exact path="/signin" component={Login} />
                 <Route exact path="/signup" component={Signup} />
+                <Route exact path={'/'} component={Home} />
+                <Route component={Booking} path={'/booking'} />
+                <Route component={Dashboard} path="/dashboard" />
+                <Route exact path={'*'} component={NotFound} />
                 <Route exact path="/profile-details" component={ProfileDetails} />
-                <Route exact path="/dashboard">
-                  <Dashboard />
-                </Route>
-                <Route path="*">
-                  <Redirect to="/login" />
-                </Route>
               </Switch>
             </SocketProvider>
           </AuthProvider>
