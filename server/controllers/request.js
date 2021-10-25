@@ -24,7 +24,24 @@ exports.listRequests = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
   const requests = await Request.find({
     sitterId: ObjectId(user._id),
-  }).populate("sitterId", "username");
+  })
+    .populate({
+      path: "sitterId",
+      populate: {
+        path: "profile",
+        select: { firstName: 1, lastName: 1, rate: 1 },
+      },
+      select: { username: 1 },
+    })
+    .populate({
+      path: "ownerId",
+      populate: {
+        path: "profile",
+        select: { firstName: 1, lastName: 1 },
+      },
+      select: { username: 1 },
+    })
+    .populate("dogId");
 
   res.status(200).json({
     requests,
