@@ -6,7 +6,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nodemon --exec \"mocha ./test -r dotenv/config\"",
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
