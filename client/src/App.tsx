@@ -14,6 +14,7 @@ import Login from './pages/Login/Login';
 import NotFound from './pages/NotFound/NotFound';
 import Signup from './pages/SignUp/SignUp';
 import theme from './themes/theme';
+import ProfileSettings from './pages/ProfileSettings/ProfileSettings';
 
 function App(): JSX.Element {
   return (
@@ -29,6 +30,7 @@ function App(): JSX.Element {
                 <Route exact path={'/'} component={Home} />
                 <Route component={Booking} path={'/booking'} />
                 <Route component={Dashboard} path="/dashboard" />
+                <Route component={ProfileSettings} path="/profile-settings" />
                 <Route exact path={'*'} component={NotFound} />
               </Switch>
             </SocketProvider>
