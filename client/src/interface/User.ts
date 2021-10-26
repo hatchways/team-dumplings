@@ -4,6 +4,7 @@ export interface User {
   email: string;
   username: string;
   role: role;
+  profile: string;
 }
 
 export interface SearchUsersApiData {
