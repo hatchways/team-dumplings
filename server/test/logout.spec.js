@@ -9,7 +9,7 @@ describe("/POST /auth/logout/", () => {
   it("it should return 200  and `logged out` message", (done) => {
     chai
       .request(app)
-      .get(`/auth/logout/`)
+      .post(`/auth/logout/`)
       .end((err, res) => {
         res.should.have.status(200);
         res.text.should.have.eql("You have successfully logged out");
