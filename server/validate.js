@@ -11,7 +11,7 @@ exports.validateRegister = [
   }),
   check("role")
     .exists()
-    .withMessage("role is Requiered")
+    .withMessage("role is Required")
     .isString()
     .withMessage("role must be a String")
     .isIn(["owner", "sitter"])
