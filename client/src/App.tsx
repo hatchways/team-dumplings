@@ -3,6 +3,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import { AuthProvider } from './context/useAuthContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
+import MyProfile from './pages/MyProfile/MyProfile';
+
+import './App.css';
 import { SocketProvider } from './context/useSocketContext';
 import Booking from './pages/Booking/Booking';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -22,6 +25,7 @@ function App(): JSX.Element {
               <Switch>
                 <Route exact path="/signin" component={Login} />
                 <Route exact path="/signup" component={Signup} />
+                <Route exact path="/myprofile" component={MyProfile} />
                 <Route exact path={'/'} component={Home} />
                 <Route component={Booking} path={'/booking'} />
                 <Route component={Dashboard} path="/dashboard" />
