@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
+  rootContainer: {
+    marginTop: '7em',
+  },
   gridContainer: {
     position: 'relative',
     width: '100%',

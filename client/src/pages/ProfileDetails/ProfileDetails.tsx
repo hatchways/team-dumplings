@@ -1,5 +1,6 @@
 import { Fragment, useState } from 'react';
 import useStyles from './useStyles';
+import NavBar from '../../components/NavBar/NavBar';
 import { Paper, Grid, Typography, Avatar, Button } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import DateFnsUtils from '@date-io/date-fns';
@@ -27,7 +28,8 @@ const ProfileDetails = (): JSX.Element => {
 
   return (
     <Fragment>
-      <Grid container justify="space-evenly">
+      <NavBar />
+      <Grid container className={classes.rootContainer} justify="space-evenly">
         <Grid item xs={12} sm={12} md={7} lg={7}>
           <Paper elevation={15}>
             <Grid container direction="column">

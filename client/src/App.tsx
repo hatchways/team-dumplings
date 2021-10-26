@@ -28,8 +28,8 @@ function App(): JSX.Element {
                 <Route exact path={'/'} component={Home} />
                 <Route component={Booking} path={'/booking'} />
                 <Route component={Dashboard} path="/dashboard" />
-                <Route exact path={'*'} component={NotFound} />
                 <Route exact path="/profile-details" component={ProfileDetails} />
+                <Route exact path={'*'} component={NotFound} />
               </Switch>
             </SocketProvider>
           </AuthProvider>
