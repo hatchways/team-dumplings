@@ -11,7 +11,8 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(12),
   },
   itemContainer: {
-    boxShadow: theme.shadows[6],
+    display: 'flex',
+    marginTop: 15,
   },
   avatarButton: {
     margin: 0,
