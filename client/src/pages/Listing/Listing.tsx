@@ -11,7 +11,7 @@ const sitters = [
   {
     id: 1,
     fullname: 'Johnny Yad',
-    img: 'url',
+    img: 'https://i.pravatar.cc/300',
     slogan: 'Professional dog trainer',
     description: 'I would like to work with your dog.',
     location: 'New Yourk',
@@ -21,7 +21,7 @@ const sitters = [
   {
     id: 2,
     fullname: 'Johnny Yad',
-    img: 'url',
+    img: 'https://i.pravatar.cc/300',
     slogan: 'Professional dog trainer',
     description: 'I would like to work with your dog.',
     location: 'New Yourk',
@@ -31,7 +31,7 @@ const sitters = [
   {
     id: 3,
     fullname: 'Johnny Yad',
-    img: 'url',
+    img: 'https://i.pravatar.cc/300',
     slogan: 'Professional dog trainer',
     description: 'I would like to work with your dog.',
     location: 'Paris',
@@ -41,7 +41,7 @@ const sitters = [
   {
     id: 4,
     fullname: 'Johnny Yad',
-    img: 'url',
+    img: 'https://i.pravatar.cc/300',
     slogan: 'Professional dog trainer',
     description: 'I would like to work with your dog.',
     location: 'New Yourk',
@@ -51,7 +51,7 @@ const sitters = [
   {
     id: 5,
     fullname: 'Johnny Yad',
-    img: 'url',
+    img: 'https://i.pravatar.cc/300',
     slogan: 'Professional dog trainer',
     description: 'I would like to work with your dog.',
     location: 'New Yourk',
@@ -61,7 +61,7 @@ const sitters = [
   {
     id: 6,
     fullname: 'Johnny Yad',
-    img: 'url',
+    img: 'https://i.pravatar.cc/300',
     slogan: 'Professional dog trainer',
     description: 'I would like to work with your dog.',
     location: 'New Yourk',
