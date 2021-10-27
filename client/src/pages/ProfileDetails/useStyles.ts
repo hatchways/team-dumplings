@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
     height: 50,
     marginBottom: '2em',
     marginTop: '4em',
+    textTransform: 'uppercase',
   },
   requestGridItem: {
     margin: 'auto',

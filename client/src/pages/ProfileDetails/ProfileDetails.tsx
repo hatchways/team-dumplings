@@ -110,7 +110,7 @@ const ProfileDetails = (): JSX.Element => {
               </Grid>
               <Grid item container justify="center">
                 <Button variant="outlined" size="large" className={classes.requestButton}>
-                  SEND REQUEST
+                  send request
                 </Button>
               </Grid>
             </Grid>
