@@ -9,6 +9,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { ExpandMoreOutlined } from '@material-ui/icons';
+import { Link } from 'react-router-dom';
 import useStyles from './useStyles';
 interface dogInfo {
   name: string;
@@ -42,10 +43,10 @@ const DogInfoAccordion = ({ dog }: Props): JSX.Element => {
     gender,
     yearOfBirth,
   } = dog;
-  const { heading, secondaryHeading, details, helper, link, dogChip } = useStyles();
+  const { heading, secondaryHeading, details, helper, link, dogChip, dogAvatar, accordionStyle } = useStyles();
   return (
     <Box display="flex" flexDirection="row" justifyContent="center" alignItems="center">
-      <Accordion style={{ width: '100%', height: 'auto' }}>
+      <Accordion className={accordionStyle}>
         <AccordionSummary expandIcon={<ExpandMoreOutlined />} aria-controls="panel1c-content" id="panel1c-header">
           <Box flexBasis="40%">
             <Typography className={heading}>
@@ -70,7 +71,7 @@ const DogInfoAccordion = ({ dog }: Props): JSX.Element => {
           </Box>
           <Box flexBasis="70%" className={helper}>
             <Box fontWeight="fontWeightMedium" mr={2} display="inline">
-              <Avatar>DOG</Avatar>
+              <Avatar className={dogAvatar}>dog</Avatar>
             </Box>
             <Typography component="div">
               <Box fontWeight="fontWeightMedium" mr={2} display="inline">
@@ -100,9 +101,9 @@ const DogInfoAccordion = ({ dog }: Props): JSX.Element => {
             <Typography variant="caption">
               Send messages directly to the owner
               <br />
-              <a href="#Messenger" className={link}>
+              <Link to="/messenger" className={link}>
                 Messenger
-              </a>
+              </Link>
             </Typography>
           </Box>
         </AccordionDetails>
