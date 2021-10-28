@@ -5,6 +5,7 @@ import { AuthProvider } from './context/useAuthContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 import ProfileDetails from './pages/ProfileDetails/ProfileDetails';
 import MyProfile from './pages/MyProfile/MyProfile';
+import './App.css';
 import { SocketProvider } from './context/useSocketContext';
 import Booking from './pages/Booking/Booking';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -17,6 +18,7 @@ import Sitting from './pages/Sitting/Sitting';
 import theme from './themes/theme';
 import Messages from './pages/Messages/Messages';
 import { ConversationProvider } from './context/useConversationContext';
+import Payment from './pages/Payment/Payment';
 
 function App(): JSX.Element {
   return (
@@ -26,12 +28,16 @@ function App(): JSX.Element {
           <AuthProvider>
             <SocketProvider>
               <Switch>
-                <Route exact path="/signin" component={Login} />
-                <Route exact path="/signup" component={Signup} />
-                <Route path="/booking" component={Booking} />
-                <Route path="/dashboard" component={Dashboard} />
-                <Route exact path="/profile-details" component={ProfileDetails} />
-                <Route exact path="/my-profile" component={MyProfile} />
+                <Route exact path={'/signin'} component={Login} />
+                <Route exact path={'/signup'} component={Signup} />
+                <Route exact path={'/listing'} component={Listing} />
+                <Route exact path={'/booking'} component={Booking} />
+                <Route exact path={'/sitting'} component={Sitting} />
+                <Route exact path="/dashboard" component={Dashboard} />
+                <Route exact path={'/'} component={Home} />
+                <Route exact path={'/payment'} component={Payment} />
+                <Route exact path={'/myprofile'} component={MyProfile} />
+                <Route exact path="/profileDetails" component={ProfileDetails} />
                 <Route exact path="/listing" component={Listing} />
                 <Route exact path="/sitting" component={Sitting} />
                 <ConversationProvider>
