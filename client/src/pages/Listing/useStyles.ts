@@ -83,5 +83,8 @@ const useStyles = makeStyles((theme) => ({
       borderBottomLeftRadius: 0,
     },
   },
+  cardStyle: {
+    width: 300,
+  },
 }));
 export default useStyles;
