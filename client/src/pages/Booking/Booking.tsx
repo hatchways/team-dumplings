@@ -7,12 +7,12 @@ import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar/NavBar';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import { listRequests } from '../../helpers/APICalls/listRequests';
-import { Request } from '../../interface/Request';
+import { Request, SittingRequest } from '../../interface/Request';
 import BookingItem from './BookingItem';
 import useStyles from './useStyles';
 
 const Booking = (): JSX.Element => {
-  const [requests, setRequests] = useState<Request[]>([]);
+  const [requests, setRequests] = useState<Request[] | SittingRequest[]>([]);
   const [nextBooking, setNextBooking] = useState<Request[]>([]);
   const [currentBookings, setCurrentBookings] = useState<Request[]>([]);
   const [pastBookings, setPastBookings] = useState<Request[]>([]);
@@ -22,7 +22,7 @@ const Booking = (): JSX.Element => {
   const [date, setDate] = useState(new Date() as MaterialUiPickersDate);
   const { updateSnackBarMessage } = useSnackBar();
 
-  const saveRequests = (requests: Request[]) => {
+  const saveRequests = (requests: Request[] | SittingRequest[]) => {
     setRequests(requests);
   };
 
@@ -42,11 +42,11 @@ const Booking = (): JSX.Element => {
       requests.forEach((booking) => {
         const startDate = moment(booking.start).startOf('day');
         if (startDate.diff(selectedDate, 'days') > 0) {
-          nxtBkn.push(booking);
+          nxtBkn.push(booking as Request);
         } else if (!startDate.diff(selectedDate, 'days')) {
-          crntBkns.push(booking);
+          crntBkns.push(booking as Request);
         } else {
-          pstBkns.push(booking);
+          pstBkns.push(booking as Request);
         }
       });
       setNextBooking(nxtBkn);
@@ -62,7 +62,7 @@ const Booking = (): JSX.Element => {
         } else if (response.requests) {
           if (ignore) {
             saveRequests(response.requests);
-            initBookingDays(response.requests);
+            initBookingDays(response.requests as Request[]);
           }
         } else {
           updateSnackBarMessage('An unexpected error has occurred. Please try again later.');

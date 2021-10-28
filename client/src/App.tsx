@@ -14,6 +14,7 @@ import Listing from './pages/Listing/Listing';
 import Login from './pages/Login/Login';
 import NotFound from './pages/NotFound/NotFound';
 import Signup from './pages/SignUp/SignUp';
+import Sitting from './pages/Sitting/Sitting';
 import theme from './themes/theme';
 
 function App(): JSX.Element {
@@ -24,14 +25,15 @@ function App(): JSX.Element {
           <AuthProvider>
             <SocketProvider>
               <Switch>
-                <Route exact path="/signin" component={Login} />
-                <Route exact path="/signup" component={Signup} />
-                <Route exact path="/myprofile" component={MyProfile} />
-                <Route exact path="/" component={Home} />
-                <Route exact path="/booking" component={Booking} />
+                <Route exact path={'/signin'} component={Login} />
+                <Route exact path={'/signup'} component={Signup} />
+                <Route exact path={'/myprofile'} component={MyProfile} />
+                <Route exact path={'/listing'} component={Listing} />
+                <Route exact path={'/booking'} component={Booking} />
+                <Route exact path={'/sitting'} component={Sitting} />
                 <Route exact path="/dashboard" component={Dashboard} />
-                <Route exact path="/listing" component={Listing} />
-                <Route exact path="*" component={NotFound} />
+                <Route exact path={'/'} component={Home} />
+                <Route path={'*'} component={NotFound} />
               </Switch>
             </SocketProvider>
           </AuthProvider>
