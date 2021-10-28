@@ -1,4 +1,4 @@
-import { Avatar, Box, Chip, Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
+import { Avatar, Box, Chip, CircularProgress, Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { DataGrid } from '@material-ui/data-grid';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
@@ -6,6 +6,7 @@ import MessageIcon from '@material-ui/icons/Message';
 import clsx from 'clsx';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import { listRequests } from '../../helpers/APICalls/listRequests';
@@ -65,7 +66,8 @@ const Sitting = () => {
     };
   }, [updateSnackBarMessage, referesh]);
 
-  const { dataGrid, root, title, chip, heading, secondaryHeading, details, helper, link, dogChip } = useStyles();
+  const { dataGrid, root, title, chip, heading, secondaryHeading, details, helper, link, dogChip, messengerLink } =
+    useStyles();
   const columns = [
     {
       field: 'owner',
@@ -125,7 +127,6 @@ const Sitting = () => {
       width: 120,
       renderCell: function renderOwner(data: any) {
         const sittingHours = moment(data.row.end).diff(moment(data.row.start), 'hours');
-        // TODO update, to get a real a price, we should update `Profile` to have `Price` field
         return <Typography>{`$ ${data.row.sitterId.profile.rate * 10 * sittingHours}`}</Typography>;
       },
     },
@@ -177,7 +178,9 @@ const Sitting = () => {
             </Tooltip>
             <Tooltip title="Messenger" placement="top">
               <IconButton color="default">
-                <MessageIcon />
+                <Link to={`/messenger/:${request.ownerId._id}`} className={messengerLink}>
+                  <MessageIcon />
+                </Link>
               </IconButton>
             </Tooltip>
           </Box>
