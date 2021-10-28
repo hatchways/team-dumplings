@@ -145,5 +145,15 @@ const useStyles = makeStyles((theme) => ({
       borderColor: grey[400],
     },
   },
+  dogAvatar: {
+    textTransform: 'uppercase',
+  },
+  accordionStyle: {
+    width: '100%',
+    height: 'auto',
+  },
+  messengerLink: {
+    color: theme.palette.grey[600],
+  },
 }));
 export default useStyles;
