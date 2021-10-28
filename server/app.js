@@ -52,7 +52,7 @@ app.use("/profile", profileRouter);
 app.use("/requests", requestRouter);
 app.use("/dogs", dogRouter);
 
-app.use("/request", paymentRouter);
+app.use("/payments", paymentRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
