@@ -18,12 +18,19 @@ const userSchema = new mongoose.Schema({
   },
   register_date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   profile: {
     type: mongoose.Types.ObjectId,
-    ref: "Profile"
-},
+    ref: "Profile",
+  },
+  role: {
+    type: String,
+    required: true,
+    trim: true,
+    lowercase: true,
+    enum: ["owner", "sitter"],
+  },
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {

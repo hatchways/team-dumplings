@@ -5,7 +5,7 @@ const register = async (username: string, email: string, password: string, role:
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, email, password }),
+    body: JSON.stringify({ username, email, password, role }),
     credentials: 'include',
   };
   return await fetch(`/auth/register`, fetchOptions)

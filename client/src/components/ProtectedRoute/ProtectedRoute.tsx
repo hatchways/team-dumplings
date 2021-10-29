@@ -9,6 +9,6 @@ export default function ProtectedRoute({ ...routeProps }: ProtectedRouteProps) {
   if (loggedInUser) {
     return <Route {...routeProps} />;
   } else {
-    return <Redirect to={{ pathname: '/login' }} />;
+    return <Redirect to={{ pathname: '/signin' }} />;
   }
 }
