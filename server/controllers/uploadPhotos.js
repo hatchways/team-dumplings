@@ -79,7 +79,7 @@ exports.setProfileGallery = asyncHandler(async (req, res, next) => {
 });
 
 // @route PATCH /upload/delete/:id 
-// @desc Update background Photo. 
+// @desc delete background/Profile Photo. 
 // @access Private
 exports.deleteProfilePhoto = asyncHandler(async (req, res, next) => {
     const profileId = req.params.id;
@@ -89,7 +89,7 @@ exports.deleteProfilePhoto = asyncHandler(async (req, res, next) => {
         let photoToDelete = {};
         if (photoType === 'profilePhoto') photoToDelete = { profilePhotoName: null }; 
         else if(photoType === 'backgroundPhoto') photoToDelete = { backgroundPhotoName: null };
-        else throw new Error('please send a valid photo type');
+        else throw new Error('please enter a valid photo type');
 
         const updatedProfile = await Profile.findByIdAndUpdate(profileId, 
             photoToDelete, 

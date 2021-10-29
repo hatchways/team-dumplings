@@ -62,7 +62,7 @@ const profileSchema = new mongoose.Schema({
         default: 'defaultAvatar.png',
     },
     backgroundPhotoName: String,
-    gallary: []
+    gallery: []
 });
 
 module.exports = Profile = mongoose.model("Profile", profileSchema);

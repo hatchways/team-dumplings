@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const protect = require('../middleware/auth');
+const isProfileOwner = require('../middleware/isProfileOwner');
 const { 
     setProfilePhoto, 
     setProfileGallery, 
@@ -8,13 +9,13 @@ const {
     setbackgroundPhoto
  } = require('../controllers/uploadPhotos');
 
-router.route('/photo/:id').patch(protect, setProfilePhoto);
+router.route('/photo/:id').patch(protect, isProfileOwner, setProfilePhoto);
 
-router.route('/background/:id').patch(protect, setbackgroundPhoto);
+router.route('/background/:id').patch(protect, isProfileOwner, setbackgroundPhoto);
 
-router.route('/gallary/:id').patch(protect, setProfileGallery);
+router.route('/gallary/:id').patch(protect, isProfileOwner, setProfileGallery);
 
-router.route('/delete/:id').patch(protect, deleteProfilePhoto);
+router.route('/delete/:id').patch(protect, isProfileOwner, deleteProfilePhoto);
 
 
 module.exports = router;
