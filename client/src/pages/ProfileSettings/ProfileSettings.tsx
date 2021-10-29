@@ -5,15 +5,29 @@ import ProfilePhoto from '../ProfilePhoto/ProfilePhoto';
 import NavBar from '../../components/NavBar/NavBar';
 import useStyles from './useStyles';
 
-// ToDo import {Payment', 'Security', 'Settings'} components once created.
-// add them in their place below to be rendered.
-
 const ProfileSettings = (): JSX.Element => {
   const classes = useStyles();
   const [component, setComponent] = useState<string>('Edit Profile');
   const [value, setValue] = useState<number>(0);
 
   const items = ['Edit Profile', 'Profile Photo', 'Payment', 'Security', 'Settings'];
+
+  // ToDo import {Payment', 'Security', 'Settings'} components once created.
+  // add them in their place below to be rendered.
+  const relevantComponent = () => {
+    switch (component) {
+      case 'Edit Profile':
+        return <MyProfile />;
+      case 'Profile Photo':
+        return <ProfilePhoto />;
+      case 'Payment':
+        return null;
+      case 'Security':
+        return null;
+      case 'Settings':
+        return null;
+    }
+  };
 
   return (
     <Fragment>
@@ -44,13 +58,7 @@ const ProfileSettings = (): JSX.Element => {
             <Divider />
           </Box>
         </Drawer>
-        <Box className={classes.box}>
-          {component === 'Edit Profile' ? (
-            <MyProfile />
-          ) : component === 'Profile Photo' ? (
-            <ProfilePhoto />
-          ) : component === 'Payment' ? null : component === 'Security' ? null : component === 'Settings' ? null : null}
-        </Box>
+        <Box className={classes.box}>{relevantComponent}</Box>
       </Box>
     </Fragment>
   );

@@ -30,7 +30,7 @@ function App(): JSX.Element {
                 <Route exact path={'/'} component={Home} />
                 <Route component={Booking} path={'/booking'} />
                 <Route component={Dashboard} path="/dashboard" />
-                <Route component={ProfileSettings} path="/profile-settings" />
+                <Route path="/profile/:settings" component={ProfileSettings} />
                 <Route exact path={'*'} component={NotFound} />
               </Switch>
             </SocketProvider>

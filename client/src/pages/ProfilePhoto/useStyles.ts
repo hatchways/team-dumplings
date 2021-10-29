@@ -39,6 +39,13 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     marginTop: '0.25em',
   },
+  gridItemAvatar: {
+    position: 'relative',
+  },
+  cameraIcon: {
+    width: '50px',
+    height: '30px',
+  },
 }));
 
 export default useStyles;

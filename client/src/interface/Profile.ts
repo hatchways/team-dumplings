@@ -7,6 +7,7 @@ export interface Profile {
   address: string;
   description: string;
   _id?: string;
+  profilePhotoName?: string;
 }
 
 export interface ProfileApiDataSuccess {

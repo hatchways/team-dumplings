@@ -56,7 +56,13 @@ const profileSchema = new mongoose.Schema({
         6: [dayAvailabilitySchema],
     },
     timezone: Number,
-    rate: Number
+    rate: Number,
+    profilePhotoName: {
+        type: String,
+        default: 'defaultAvatar.png',
+    },
+    backgroundPhotoName: String,
+    gallary: []
 });
 
 module.exports = Profile = mongoose.model("Profile", profileSchema);
