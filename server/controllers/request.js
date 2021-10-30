@@ -22,8 +22,14 @@ exports.loadRequest = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.listRequests = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
+  let params = {};
+  if (user.role == "sitter") {
+    params = { sitterId: ObjectId(user._id) };
+  } else {
+    params = { ownerId: ObjectId(user._id) };
+  }
   const requests = await Request.find({
-    sitterId: ObjectId(user._id),
+    ...params,
   })
     .populate({
       path: "sitterId",
