@@ -24,3 +24,13 @@ export const createProfile = async (inputs: Profile): Promise<ProfileApiData> =>
     .then((res) => res.json())
     .catch((error) => ({ error }));
 };
+
+export const getProfile = async (id: string): Promise<ProfileApiData> => {
+  const fetchOptions: FetchOptions = {
+    method: 'GET',
+    credentials: 'include',
+  };
+  return await fetch(`/profile/${id}`, fetchOptions)
+    .then((res) => res.json())
+    .catch((error) => ({ error }));
+};
