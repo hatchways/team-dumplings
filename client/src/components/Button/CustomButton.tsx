@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Badge, Button } from '@material-ui/core';
 import useStyles from './useStyles';
 import clsx from 'clsx';
+import { MouseEventHandler } from 'react';
 
 interface Props {
   linkTo: string;
@@ -10,9 +11,10 @@ interface Props {
   status?: string;
   disable?: boolean;
   cssStyle?: React.CSSProperties;
+  onClickFunction?: any;
 }
 
-const CustomButton = ({ linkTo, btnText, style, status, disable, cssStyle }: Props): JSX.Element => {
+const CustomButton = ({ linkTo, btnText, style, status, disable, cssStyle, onClickFunction }: Props): JSX.Element => {
   const { button, badge } = useStyles();
   const buttonStyle = clsx(button, style);
   const badgeStyle = clsx(badge, status);
@@ -27,6 +29,7 @@ const CustomButton = ({ linkTo, btnText, style, status, disable, cssStyle }: Pro
       disableRipple
       disabled={disable}
       style={cssStyle}
+      onClick={onClickFunction}
     >
       <Badge classes={{ badge: badgeStyle }} variant="dot">
         {btnText}
