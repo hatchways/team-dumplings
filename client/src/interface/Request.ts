@@ -60,3 +60,9 @@ export interface RequestsApiData {
   requests?: Request[] | SittingRequest[];
   error?: { message: string };
 }
+
+export interface CreateRequest {
+  sitterId: string;
+  start: Date | null;
+  end: Date | null;
+}

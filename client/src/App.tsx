@@ -28,12 +28,12 @@ function App(): JSX.Element {
                 <Route exact path="/signup" component={Signup} />
                 <Route path="/booking" component={Booking} />
                 <Route path="/dashboard" component={Dashboard} />
-                <Route exact path="/profile-details" component={ProfileDetails} />
-                <Route exact path='/myprofile' component={MyProfile} />
-                <Route exact path='/listing' component={Listing} />
-                <Route exact path='/sitting' component={Sitting} />
-                <Route exact path='/' component={Home} />
-                <Route path='*' component={NotFound} />
+                <Route exact path="/profile/details/:linkToProfile" component={ProfileDetails} />
+                <Route exact path="/myprofile" component={MyProfile} />
+                <Route exact path="/listing" component={Listing} />
+                <Route exact path="/sitting" component={Sitting} />
+                <Route exact path="/" component={Home} />
+                <Route path="*" component={NotFound} />
               </Switch>
             </SocketProvider>
           </AuthProvider>

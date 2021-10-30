@@ -56,7 +56,10 @@ const profileSchema = new mongoose.Schema({
         6: [dayAvailabilitySchema],
     },
     timezone: Number,
-    rate: Number
+    rate: Number,
+    price: Number,
+    aboutMe: String,
+    location: String,
 });
 
 module.exports = Profile = mongoose.model("Profile", profileSchema);
