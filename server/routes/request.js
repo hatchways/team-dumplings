@@ -9,6 +9,7 @@ const {
   createRequest,
   deleteRequest,
   updateRequest,
+  createRequestSitter,
 } = require("../controllers/request");
 
 router.route("/").get(protect, listRequests);
@@ -22,5 +23,7 @@ router.route("/:id").delete(validateId, protect, deleteRequest);
 router
   .route("/:id")
   .patch(validateId, protect, validateCreateUpdateRequest, updateRequest);
+
+router.route("/v2/").post(protect, createRequestSitter);
 
 module.exports = router;

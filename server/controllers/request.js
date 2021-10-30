@@ -117,3 +117,25 @@ exports.updateRequest = asyncHandler(async (req, res, next) => {
     });
   } else res.sendStatus(404);
 });
+
+// @route POST /requests
+// @desc create new request for logged in user (dog owner)
+// @access Private
+exports.createRequestSitter = asyncHandler(async (req, res, next) => {
+  const { sitterId, start, end } = req.body;
+
+  const requests = await Request.create({
+    ownerId: ObjectId(req.user.id),
+    sitterId: ObjectId(sitterId),
+    start,
+    end,
+  });
+  if (requests) {
+    res.status(201).json({
+      requests,
+    });
+  } else {
+    res.status(500);
+    throw new Error("Internal Server Error");
+  }
+});

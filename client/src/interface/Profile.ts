@@ -7,6 +7,13 @@ export interface Profile {
   address: string;
   description: string;
   _id?: string;
+  backgroundPhotoName?: string;
+  profilePhotoName?: string;
+  gallery?: [];
+  aboutMe?: string;
+  location?: string;
+  rate?: number;
+  price?: number;
 }
 
 export interface ProfileApiDataSuccess {
