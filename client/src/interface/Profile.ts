@@ -9,6 +9,7 @@ export interface Profile {
   _id?: string;
   availability?: any;
   rate?: number;
+  customerId?: string;
 }
 
 export interface ProfileApiDataSuccess {
