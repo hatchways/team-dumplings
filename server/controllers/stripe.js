@@ -25,13 +25,14 @@ const getRequestPrice = asyncHandler(async (requestId, res) => {
 });
 
 // @route POST /payments/:id/pay
-// @desc Pay pet sitter for a request (after service completed)
+// @desc create payement intent to payout pet sitter for a request (after service completed)
 // @access Private
 exports.createPaymentIntent = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const amount = await getRequestPrice(id, res);
   stripe.paymentIntents.create(
     {
+      customer,
       amount,
       currency: "cad",
       payment_method_types: ["card"],
@@ -46,4 +47,143 @@ exports.createPaymentIntent = asyncHandler(async (req, res, next) => {
       }
     }
   );
+});
+
+// @route POST /payments/customer
+// @desc create a stripe customer
+// @access Private
+exports.createCustomer = asyncHandler(async (req, res, next) => {
+  const { name, email, phone } = req.body;
+  stripe.customers.create(
+    {
+      name,
+      email,
+      phone,
+      description: "LovingSitter.",
+    },
+    (stripeError, stripeResponse) => {
+      if (stripeError) {
+        res.status(500).json({ error: stripeError });
+      } else if (stripeResponse) {
+        res.status(200).json({
+          customerId: stripeResponse.id,
+        });
+      } else {
+        res.status(500);
+        throw new Error("Internal Server Error");
+      }
+    }
+  );
+});
+
+// @route PATCH /payments/customer
+// @desc update a stripe customer with paymentMethod
+// @access Private
+exports.updateCustomer = asyncHandler(async (req, res, next) => {
+  const { cardId, customerId } = req.body;
+  stripe.customers.update(
+    customerId,
+    {
+      default_source: cardId,
+    },
+    (stripeError, stripeResponse) => {
+      if (stripeError) {
+        res.status(500).json({ error: stripeError });
+      } else {
+        res.status(200).json({
+          stripeResponse,
+        });
+      }
+    }
+  );
+});
+
+// @route POST /payments/method/
+// @desc create stripe paymentMethod `token` and bind the token to the current customer
+// @access Private
+exports.createPaymentMethod = asyncHandler(async (req, res, next) => {
+  const { creditCardNumber, cvcField, expDate, name, customerId } = req.body;
+  const number = creditCardNumber.trim();
+  const exp_month = parseInt(expDate.split("/")[0]);
+  const exp_year = parseInt(expDate.split("/")[1]);
+  const cvc = cvcField;
+
+  stripe.tokens.create(
+    {
+      card: {
+        name,
+        number,
+        exp_month,
+        exp_year,
+        cvc,
+      },
+    },
+    (stripeError, stripeResponse) => {
+      if (stripeError) {
+        res.status(500).json({ error: stripeError });
+      } else {
+        stripe.customers.createSource(
+          customerId,
+          { source: stripeResponse.id },
+          (stripeError, stripeResponse) => {
+            if (stripeError) {
+              res.status(500).json({ error: stripeError });
+            } else {
+              res.status(200).json({
+                stripeResponse,
+              });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+// @route GET payments/method/:id
+// @desc list payment methods for a given stripe customer
+// @access Private
+// @author @fetahokey
+exports.listPaymentMethods = asyncHandler(async (req, res, next) => {
+  const customerId = req.params.id;
+  const paymentProfiles = [];
+
+  stripe.customers.retrieve(customerId, (stripeError, customer) => {
+    if (customer) {
+      const default_source = customer.default_source;
+
+      stripe.customers.listPaymentMethods(
+        customerId,
+        { type: "card" },
+        (stripeError, paymentMethods) => {
+          if (paymentMethods) {
+            paymentMethods.data.map((item, index) => {
+              const { exp_month, exp_year, last4, brand } = item.card;
+              const { name } = item.billing_details;
+              paymentProfiles[index] = {
+                id: item.id,
+                default: item.id == default_source,
+                name,
+                brand,
+                expMonth: exp_month,
+                expYear: exp_year,
+                last4,
+              };
+            });
+            res.status(200).json({ paymentProfiles });
+          } else if (stripeError) {
+            res.status(500).json({ error: stripeError });
+          } else {
+            res.status(500);
+            throw new Error("Internal Server Error");
+          }
+        }
+      );
+    } else if (stripeError) {
+      res.status(500).json({ error: stripeError });
+    } else {
+      res.status(500);
+      throw new Error("Internal Server Error");
+    }
+  });
 });
