@@ -19,6 +19,6 @@
     "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
-    "react/no-unescaped-entities": 0
+    "react/no-unescaped-entities": "off"
   }
 }
