@@ -43,7 +43,7 @@ interface Props {
 }
 
 const dayOfWeekAsString = (dayIndex: number): string => {
-  return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][dayIndex];
+  return ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'][dayIndex];
 };
 
 export const ListingItem = ({
@@ -66,6 +66,7 @@ export const ListingItem = ({
     iconStyle,
     avatarButton,
     cardStyle,
+    chip,
   } = useStyles();
   return (
     <Grid item xs={12} sm={6} md={4} xl={3} className={itemContainer}>
@@ -87,42 +88,49 @@ export const ListingItem = ({
               <Box pt={2}>
                 <Divider light />
                 <Chip
+                  className={chip}
                   variant={_.isEmpty(availability?.[0]) ? 'outlined' : 'default'}
                   color="primary"
                   size="small"
                   label={dayOfWeekAsString(0)}
                 />
                 <Chip
+                  className={chip}
                   variant={_.isEmpty(availability?.[1]) ? 'outlined' : 'default'}
                   color="primary"
                   size="small"
                   label={dayOfWeekAsString(1)}
                 />
                 <Chip
+                  className={chip}
                   variant={_.isEmpty(availability?.[2]) ? 'outlined' : 'default'}
                   color="primary"
                   size="small"
                   label={dayOfWeekAsString(2)}
                 />
                 <Chip
+                  className={chip}
                   variant={_.isEmpty(availability?.[3]) ? 'outlined' : 'default'}
                   color="primary"
                   size="small"
                   label={dayOfWeekAsString(3)}
                 />
                 <Chip
+                  className={chip}
                   variant={_.isEmpty(availability?.[4]) ? 'outlined' : 'default'}
                   color="primary"
                   size="small"
                   label={dayOfWeekAsString(4)}
                 />
                 <Chip
+                  className={chip}
                   variant={_.isEmpty(availability?.[5]) ? 'outlined' : 'default'}
                   color="primary"
                   size="small"
                   label={dayOfWeekAsString(5)}
                 />
                 <Chip
+                  className={chip}
                   variant={_.isEmpty(availability?.[6]) ? 'outlined' : 'default'}
                   color="primary"
                   size="small"
