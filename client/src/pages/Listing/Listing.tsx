@@ -11,6 +11,7 @@ import { listProfiles } from '../../helpers/APICalls/listProfiles';
 import { Profile } from '../../interface/Profile';
 import { ListingItem, rate } from './ListingItem';
 import useStyles from './useStyles';
+import { useDebounce } from 'use-debounce';
 
 const Listing = (): JSX.Element => {
   const { root, title, search, dateInOff, iconStyle } = useStyles();
@@ -22,33 +23,41 @@ const Listing = (): JSX.Element => {
   const [dateIn, setDateIn] = useState<number>(TODAY);
   const [dateOff, setDateOff] = useState<number>(TODAY);
   const [searchString, setSearchString] = useState<string>('');
-  const dateInRef = useRef<any>();
-  const dateOffRef = useRef<any>();
-  const searchRef = useRef<any>();
+  const dateInRef = useRef<HTMLInputElement>(null);
+  const dateOffRef = useRef<HTMLInputElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const [debouncedSearch] = useDebounce({ filter, dateIn, dateOff, searchString }, 800);
 
   const handleFilterChange = () => {
-    setFilter(!filter);
+    setFilter((filter) => !filter);
     if (filter) {
-      searchRef.current.value = '';
-      dateInRef.current.value = new Date().toISOString().slice(0, 10);
-      dateOffRef.current.value = new Date().toISOString().slice(0, 10);
+      const searchInput = searchRef.current;
+      const dateInInput = dateInRef.current;
+      const dateOffInput = dateOffRef.current;
+
+      if (searchInput && dateInInput && dateOffInput) {
+        searchInput.value = '';
+        dateInInput.value = new Date().toISOString().slice(0, 10);
+        dateOffInput.value = new Date().toISOString().slice(0, 10);
+      }
+
       setSearchString('');
       setDateIn(TODAY);
       setDateOff(TODAY);
     }
   };
 
-  const handleSearchChange = (event: any) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchString(event.target.value);
     setFilter(true);
   };
 
-  const handleDateInChange = (event: any) => {
+  const handleDateInChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDateIn(new Date(event.target.value).getDay());
     setFilter(true);
   };
 
-  const handleDateOffChange = (event: any) => {
+  const handleDateOffChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDateOff(new Date(event.target.value).getDay());
     setFilter(true);
   };
@@ -65,7 +74,7 @@ const Listing = (): JSX.Element => {
     let ignore = true;
     function getProfiles() {
       setLoading(true);
-      listProfiles(filter, dateIn, dateOff, searchString).then((response) => {
+      listProfiles({ ...debouncedSearch }).then((response) => {
         if (response.error) {
           updateSnackBarMessage(JSON.stringify(response.error));
         } else if (response.success && response.success.profiles) {
@@ -84,7 +93,7 @@ const Listing = (): JSX.Element => {
     return () => {
       ignore = false;
     };
-  }, [updateSnackBarMessage, filter, dateIn, dateOff, searchString]);
+  }, [updateSnackBarMessage, debouncedSearch]);
 
   return (
     <>
@@ -153,7 +162,7 @@ const Listing = (): JSX.Element => {
         </Grid>
         <Grid container item direction="row" xs={12} md={10}>
           <Grid item container spacing={1}>
-            {!loading && profiles.length > 0 ? (
+            {!loading && !!profiles.length ? (
               profiles.map(
                 ({ _id, address, description, firstName, gender, lastName, phoneNumber, rate, availability }) => (
                   <ListingItem
