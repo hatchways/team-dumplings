@@ -1,9 +1,23 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { Badge, Box, Card, CardContent, CardHeader, Grid, Paper, Typography, useMediaQuery } from '@material-ui/core';
+import {
+  Badge,
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Collapse,
+  Grid,
+  IconButton,
+  Paper,
+  Typography,
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import { Alert } from '@material-ui/lab';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import NavBar from '../../components/NavBar/NavBar';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import { listRequests } from '../../helpers/APICalls/listRequests';
@@ -12,15 +26,23 @@ import BookingItem from './BookingItem';
 import useStyles from './useStyles';
 
 const Booking = (): JSX.Element => {
+  // eslint-disable-next-line
   const [requests, setRequests] = useState<Request[] | SittingRequest[]>([]);
   const [nextBooking, setNextBooking] = useState<Request[]>([]);
   const [currentBookings, setCurrentBookings] = useState<Request[]>([]);
   const [pastBookings, setPastBookings] = useState<Request[]>([]);
   const [bookingDays, setBookingDays] = useState<string[]>([]);
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState<undefined | boolean>(undefined);
   const [date, setDate] = useState(new Date() as MaterialUiPickersDate);
   const { updateSnackBarMessage } = useSnackBar();
+  const location = useLocation();
+  const [paymentConfirmation, setPaymentConfirmation] = useState<boolean | undefined>(undefined);
+
+  const getFullName = (firstName: string, lastName: string): string => {
+    return firstName.concat(' ').concat(lastName);
+  };
 
   const saveRequests = (requests: Request[] | SittingRequest[]) => {
     setRequests(requests);
@@ -28,7 +50,12 @@ const Booking = (): JSX.Element => {
 
   useEffect(() => {
     let ignore = true;
-
+    if (location.state) {
+      // eslint-disable-next-line
+      const { confirmCardPayment }: any = location.state;
+      confirmCardPayment ? setPaymentConfirmation(true) : setPaymentConfirmation(false);
+      setOpen(true);
+    }
     const initBookingDays = (requests: Request[]) => {
       const dates = requests.map((request) => {
         return moment(request.start).format('MM/DD/YYYY');
@@ -75,7 +102,7 @@ const Booking = (): JSX.Element => {
     return () => {
       ignore = false;
     };
-  }, [date, updateSnackBarMessage]);
+  }, [date, updateSnackBarMessage, location.state]);
 
   const onDateChange = (date: MaterialUiPickersDate): MaterialUiPickersDate => {
     setDate(date);
@@ -88,6 +115,28 @@ const Booking = (): JSX.Element => {
       <Grid container className={classes.root}>
         <Grid item md={6} className={classes.leftContainer}>
           <Box className={classes.bookingsBox}>
+            <Collapse in={open}>
+              <Alert
+                severity={paymentConfirmation ? 'success' : 'error'}
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setOpen(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                {paymentConfirmation ? 'Payment has been made successful' : 'Something went wrong with payment'}
+              </Alert>
+            </Collapse>
+          </Box>
+
+          <Box className={classes.bookingsBox}>
             <Card component={Paper}>
               <CardHeader title="next bookings:" />
 
@@ -96,12 +145,13 @@ const Booking = (): JSX.Element => {
                   nextBooking.map((request) => (
                     <BookingItem
                       _id={request._id}
-                      fullName={request.sitterId.username}
+                      fullName={getFullName(request.sitterId.profile.firstName, request.sitterId.profile.lastName)}
                       start={request.start}
                       end={request.end}
                       status={request.status}
                       username={request.ownerId}
                       sitterId={request.sitterId._id}
+                      rate={request.sitterId.profile.rate}
                       key={request._id}
                     />
                   ))}
@@ -123,12 +173,13 @@ const Booking = (): JSX.Element => {
                   currentBookings.map((request) => (
                     <BookingItem
                       _id={request._id}
-                      fullName={request.sitterId.username}
+                      fullName={getFullName(request.sitterId.profile.firstName, request.sitterId.profile.lastName)}
                       start={request.start}
                       end={request.end}
                       status={request.status}
                       username={request.ownerId}
                       sitterId={request.sitterId._id}
+                      rate={request.sitterId.profile.rate}
                       key={request._id}
                     />
                   ))}
@@ -145,12 +196,13 @@ const Booking = (): JSX.Element => {
                   pastBookings.map((request) => (
                     <BookingItem
                       _id={request._id}
-                      fullName={request.sitterId.username}
+                      fullName={getFullName(request.sitterId.profile.firstName, request.sitterId.profile.lastName)}
                       start={request.start}
                       end={request.end}
                       status={request.status}
                       username={request.ownerId}
                       sitterId={request.sitterId._id}
+                      rate={request.sitterId.profile.rate}
                       key={request._id}
                     />
                   ))}
@@ -172,7 +224,9 @@ const Booking = (): JSX.Element => {
             display="flex"
             alignItems="center"
             justifyContent="start"
-            maxWidth="55%"
+            justifyItems="center"
+            maxWidth="30%"
+            minWidth="25%"
             position="fixed"
           >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
