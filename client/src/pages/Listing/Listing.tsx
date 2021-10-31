@@ -1,77 +1,100 @@
 import { Box, Grid, IconButton, InputAdornment, TextField, Typography } from '@material-ui/core';
+import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
 import clsx from 'clsx';
+import { useEffect, useRef, useState } from 'react';
 import { CustomButton } from '../../components/Button/CustomButton';
 import NavBar from '../../components/NavBar/NavBar';
+import { useSnackBar } from '../../context/useSnackbarContext';
+import { listProfiles } from '../../helpers/APICalls/listProfiles';
+import { Profile } from '../../interface/Profile';
 import { ListingItem, rate } from './ListingItem';
 import useStyles from './useStyles';
-
-const sitters = [
-  {
-    id: 1,
-    fullname: 'Johnny Yad',
-    img: 'https://i.pravatar.cc/300',
-    slogan: 'Professional dog trainer',
-    description: 'I would like to work with your dog.',
-    location: 'New Yourk',
-    price: 80,
-    rating: 5,
-  },
-  {
-    id: 2,
-    fullname: 'Johnny Yad',
-    img: 'https://i.pravatar.cc/300',
-    slogan: 'Professional dog trainer',
-    description: 'I would like to work with your dog.',
-    location: 'New Yourk',
-    price: 80,
-    rating: 3,
-  },
-  {
-    id: 3,
-    fullname: 'Johnny Yad',
-    img: 'https://i.pravatar.cc/300',
-    slogan: 'Professional dog trainer',
-    description: 'I would like to work with your dog.',
-    location: 'Paris',
-    price: 180,
-    rating: 0,
-  },
-  {
-    id: 4,
-    fullname: 'Johnny Yad',
-    img: 'https://i.pravatar.cc/300',
-    slogan: 'Professional dog trainer',
-    description: 'I would like to work with your dog.',
-    location: 'New Yourk',
-    price: 40,
-    rating: 4,
-  },
-  {
-    id: 5,
-    fullname: 'Johnny Yad',
-    img: 'https://i.pravatar.cc/300',
-    slogan: 'Professional dog trainer',
-    description: 'I would like to work with your dog.',
-    location: 'New Yourk',
-    price: 80,
-    rating: 4,
-  },
-  {
-    id: 6,
-    fullname: 'Johnny Yad',
-    img: 'https://i.pravatar.cc/300',
-    slogan: 'Professional dog trainer',
-    description: 'I would like to work with your dog.',
-    location: 'New Yourk',
-    price: 80,
-    rating: 4,
-  },
-];
+import { useDebounce } from 'use-debounce';
 
 const Listing = (): JSX.Element => {
   const { root, title, search, dateInOff, iconStyle } = useStyles();
+  const TODAY = new Date().getDay();
+  const [loading, setLoading] = useState<undefined | boolean>(undefined);
+  const [filter, setFilter] = useState<boolean>(false);
+  const { updateSnackBarMessage } = useSnackBar();
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [dateIn, setDateIn] = useState<number>(TODAY);
+  const [dateOff, setDateOff] = useState<number>(TODAY);
+  const [searchString, setSearchString] = useState<string>('');
+  const dateInRef = useRef<HTMLInputElement>(null);
+  const dateOffRef = useRef<HTMLInputElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const [debouncedSearch] = useDebounce({ filter, dateIn, dateOff, searchString }, 800);
+
+  const handleFilterChange = () => {
+    setFilter((filter) => !filter);
+    if (filter) {
+      const searchInput = searchRef.current;
+      const dateInInput = dateInRef.current;
+      const dateOffInput = dateOffRef.current;
+
+      if (searchInput && dateInInput && dateOffInput) {
+        searchInput.value = '';
+        dateInInput.value = new Date().toISOString().slice(0, 10);
+        dateOffInput.value = new Date().toISOString().slice(0, 10);
+      }
+
+      setSearchString('');
+      setDateIn(TODAY);
+      setDateOff(TODAY);
+    }
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchString(event.target.value);
+    setFilter(true);
+  };
+
+  const handleDateInChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDateIn(new Date(event.target.value).getDay());
+    setFilter(true);
+  };
+
+  const handleDateOffChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDateOff(new Date(event.target.value).getDay());
+    setFilter(true);
+  };
+
+  const getFullName = (firstName: string, lastName: string): string => {
+    return firstName.concat(' ').concat(lastName);
+  };
+
+  const saveProfiles = (profiles: Profile[]) => {
+    setProfiles(profiles);
+  };
+
+  useEffect(() => {
+    let ignore = true;
+    function getProfiles() {
+      setLoading(true);
+      listProfiles({ ...debouncedSearch }).then((response) => {
+        if (response.error) {
+          updateSnackBarMessage(JSON.stringify(response.error));
+        } else if (response.success && response.success.profiles) {
+          if (ignore) {
+            saveProfiles(response.success.profiles);
+          }
+        } else {
+          updateSnackBarMessage('An unexpected error has occurred. Please try again later.');
+        }
+      });
+
+      setLoading(false);
+    }
+    getProfiles();
+
+    return () => {
+      ignore = false;
+    };
+  }, [updateSnackBarMessage, debouncedSearch]);
+
   return (
     <>
       <NavBar />
@@ -86,6 +109,8 @@ const Listing = (): JSX.Element => {
             <Box display="flex">
               <TextField
                 className={search}
+                inputRef={searchRef}
+                onChange={handleSearchChange}
                 placeholder="Toronto, Ontario"
                 InputProps={{
                   disableUnderline: true,
@@ -105,6 +130,8 @@ const Listing = (): JSX.Element => {
                 type="date"
                 defaultValue="2022-01-01"
                 className={clsx(dateInOff, 'left')}
+                onChange={handleDateInChange}
+                inputRef={dateInRef}
               />
               <TextField
                 id="dateOff"
@@ -112,37 +139,61 @@ const Listing = (): JSX.Element => {
                   disableUnderline: true,
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton color="primary" aria-label="clear search filter">
-                        <ClearIcon />
-                      </IconButton>
+                      {!filter ? (
+                        <IconButton aria-label="clear/apply search filter" onClick={handleFilterChange}>
+                          <CheckIcon />
+                        </IconButton>
+                      ) : (
+                        <IconButton aria-label="clear/apply search filter" onClick={handleFilterChange}>
+                          <ClearIcon color="primary" />
+                        </IconButton>
+                      )}
                     </InputAdornment>
                   ),
                 }}
                 type="date"
                 defaultValue="2022-01-10"
                 className={clsx(dateInOff, 'right')}
+                onChange={handleDateOffChange}
+                inputRef={dateOffRef}
               />
             </Box>
           </Grid>
         </Grid>
         <Grid container item direction="row" xs={12} md={10}>
           <Grid item container spacing={1}>
-            {sitters.map(({ id, img, fullname, rating, slogan, description, location, price }) => (
-              <ListingItem
-                key={id}
-                image={img}
-                fullName={fullname}
-                rating={rating as rate}
-                slogan={slogan}
-                description={description}
-                location={location}
-                price={price}
-              />
-            ))}
+            {!loading && !!profiles.length ? (
+              profiles.map(
+                ({ _id, address, description, firstName, gender, lastName, phoneNumber, rate, availability }) => (
+                  <ListingItem
+                    key={_id}
+                    image={'img'}
+                    fullName={getFullName(firstName, lastName)}
+                    rating={Math.floor(Math.random() * 5) as rate}
+                    slogan={'slogan'}
+                    description={description}
+                    location={address}
+                    price={rate || 0}
+                    availability={availability}
+                  />
+                ),
+              )
+            ) : (
+              <>
+                <Box display="flex" width="100%" justifyContent="center" flexDirection="column">
+                  <Typography variant="h2" color="primary" align="center">
+                    No results found.
+                  </Typography>
+                  <Typography variant="body2" align="center">
+                    We can't find any item matching your search.
+                  </Typography>
+                </Box>
+              </>
+            )}
           </Grid>
           <Grid item container md={12}>
             <Box width={'100%'} alignItems="center" justifyContent="center" display="flex" pt={5} pr={10} pl={10}>
-              <CustomButton linkTo="#" btnText="show more" style="showmore" />
+              <CustomButton linkTo="/" btnText="show more" style="showmore" />
             </Box>
           </Grid>
         </Grid>

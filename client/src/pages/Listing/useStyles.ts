@@ -83,5 +83,13 @@ const useStyles = makeStyles((theme) => ({
       borderBottomLeftRadius: 0,
     },
   },
+  cardStyle: {
+    width: 300,
+  },
+  chip: {
+    padding: 0,
+    marginRight: theme.spacing(1),
+    fontSize: 10,
+  },
 }));
 export default useStyles;
