@@ -19,6 +19,7 @@ import theme from './themes/theme';
 import Messages from './pages/Messages/Messages';
 import { ConversationProvider } from './context/useConversationContext';
 import Payment from './pages/Payment/Payment';
+import Checkout from './pages/Checkout/Checkout';
 
 function App(): JSX.Element {
   return (
@@ -36,6 +37,7 @@ function App(): JSX.Element {
                 <Route exact path="/dashboard" component={Dashboard} />
                 <Route exact path={'/'} component={Home} />
                 <Route exact path={'/payment'} component={Payment} />
+                <Route exact path={'/checkout'} component={Checkout} />
                 <Route exact path={'/myprofile'} component={MyProfile} />
                 <Route exact path="/profileDetails" component={ProfileDetails} />
                 <Route exact path="/listing" component={Listing} />
