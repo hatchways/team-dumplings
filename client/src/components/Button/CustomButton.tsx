@@ -1,16 +1,17 @@
-import { Link } from 'react-router-dom';
 import { Badge, Button } from '@material-ui/core';
-import useStyles from './useStyles';
 import clsx from 'clsx';
-import { MouseEventHandler } from 'react';
+import { Link } from 'react-router-dom';
+import useStyles from './useStyles';
 
 interface Props {
-  linkTo: string;
+  // eslint-disable-next-line
+  linkTo: any;
   btnText: string;
   style?: string;
   status?: string;
   disable?: boolean;
   cssStyle?: React.CSSProperties;
+  // eslint-disable-next-line
   onClickFunction?: any;
 }
 
