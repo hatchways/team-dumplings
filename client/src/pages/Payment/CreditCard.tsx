@@ -13,6 +13,7 @@ interface Props {
   fullname: string;
   cardId: string;
   customerId: string;
+  // eslint-disable-next-line
   defaultProfileAction: any;
 }
 
