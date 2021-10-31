@@ -93,7 +93,6 @@ const useStyles = makeStyles((theme) => ({
   CreditCardInputClass: {
     color: 'red !important',
     fontSize: '10px   !important',
-    //display: 'none',
   },
 }));
 
