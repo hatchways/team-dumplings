@@ -1,25 +1,23 @@
 import { Box, CircularProgress, Grid, Paper, Typography } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import clsx from 'clsx';
+import _ from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CustomButton } from '../../components/Button/CustomButton';
 import NavBar from '../../components/NavBar/NavBar';
+import { useAuth } from '../../context/useAuthContext';
+import { useSnackBar } from '../../context/useSnackbarContext';
+import { listPaymentMethods } from '../../helpers/APICalls/payment';
+import { getProfile } from '../../helpers/APICalls/profile';
+import { PaymentProfile } from '../../interface/Payment';
 import CreditCard from './CreditCard';
 import NewPaymentProfile from './NewPaymentProfile';
 import useStyles from './useStyles';
-import { CardElement, useStripe, useElements, Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { PaymentProfile } from '../../interface/Payment';
-import { useSnackBar } from '../../context/useSnackbarContext';
-import { listPaymentMethods } from '../../helpers/APICalls/payment';
-import { useAuth } from '../../context/useAuthContext';
-import { getProfile } from '../../helpers/APICalls/profile';
-import _ from 'lodash';
-import { Alert } from '@material-ui/lab';
 
-const Payment = () => {
-  const publicKey = process.env.REACT_APP_STRIPE_PUBLIC_KEY || '';
+const Payment = (): JSX.Element => {
   const { root, sideBarMenuItem, title, subTitle } = useStyles();
+  // eslint-disable-next-line
   const [fullWidth, setFullWidth] = useState(true);
   const [open, setOpen] = useState(false);
   const [customerId, setCustomerId] = useState<string>();
@@ -27,8 +25,6 @@ const Payment = () => {
   const { updateSnackBarMessage } = useSnackBar();
   const [loading, setLoading] = useState<boolean>(false);
   const { loggedInUser } = useAuth();
-
-  const stripePromise = loadStripe(publicKey);
 
   const savePaymentProfiles = (paymentProfiles: PaymentProfile[]) => {
     setPaymentProfiles(paymentProfiles);
@@ -78,6 +74,7 @@ const Payment = () => {
     let ignore = true;
     getPaymentMethods();
     return () => {
+      // eslint-disable-next-line
       ignore = false;
     };
   }, [getPaymentMethods]);
@@ -141,7 +138,7 @@ const Payment = () => {
                 ) : (
                   <>
                     <Alert variant="outlined" severity="warning">
-                      This is a warning alert — Please set one payment method at least!
+                      Warning — Please set one payment method at least!
                     </Alert>
                   </>
                 )}
@@ -156,14 +153,12 @@ const Payment = () => {
                   />
                 )}
               </Box>
-              <Elements stripe={stripePromise}>
-                <NewPaymentProfile
-                  fullWidth={fullWidth}
-                  open={open}
-                  handleClose={handleClose}
-                  callBackAction={getPaymentMethods}
-                />
-              </Elements>
+              <NewPaymentProfile
+                fullWidth={fullWidth}
+                open={open}
+                handleClose={handleClose}
+                callBackAction={getPaymentMethods}
+              />
             </Box>
           </Box>
         </Grid>
