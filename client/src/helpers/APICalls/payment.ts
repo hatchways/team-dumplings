@@ -1,4 +1,10 @@
-import { CustomerApiData, PaymentMethodApiData, PaymentProfileUpdateApiData } from '../../interface/Payment';
+import {
+  CustomerApiData,
+  PaymentIntentApiData,
+  PaymentMethodApiData,
+  PaymentProfileUpdateApiData,
+  ConfirmPaymentApiData,
+} from '../../interface/Payment';
 import { FetchOptions } from '../../interface/FetchOptions';
 
 export const createCustomer = async (name: string, email: string, phone: string): Promise<CustomerApiData> => {
@@ -52,6 +58,29 @@ export const createPaymentMethod = async (
     credentials: 'include',
   };
   return await fetch(`/payments/method`, fetchOptions)
+    .then((res) => res.json())
+    .catch((error) => ({ error }));
+};
+
+export const createPaymentIntent = async (requestId: string, customer: string): Promise<PaymentIntentApiData> => {
+  const fetchOptions: FetchOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ customer }),
+    credentials: 'include',
+  };
+  return await fetch(`/payments/${requestId}/pay`, fetchOptions)
+    .then((res) => res.json())
+    .catch((error) => ({ error }));
+};
+
+export const confirmPayment = async (requestId: string): Promise<ConfirmPaymentApiData> => {
+  const fetchOptions: FetchOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+  };
+  return await fetch(`/payments/${requestId}/confirmed`, fetchOptions)
     .then((res) => res.json())
     .catch((error) => ({ error }));
 };
