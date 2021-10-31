@@ -13,9 +13,14 @@ const getRequestPrice = asyncHandler(async (requestId, res) => {
       path: "profile",
       select: { rate: 1 },
     });
+    const { rate } = sitter.profile;
+
+    const subtotal = sittingHours * rate;
+    const fee = subtotal * 0.03;
+    const total = subtotal + fee;
 
     if (sitter && sitter.profile) {
-      return sittingHours * sitter.profile.rate * 100;
+      return total * 100;
     } else {
       return res.sendStatus(404);
     }
@@ -29,6 +34,7 @@ const getRequestPrice = asyncHandler(async (requestId, res) => {
 // @access Private
 exports.createPaymentIntent = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
+  const { customer } = req.body;
   const amount = await getRequestPrice(id, res);
   stripe.paymentIntents.create(
     {
@@ -39,10 +45,10 @@ exports.createPaymentIntent = asyncHandler(async (req, res, next) => {
     },
     (stripeError, stripeResponse) => {
       if (stripeError) {
-        res.status(500).json(stripeError);
+        res.status(500).json({ error: stripeError });
       } else {
         res.status(200).json({
-          success: { clientSecret: stripeResponse.client_secret },
+          clientSecret: stripeResponse.client_secret,
         });
       }
     }
@@ -77,7 +83,7 @@ exports.createCustomer = asyncHandler(async (req, res, next) => {
 });
 
 // @route PATCH /payments/customer
-// @desc update a stripe customer with paymentMethod
+// @desc update a stripe customer default paymentMethod (default source)
 // @access Private
 exports.updateCustomer = asyncHandler(async (req, res, next) => {
   const { cardId, customerId } = req.body;
@@ -186,4 +192,28 @@ exports.listPaymentMethods = asyncHandler(async (req, res, next) => {
       throw new Error("Internal Server Error");
     }
   });
+});
+
+// @route POST /payments/:id/confirmed
+// @desc change the request status when payments succeeded, to `paid`
+// @access Private
+exports.confirmPayment = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+
+  const updatedRequest = await Request.findOneAndUpdate(
+    {
+      _id: id,
+    },
+    { status: "paid" },
+    {
+      runValidators: true,
+      new: true,
+    }
+  );
+
+  if (updatedRequest) {
+    res.status(200).send({
+      request: updatedRequest,
+    });
+  } else res.sendStatus(404);
 });
