@@ -15,11 +15,14 @@ const {
   updateCustomer,
   createPaymentMethod,
   listPaymentMethods,
+  confirmPayment,
 } = require("../controllers/stripe");
 
 router
   .route("/:id/pay")
   .post([protect, validateId, validateStripeRequest], createPaymentIntent);
+
+router.route("/:id/confirmed").post(protect, validateId, confirmPayment);
 
 router
   .route("/method/:id")
