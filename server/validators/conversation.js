@@ -1,5 +1,4 @@
 const { check, validationResult } = require("express-validator");
-const { Mongoose } = require("mongoose");
 const Profile = require("../models/Profile");
 const validator = require("validator");
 
