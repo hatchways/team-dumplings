@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { validateCreateUpdateRequest } = require("../validators/request");
+const { validateUpdateRequest, validateCreateRequest } = require("../validators/request");
 const { validateId } = require("../validators/common");
 const protect = require("../middleware/auth");
 const {
@@ -16,14 +16,12 @@ router.route("/").get(protect, listRequests);
 
 router.route("/:id").get(validateId, protect, loadRequest);
 
-router.route("/").post(protect, validateCreateUpdateRequest, createRequest);
+router.route("/").post(protect, validateCreateRequest, createRequest);
 
 router.route("/:id").delete(validateId, protect, deleteRequest);
 
 router
   .route("/:id")
-  .patch(validateId, protect, validateCreateUpdateRequest, updateRequest);
-
-router.route("/v2/").post(protect, createRequestSitter);
+  .patch(validateId, protect, validateUpdateRequest, updateRequest);
 
 module.exports = router;

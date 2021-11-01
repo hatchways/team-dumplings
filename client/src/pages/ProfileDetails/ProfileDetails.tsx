@@ -45,7 +45,6 @@ const ProfileDetails = (): JSX.Element => {
   };
 
   useEffect(() => {
-    // const id = linkToProfile ? linkToProfile : '';
     getProfile(sitterId).then((data) => {
       if (data.error) {
         updateSnackBarMessage(data.error);

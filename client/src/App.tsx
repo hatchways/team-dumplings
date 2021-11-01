@@ -29,7 +29,7 @@ function App(): JSX.Element {
                 <Route path="/booking" component={Booking} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route exact path="/profile/details/:linkToProfile" component={ProfileDetails} />
-                <Route exact path="/myprofile" component={MyProfile} />
+                <Route exact path="/my-profile" component={MyProfile} />
                 <Route exact path="/listing" component={Listing} />
                 <Route exact path="/sitting" component={Sitting} />
                 <Route exact path="/" component={Home} />
