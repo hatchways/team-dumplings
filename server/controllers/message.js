@@ -14,7 +14,6 @@ exports.createMessage = asyncHandler(async (req, res, next) => {
 
   const conversation = await Conversation.findOne({
     _id: conversationId,
-    //members: [profile._id, recipientId],
     members: { $all: [profile._id, recipientId] },
   });
 
