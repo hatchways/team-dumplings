@@ -10,23 +10,24 @@ import { searchUsers } from '../../helpers/APICalls/searchUsers';
 interface Props {
   search: string;
   handleChange: (event: ChangeEvent<HTMLInputElement>, newInputValue: string) => void;
+  options: User[];
+  setOptions: any;
 }
-const Search = ({ search, handleChange }: Props): JSX.Element => {
+const Search = ({ search, handleChange, options, setOptions }: Props): JSX.Element => {
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState<User[]>([]);
+  //const [options, setOptions] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   // limit our call to the api with a debounced value at max of 1 per 0.5 seconds
   const [debouncedSearch] = useDebounce(search, 500);
 
   const classes = useStyles();
 
-  const saveOptions = (users: User[]) => {
-    setOptions(users);
-  };
-
   useEffect(() => {
     let active = true;
 
+    const saveOptions = (users: User[]) => {
+      setOptions(users);
+    };
     async function searchAndSaveUsers() {
       // send request to backend API to get users limited to 20.
       setLoading(true);
@@ -35,7 +36,6 @@ const Search = ({ search, handleChange }: Props): JSX.Element => {
       });
 
       if (active && response && response.users) {
-        console.log(response);
         saveOptions(response.users);
       }
       setLoading(false);
@@ -46,7 +46,7 @@ const Search = ({ search, handleChange }: Props): JSX.Element => {
     return () => {
       active = false;
     };
-  }, [debouncedSearch]);
+  }, [debouncedSearch, setOptions]);
 
   // creates a combobox search which is dynamically updated with call's to the API
   return (
