@@ -17,6 +17,7 @@ const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
   const [search, setSearch] = useState<string>('test');
   const [newChatUser, setNewChatUser] = useState<User | null>(null);
   const classes = useStyles();
+  const [options, setOptions] = useState<User[]>([]);
 
   // React.FormEvent<FormControl & FormControlProps>)
   const handleChange = (e: ChangeEvent<HTMLInputElement>, newInputValue: string) => {
@@ -39,7 +40,7 @@ const ChatSideBanner = ({ loggedInUser }: Props): JSX.Element => {
         <Typography className={classes.chatTitle} variant="h5">
           Users
         </Typography>
-        <Search search={search} handleChange={handleChange} />
+        <Search options={options} setOptions={setOptions} search={search} handleChange={handleChange} />
       </Box>
     </Grid>
   );
