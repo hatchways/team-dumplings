@@ -21,25 +21,25 @@ const theme = createTheme({
 
 theme.overrides = {
   MuiTypography: {
-    // home page logo text
-    h4: {
-      fontSize: 26,
+    // home page slogan
+    h1: {
+      fontSize: 50,
     },
     // navbar left logo text && login/signup welcome title
     h2: {
       fontSize: 26,
     },
-    // home page slogan
-    h1: {
-      fontSize: 50,
-    },
     // 404 title
-    h5: {
-      fontSize: 100,
-    },
     // listing item full name
     h3: {
       fontSize: 24,
+    },
+    // home page logo text
+    h4: {
+      fontSize: 26,
+    },
+    h5: {
+      fontSize: 100,
     },
     // listing item subtitle
     subtitle1: {
