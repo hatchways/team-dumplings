@@ -6,12 +6,11 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: '#E9EEF9',
+    border: '1px solid #E9EEF9',
     marginLeft: 0,
     height: '50px',
     lineHeight: '18px',
-
-    width: `calc(${drawerWidth} - 2rem)`,
+    width: `150%`,
   },
   searchRoot: {
     color: 'inherit',
