@@ -16,7 +16,7 @@ const messageSchema = new mongoose.Schema(
       ref: "Profile",
       required: true,
     },
-    seen: {
+    read: {
       type: Boolean,
       default: false,
     },
