@@ -27,6 +27,9 @@ exports.createMessage = asyncHandler(async (req, res, next) => {
     text,
   });
 
+  conversation.latestMessage = message._id;
+  await conversation.save();
+
   message = await Message.populate(message, {
     path: "sender",
     select: { firstName: 1, lastName: 1 },
@@ -43,7 +46,7 @@ exports.createMessage = asyncHandler(async (req, res, next) => {
 });
 
 // @route PATCH /messages/:id
-// @desc update message `seen` to true, when message is seen
+// @desc update message `read` to true, when message is read
 // @access private
 exports.updateMessageStatus = asyncHandler(async (req, res, next) => {
   const { conversationId, recipientId } = req.body;
@@ -65,7 +68,7 @@ exports.updateMessageStatus = asyncHandler(async (req, res, next) => {
       _id: messageId,
     },
     {
-      seen: true,
+      read: true,
     },
     {
       runValidators: true,
