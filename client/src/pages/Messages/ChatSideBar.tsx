@@ -1,15 +1,35 @@
-import { Avatar, Badge, Box, Divider, Paper, Typography } from '@material-ui/core';
-import clsx from 'clsx';
-import useStyles from './useStyles';
-import ConversationBox from './UserConversationBox';
-import Search from '../../components/Search/Search';
+import { Box, CircularProgress, Divider, Paper, Typography } from '@material-ui/core';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { User } from '../../interface/User';
+import Search from '../../components/Search/Search';
+import { createConversation, getAllConversations } from '../../helpers/APICalls/conversations';
+import { Conversation } from '../../interface/Conversation';
+import { Profile } from '../../interface/Profile';
+import { User, UserFromSearch } from '../../interface/User';
+import ConversationBox from './UserConversationBox';
+import useStyles from './useStyles';
+import { useConversation } from '../../context/useConversationContext';
+import { useSnackBar } from '../../context/useSnackbarContext';
 
-export const ChatSideBar = (): JSX.Element => {
+interface Props {
+  conversations: Conversation[];
+  profileId: string;
+}
+
+export const ChatSideBar = ({ conversations, profileId }: Props): JSX.Element => {
   const [search, setSearch] = useState<string>('test');
   const [newChatUser, setNewChatUser] = useState<User | null>(null);
-  const [options, setOptions] = useState<User[]>([]);
+  const [options, setOptions] = useState<UserFromSearch[]>([]);
+  const [selected, setSelected] = useState<boolean>(false);
+  const { updateConversationContext } = useConversation();
+  const { updateSnackBarMessage } = useSnackBar();
+
+  const getRecipient = (members: Profile[]): Profile => {
+    return members.filter((member) => member._id != profileId)[0];
+  };
+
+  const getFullName = (profile: Profile): string => {
+    return profile.firstName.concat(' ').concat(profile.lastName);
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, newInputValue: string) => {
     setSearch(newInputValue);
@@ -17,10 +37,31 @@ export const ChatSideBar = (): JSX.Element => {
       setNewChatUser(null);
     }
   };
+
   useEffect(() => {
-    // TODO set user from search to conversation
-    console.log(`Changed ${JSON.stringify(options)}`);
-  }, [options]);
+    let active = true;
+    if (selected && options.length) {
+      const recipientId = options[0].profile._id;
+
+      const newConversation = async () => {
+        let response = await createConversation([profileId, recipientId!]);
+        if (response.error) {
+          updateSnackBarMessage(response.error);
+        } else if (response.conversation) {
+          response = await getAllConversations();
+          if (response.error) {
+            updateSnackBarMessage(response.error);
+          } else if (response.conversations) {
+            updateConversationContext(response.conversations);
+          }
+        }
+      };
+      newConversation();
+    }
+    return () => {
+      active = false;
+    };
+  }, [options, selected, profileId, updateConversationContext, updateSnackBarMessage]);
   const { chatSideBar } = useStyles();
   return (
     <>
@@ -32,27 +73,33 @@ export const ChatSideBar = (): JSX.Element => {
         </Box>
         <Box display={'flex'} width={'100%'}>
           <Box display="flex" width={'100%'} pt={2} pb={3} pl={2} height="6vh" alignItems="center">
-            <Search options={options} setOptions={setOptions} search={search} handleChange={handleChange} />
+            <Search
+              options={options}
+              setOptions={setOptions}
+              search={search}
+              handleChange={handleChange}
+              setSelected={setSelected}
+            />
           </Box>
         </Box>
         <Divider light orientation="horizontal" />
         <Box className={chatSideBar}>
-          <ConversationBox
-            imageUrl={'https://i.pravatar.cc/300'}
-            name={'Marry Wills'}
-            latestMessage={"I'll send you details"}
-            sentTime={new Date()}
-            selected={true}
-            activeUser={true}
-          />
-          <ConversationBox
-            imageUrl={'https://i.pravatar.cc/300'}
-            name={'William Pory'}
-            latestMessage={"okey i'll Text you ..."}
-            sentTime={new Date('09/02/2021 11:55:30')}
-            selected={false}
-            activeUser={false}
-          />
+          {conversations ? (
+            conversations.map((conversation) => (
+              <ConversationBox
+                key={conversation._id}
+                imageUrl={'https://i.pravatar.cc/300'}
+                name={getFullName(getRecipient(conversation.members))}
+                latestMessage={conversation?.latestMessage?.text}
+                sentTime={new Date(conversation.updatedAt)}
+                selected={false}
+                activeUser={false}
+                conversationId={conversation._id}
+              />
+            ))
+          ) : (
+            <CircularProgress />
+          )}
         </Box>
       </Box>
     </>
