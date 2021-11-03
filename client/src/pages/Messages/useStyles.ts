@@ -9,6 +9,13 @@ const useStyles = makeStyles((theme) => ({
     },
     paddingTop: theme.spacing(8),
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 2,
+    color: '#fff',
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+  },
   fullName: {
     fontWeight: 500,
     marginBottom: 0,
