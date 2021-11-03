@@ -98,7 +98,6 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
     res.status(401);
     throw new Error("Not authorized");
   }
-
   res.status(200).json({
     success: {
       user: {
@@ -106,6 +105,7 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        profile: user.profile,
       },
     },
   });
