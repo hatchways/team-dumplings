@@ -11,7 +11,9 @@ exports.getAllConversations = asyncHandler(async (req, res, next) => {
 
   const conversations = await Conversation.find({
     members: { $in: [profile._id] },
-  }).populate("members", "firstName lastName");
+  })
+    .populate("members", "firstName lastName")
+    .populate("latestMessage");
 
   res.status(200).json({ conversations });
 });
@@ -38,8 +40,10 @@ exports.getOneConversation = asyncHandler(async (req, res, next) => {
   }).populate("sender", "firstName lastName");
 
   res.status(200).json({
-    conversationId,
-    messages,
+    conversationContent: {
+      conversationId,
+      messages,
+    },
   });
 });
 
