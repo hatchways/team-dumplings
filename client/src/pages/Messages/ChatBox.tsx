@@ -52,14 +52,8 @@ const ChatBox = ({ profileId }: Props): JSX.Element => {
   };
 
   const handleSendMessage = () => {
-    const AsyncSendMessage = async () => {
-      if (
-        currentConversation &&
-        currentRecipient &&
-        currentConversation.conversationId &&
-        currentRecipient._id &&
-        socket
-      ) {
+    const asyncSendMessage = async () => {
+      if (currentConversation?.conversationId && currentRecipient?._id && socket) {
         const conversationId = currentConversation.conversationId;
         const recipientId = currentRecipient._id;
 
@@ -78,13 +72,14 @@ const ChatBox = ({ profileId }: Props): JSX.Element => {
             replyAreaRef.current.value = '';
           }
 
-          const setCurrentConversation = async () => {
+          {
             const response = await getOneConversation(conversationId);
 
-          if (response.error) {
-            updateSnackBarMessage(response.error);
-          } else if (response.conversationContent) {
-            updateCurrentConversation(response.conversationContent);
+            if (response.error) {
+              updateSnackBarMessage(response.error);
+            } else if (response.conversationContent) {
+              updateCurrentConversation(response.conversationContent);
+            }
           }
         }
       }
