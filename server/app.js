@@ -17,6 +17,9 @@ const dogRouter = require("./routes/dog");
 const paymentRouter = require("./routes/stripe");
 const conversationRouter = require("./routes/conversation");
 const messageRouter = require("./routes/message");
+const { addUser, removeUser, getUser } = require("./utils/socketUsers");
+const ioCookieParser = require("socket.io-cookie-parser");
+const jwt = require("jsonwebtoken");
 
 const { json, urlencoded } = express;
 
@@ -29,9 +32,37 @@ const io = socketio(server, {
     origin: "*",
   },
 });
+io.use(ioCookieParser());
+io.use((socket, next) => {
+  const token = socket.request.cookies["token"];
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      user = decoded;
+      next();
+    } catch (err) {
+      return next(new Error("Authentication Error"));
+    }
+  } else {
+    return next(new Error("Authentication Error"));
+  }
+}).on("connection", (socket, next) => {
+  socket.on("addUser", (userId) => {
+    const users = addUser(userId, socket.id);
+    io.emit("getUsers", users);
+  });
 
-io.on("connection", (socket) => {
-  console.log("connected");
+  socket.on("sendMessage", ({ recipientId, ...rest }) => {
+    const activeUser = getUser(recipientId);
+    if (activeUser) {
+      io.to(activeUser.socketId).emit("getMessage", { ...rest });
+    }
+  });
+
+  socket.on("disconnect", () => {
+    const users = removeUser(socket.id);
+    io.emit("getUsers", users);
+  });
 });
 
 if (process.env.NODE_ENV === "development") {
