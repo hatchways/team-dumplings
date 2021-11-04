@@ -3,6 +3,7 @@ import { Profile } from './Profile';
 type role = 'owner' | 'sitter';
 
 export interface User {
+  id: string;
   email: string;
   username: string;
   role: role;
