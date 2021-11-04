@@ -63,7 +63,6 @@ const Search = ({ search, handleChange, options, setOptions, setSelected }: Prop
         onClose={() => {
           setOpen(false);
           setSelected(true);
-          console.log(`selected ......`);
         }}
         getOptionSelected={(option, value) => option.username === value.username}
         getOptionLabel={(option) => `${option.profile.firstName} ${option.profile.lastName} (${option.username})`}

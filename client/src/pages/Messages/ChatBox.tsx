@@ -36,8 +36,8 @@ const ChatBox = ({ profileId }: Props): JSX.Element => {
   const { updateSnackBarMessage } = useSnackBar();
 
   const handleSendMessage = () => {
-    const AsyncSendMessage = async () => {
-      if (currentConversation && currentRecipient && currentConversation.conversationId && currentRecipient._id) {
+    const asyncSendMessage = async () => {
+      if (currentConversation?.conversationId && currentRecipient?._id) {
         const conversationId = currentConversation.conversationId;
         const recipientId = currentRecipient._id;
 
@@ -45,22 +45,18 @@ const ChatBox = ({ profileId }: Props): JSX.Element => {
         if (response.error) {
           updateSnackBarMessage(response.error);
         } else if (response.message) {
-          const setCurrentConversation = async () => {
-            const response = await getOneConversation(conversationId);
+          const response = await getOneConversation(conversationId);
 
-            if (response.error) {
-              updateSnackBarMessage(response.error);
-            } else if (response.conversationContent) {
-              updateCurrentConversation(response.conversationContent);
-            }
-          };
-
-          setCurrentConversation();
+          if (response.error) {
+            updateSnackBarMessage(response.error);
+          } else if (response.conversationContent) {
+            updateCurrentConversation(response.conversationContent);
+          }
         }
       }
     };
 
-    AsyncSendMessage();
+    asyncSendMessage();
   };
   const handleSendTextChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const messageTxt = e.target.value;
