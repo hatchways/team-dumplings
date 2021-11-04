@@ -10,9 +10,10 @@ interface Props {
   status?: string;
   disable?: boolean;
   cssStyle?: React.CSSProperties;
+  onClick?: (e: any) => void;
 }
 
-const CustomButton = ({ linkTo, btnText, style, status, disable, cssStyle }: Props): JSX.Element => {
+const CustomButton = ({ linkTo, btnText, style, status, disable, cssStyle, onClick }: Props): JSX.Element => {
   const { button, badge } = useStyles();
   const buttonStyle = clsx(button, style);
   const badgeStyle = clsx(badge, status);
@@ -27,6 +28,7 @@ const CustomButton = ({ linkTo, btnText, style, status, disable, cssStyle }: Pro
       disableRipple
       disabled={disable}
       style={cssStyle}
+      onClick={onClick}
     >
       <Badge classes={{ badge: badgeStyle }} variant="dot">
         {btnText}
