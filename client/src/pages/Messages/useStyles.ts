@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   chatSideBar: {
-    overflowY: 'scroll',
+    //overflowY: 'scroll',
     height: '60vh',
   },
 
