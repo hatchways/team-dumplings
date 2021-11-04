@@ -1,17 +1,17 @@
-let users = [];
+let users = {};
 
 const getUser = (userId) => {
-  return users.find((user) => user.userId === userId);
+  return users[userId];
 };
 
 const addUser = (userId, socketId) => {
-  !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
+  users[userId] = socketId;
   return users;
 };
 
 const removeUser = (socketID) => {
-  users = users.filter((user) => user.socketId !== socketID);
+  let key = Object.keys(users).find((k) => users[k] === socketID);
+  delete users[key];
   return users;
 };
 
