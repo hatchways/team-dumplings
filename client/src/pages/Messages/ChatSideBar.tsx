@@ -20,7 +20,7 @@ export const ChatSideBar = ({ conversations, profileId }: Props): JSX.Element =>
   const [newChatUser, setNewChatUser] = useState<User | null>(null);
   const [options, setOptions] = useState<UserFromSearch[]>([]);
   const [selected, setSelected] = useState<boolean>(false);
-  const { updateConversationContext } = useConversation();
+  const { updateConversationContext, loading } = useConversation();
   const { updateSnackBarMessage } = useSnackBar();
 
   const getRecipient = (members: Profile[]): Profile => {
@@ -84,7 +84,9 @@ export const ChatSideBar = ({ conversations, profileId }: Props): JSX.Element =>
         </Box>
         <Divider light orientation="horizontal" />
         <Box className={chatSideBar}>
-          {conversations ? (
+          {console.log(`conversation: ${conversations}  loading: ${loading}`)}
+          {console.log(conversations)}
+          {conversations && !loading ? (
             conversations.map((conversation) => (
               <ConversationBox
                 key={conversation._id}
@@ -97,8 +99,10 @@ export const ChatSideBar = ({ conversations, profileId }: Props): JSX.Element =>
                 conversationId={conversation._id}
               />
             ))
-          ) : (
+          ) : !conversations ? (
             <CircularProgress />
+          ) : (
+            <Typography>Nothing !</Typography>
           )}
         </Box>
       </Box>

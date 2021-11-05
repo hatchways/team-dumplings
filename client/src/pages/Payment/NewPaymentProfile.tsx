@@ -55,7 +55,7 @@ const NewPaymentProfile = ({ fullWidth, open, handleClose, callBackAction }: Pro
   useEffect(() => {
     let ignore = true;
     const createNewCustomer = (data: ProfileApiDataSuccess, email: string) => {
-      const profile = data.profile;
+      const profile = data?.profile;
       const { firstName, lastName, phoneNumber } = profile as Profile;
 
       createCustomer(firstName.concat(' ').concat(lastName), email, phoneNumber).then((response) => {
@@ -92,7 +92,7 @@ const NewPaymentProfile = ({ fullWidth, open, handleClose, callBackAction }: Pro
           } else if (response.success) {
             if (ignore) {
               saveProfile(response.success, loggedInUser.email);
-              if (response.success?.profile?.customerId) {
+              if (response?.success?.profile?.customerId) {
                 saveCustomerId(response.success.profile.customerId);
               } else {
                 createNewCustomer(response.success, loggedInUser.email);

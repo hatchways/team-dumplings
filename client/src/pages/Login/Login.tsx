@@ -22,12 +22,12 @@ export default function Login(): JSX.Element {
     defaultMatches: true,
   });
   const history = useHistory();
-
+  /*
   if (loggedInUser) {
     history.push('/booking');
     return <CircularProgress />;
   }
-
+*/
   const handleSubmit = (
     { email, password }: { email: string; password: string },
     { setSubmitting }: FormikHelpers<{ email: string; password: string }>,

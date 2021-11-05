@@ -17,12 +17,12 @@ export default function Register(): JSX.Element {
   const { updateLoginContext, loggedInUser } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
   const history = useHistory();
-
+  /*
   if (loggedInUser) {
     history.push('/booking');
     return <CircularProgress />;
   }
-
+*/
   const handleSubmit = (
     {
       username,
