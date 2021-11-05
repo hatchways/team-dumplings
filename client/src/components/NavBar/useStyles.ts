@@ -96,6 +96,13 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(1, 4, 1, 4),
     },
   },
+
+  avatar: {
+    cursor: 'pointer',
+  },
+  menu: {
+    marginTop: 30,
+  },
 }));
 
 export default useStyles;

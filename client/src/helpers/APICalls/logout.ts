@@ -3,7 +3,7 @@ import { FetchOptions } from '../../interface/FetchOptions';
 
 const logout = async (): Promise<AuthApiData> => {
   const fetchOptions: FetchOptions = {
-    method: 'GET',
+    method: 'POST',
     credentials: 'include',
   };
   return await fetch(`/auth/logout`, fetchOptions)

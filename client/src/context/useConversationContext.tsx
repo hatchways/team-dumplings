@@ -1,12 +1,14 @@
 import { useState, useContext, createContext, FunctionComponent, useEffect, useCallback } from 'react';
 import { Conversation, ConversationContent } from '../interface/Conversation';
 import { getAllConversations } from '../helpers/APICalls/conversations';
+import { boolean } from 'yup';
 
 interface IConversationContext {
   currentConversation: ConversationContent | null | undefined;
   conversations: Conversation[] | null | undefined;
   updateConversationContext: (data: Conversation[]) => void;
   updateCurrentConversation: (conversationContent: ConversationContent) => void;
+  loading: boolean | null;
 }
 
 export const ConversationContext = createContext<IConversationContext>({
@@ -14,11 +16,13 @@ export const ConversationContext = createContext<IConversationContext>({
   conversations: [],
   updateConversationContext: () => null,
   updateCurrentConversation: () => null,
+  loading: null,
 });
 
 export const ConversationProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [conversations, setConversations] = useState<Conversation[] | null | undefined>();
   const [currentConversation, setCurrentConversation] = useState<ConversationContent | null | undefined>();
+  const [loading, setLoading] = useState<boolean | null>(null);
 
   const updateConversationContext = useCallback((data: Conversation[]) => {
     setConversations(data);
@@ -30,7 +34,7 @@ export const ConversationProvider: FunctionComponent = ({ children }): JSX.Eleme
 
   useEffect(() => {
     let active = true;
-
+    setLoading(true);
     const getConversations = async () => {
       const response = await getAllConversations();
       if (response.conversations) {
@@ -38,7 +42,7 @@ export const ConversationProvider: FunctionComponent = ({ children }): JSX.Eleme
       } else return;
     };
     getConversations();
-
+    setLoading(false);
     return () => {
       active = false;
     };
@@ -46,7 +50,7 @@ export const ConversationProvider: FunctionComponent = ({ children }): JSX.Eleme
 
   return (
     <ConversationContext.Provider
-      value={{ currentConversation, conversations, updateConversationContext, updateCurrentConversation }}
+      value={{ currentConversation, conversations, updateConversationContext, updateCurrentConversation, loading }}
     >
       {children}
     </ConversationContext.Provider>

@@ -18,7 +18,7 @@ import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import { createCustomer, createPaymentMethod } from '../../helpers/APICalls/payment';
 import { editProfile, getProfile } from '../../helpers/APICalls/profile';
-import { ProfileApiDataSuccess } from '../../interface/Profile';
+import { Profile, ProfileApiDataSuccess } from '../../interface/Profile';
 import useStyles from './useStyles';
 
 interface Props {
@@ -46,7 +46,7 @@ const NewPaymentProfile = ({ fullWidth, open, handleClose, callBackAction }: Pro
   };
 
   const saveProfile = (data: ProfileApiDataSuccess, email: string): void => {
-    const { firstName, lastName, phoneNumber } = data.profile;
+    const { firstName, lastName, phoneNumber } = data.profile as Profile;
     setFullName(firstName.concat(' ').concat(lastName));
     setPhoneNumber(phoneNumber);
     setEmail(email);
@@ -55,8 +55,8 @@ const NewPaymentProfile = ({ fullWidth, open, handleClose, callBackAction }: Pro
   useEffect(() => {
     let ignore = true;
     const createNewCustomer = (data: ProfileApiDataSuccess, email: string) => {
-      const profile = data.profile;
-      const { firstName, lastName, phoneNumber } = profile;
+      const profile = data?.profile;
+      const { firstName, lastName, phoneNumber } = profile as Profile;
 
       createCustomer(firstName.concat(' ').concat(lastName), email, phoneNumber).then((response) => {
         if (response.customerId && profile && profile._id) {
@@ -92,7 +92,7 @@ const NewPaymentProfile = ({ fullWidth, open, handleClose, callBackAction }: Pro
           } else if (response.success) {
             if (ignore) {
               saveProfile(response.success, loggedInUser.email);
-              if (response.success.profile.customerId) {
+              if (response?.success?.profile?.customerId) {
                 saveCustomerId(response.success.profile.customerId);
               } else {
                 createNewCustomer(response.success, loggedInUser.email);
