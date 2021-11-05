@@ -1,41 +1,40 @@
-import { ChangeEvent, useState, useEffect, SyntheticEvent } from 'react';
-import useStyles from './useStyles';
-import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { User } from '../../interface/User';
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { searchUsers } from '../../helpers/APICalls/searchUsers';
+import { UserFromSearch } from '../../interface/User';
+import useStyles from './useStyles';
 
 interface Props {
   search: string;
   handleChange: (event: ChangeEvent<HTMLInputElement>, newInputValue: string) => void;
+  options: UserFromSearch[];
+  setOptions: any;
+  setSelected?: any;
 }
-const Search = ({ search, handleChange }: Props): JSX.Element => {
+
+const Search = ({ search, handleChange, options, setOptions, setSelected }: Props): JSX.Element => {
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
-  // limit our call to the api with a debounced value at max of 1 per 0.5 seconds
   const [debouncedSearch] = useDebounce(search, 500);
 
   const classes = useStyles();
 
-  const saveOptions = (users: User[]) => {
-    setOptions(users);
-  };
-
   useEffect(() => {
     let active = true;
 
+    const saveOptions = (users: UserFromSearch[]) => {
+      setOptions(users);
+    };
     async function searchAndSaveUsers() {
-      // send request to backend API to get users limited to 20.
       setLoading(true);
       const response = await searchUsers({
         search: debouncedSearch,
       });
 
       if (active && response && response.users) {
-        console.log(response);
         saveOptions(response.users);
       }
       setLoading(false);
@@ -46,9 +45,8 @@ const Search = ({ search, handleChange }: Props): JSX.Element => {
     return () => {
       active = false;
     };
-  }, [debouncedSearch]);
+  }, [debouncedSearch, setOptions]);
 
-  // creates a combobox search which is dynamically updated with call's to the API
   return (
     <form
       onSubmit={(e: SyntheticEvent) => {
@@ -60,12 +58,15 @@ const Search = ({ search, handleChange }: Props): JSX.Element => {
         open={open}
         onOpen={() => {
           setOpen(true);
+          setSelected(false);
         }}
         onClose={() => {
           setOpen(false);
+          setSelected(true);
+          console.log(`selected ......`);
         }}
         getOptionSelected={(option, value) => option.username === value.username}
-        getOptionLabel={(option) => option.username}
+        getOptionLabel={(option) => `${option.profile.firstName} ${option.profile.lastName} (${option.username})`}
         options={options}
         loading={loading}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment

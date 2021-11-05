@@ -15,6 +15,12 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const dogRouter = require("./routes/dog");
 const paymentRouter = require("./routes/stripe");
+const conversationRouter = require("./routes/conversation");
+const messageRouter = require("./routes/message");
+
+const ioCookieParser = require("socket.io-cookie-parser");
+const jwt = require("jsonwebtoken");
+const { authentication, messaging } = require("./middleware/messagingSocket");
 
 const { json, urlencoded } = express;
 
@@ -27,10 +33,10 @@ const io = socketio(server, {
     origin: "*",
   },
 });
-
-io.on("connection", (socket) => {
-  console.log("connected");
-});
+io.use(ioCookieParser());
+io.use(authentication).on("connection", (socket, next) =>
+  messaging(socket, next, io)
+);
 
 if (process.env.NODE_ENV === "development") {
   app.use(logger("dev"));
@@ -53,6 +59,9 @@ app.use("/requests", requestRouter);
 app.use("/dogs", dogRouter);
 
 app.use("/payments", paymentRouter);
+
+app.use("/conversations", conversationRouter);
+app.use("/messages", messageRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
