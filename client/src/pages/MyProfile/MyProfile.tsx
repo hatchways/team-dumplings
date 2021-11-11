@@ -35,7 +35,7 @@ export default function MyProfile(): JSX.Element {
         if (data.error) {
           updateSnackBarMessage(data.error);
         } else if (data.success) {
-          loggedInUser.profile = data.success.profile._id ? data.success.profile._id : '';
+          loggedInUser.profile = data.success?.profile?._id ? data.success.profile._id : '';
           updateSnackBarMessage('Your profile has been created successfully');
         } else {
           updateSnackBarMessage('An unexpected error occurred. Please try again later');

@@ -15,6 +15,8 @@ import NotFound from './pages/NotFound/NotFound';
 import Signup from './pages/SignUp/SignUp';
 import Sitting from './pages/Sitting/Sitting';
 import theme from './themes/theme';
+import Messages from './pages/Messages/Messages';
+import { ConversationProvider } from './context/useConversationContext';
 
 function App(): JSX.Element {
   return (
@@ -29,9 +31,12 @@ function App(): JSX.Element {
                 <Route path="/booking" component={Booking} />
                 <Route path="/dashboard" component={Dashboard} />
                 <Route exact path="/profile-details" component={ProfileDetails} />
-                <Route exact path="/myprofile" component={MyProfile} />
+                <Route exact path="/my-profile" component={MyProfile} />
                 <Route exact path="/listing" component={Listing} />
                 <Route exact path="/sitting" component={Sitting} />
+                <ConversationProvider>
+                  <Route exact path="/messages" component={Messages} />
+                </ConversationProvider>
                 <Route exact path="/" component={Home} />
                 <Route path="*" component={NotFound} />
               </Switch>

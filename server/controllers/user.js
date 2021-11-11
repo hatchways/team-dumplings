@@ -11,9 +11,12 @@ exports.searchUsers = asyncHandler(async (req, res, next) => {
   if (searchString) {
     users = await User.find({
       username: { $regex: searchString, $options: "i" },
-    });
+    })
+      .select(" -password  ")
+      .populate("profile", "firstName lastName")
+      .exec();
+    users = await users.filter((userWithProfile) => !!userWithProfile.profile);
   }
-
   if (!users) {
     res.status(404);
     throw new Error("No users found in search");

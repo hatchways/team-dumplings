@@ -15,6 +15,8 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const dogRouter = require("./routes/dog");
 const paymentRouter = require("./routes/stripe");
+const conversationRouter = require("./routes/conversation");
+const messageRouter = require("./routes/message");
 
 const { json, urlencoded } = express;
 
@@ -53,6 +55,9 @@ app.use("/requests", requestRouter);
 app.use("/dogs", dogRouter);
 
 app.use("/payments", paymentRouter);
+
+app.use("/conversations", conversationRouter);
+app.use("/messages", messageRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
