@@ -43,7 +43,7 @@ const CreditCard = ({
       <Box width={'60%'} mr={10}>
         <Card elevation={1}>
           <CardHeader
-            avatar={<img src={`./assets/${type}.png`} className={cardBrandLogo} />}
+            avatar={<img src={`./assets/${type}.png`} alt="credit card brand logo" className={cardBrandLogo} />}
             action={
               <IconButton
                 aria-label="default"
