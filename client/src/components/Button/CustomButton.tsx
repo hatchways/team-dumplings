@@ -1,18 +1,21 @@
-import { Link } from 'react-router-dom';
 import { Badge, Button } from '@material-ui/core';
-import useStyles from './useStyles';
 import clsx from 'clsx';
+import { Link } from 'react-router-dom';
+import useStyles from './useStyles';
 
 interface Props {
-  linkTo: string;
+  // eslint-disable-next-line
+  linkTo: any;
   btnText: string;
   style?: string;
   status?: string;
   disable?: boolean;
   cssStyle?: React.CSSProperties;
+  // eslint-disable-next-line
+  onClickFunction?: any;
 }
 
-const CustomButton = ({ linkTo, btnText, style, status, disable, cssStyle }: Props): JSX.Element => {
+const CustomButton = ({ linkTo, btnText, style, status, disable, cssStyle, onClickFunction }: Props): JSX.Element => {
   const { button, badge } = useStyles();
   const buttonStyle = clsx(button, style);
   const badgeStyle = clsx(badge, status);
@@ -27,6 +30,7 @@ const CustomButton = ({ linkTo, btnText, style, status, disable, cssStyle }: Pro
       disableRipple
       disabled={disable}
       style={cssStyle}
+      onClick={onClickFunction}
     >
       <Badge classes={{ badge: badgeStyle }} variant="dot">
         {btnText}

@@ -11,12 +11,12 @@ import {
   Paper,
   Typography,
 } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import SettingsIcon from '@material-ui/icons/Settings';
 import moment from 'moment';
 import { useState } from 'react';
 import { CustomButton } from '../../components/Button/CustomButton';
 import useStyles from './useStyles';
-import { useTheme } from '@material-ui/core/styles';
 
 interface Props {
   _id: string;
@@ -26,14 +26,15 @@ interface Props {
   status: string;
   username?: string;
   sitterId?: string;
+  rate?: number;
 }
 
-const BookingItem = ({ fullName, start, end, status, _id }: Props): JSX.Element => {
+const BookingItem = ({ fullName, start, end, status, _id, rate }: Props): JSX.Element => {
   const theme = useTheme();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
@@ -66,7 +67,7 @@ const BookingItem = ({ fullName, start, end, status, _id }: Props): JSX.Element 
         title={`${moment(start).format('DD MMMM  YYYY, h:mm a')} | | ${moment(end).format('DD-MM-YY, h:mm a')}`}
       />
       <CardContent className={classes.currentBookingCardContent}>
-        <Box display="flex" alignItems="center" marginRight={`${theme.spacing(25)}px`}>
+        <Box display="flex" alignItems="center" marginRight={`${theme.spacing(25)}px`} width="100%">
           <Typography
             variant="h6"
             color="textSecondary"
@@ -88,7 +89,15 @@ const BookingItem = ({ fullName, start, end, status, _id }: Props): JSX.Element 
           >
             {status}
           </Typography>
-          <CustomButton linkTo={'/'} btnText={'checkout'} style={'checkout'} disable={status !== 'accepted' && true} />
+          <CustomButton
+            linkTo={{
+              pathname: '/checkout',
+              state: { _id, fullName, start, end, rate },
+            }}
+            btnText={'checkout'}
+            style={'checkout'}
+            disable={status !== 'accepted' && true}
+          />
         </Grid>
       </CardContent>
     </Card>

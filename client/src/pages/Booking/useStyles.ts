@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: '100%',
       minWidth: '100%',
       minHeight: '100%',
-      padding: theme.spacing(1),
+      padding: theme.spacing(2, 0, 2, 0),
     },
     '& .MuiPickersStaticWrapper-staticWrapperRoot': {
       maxWidth: '100%',
