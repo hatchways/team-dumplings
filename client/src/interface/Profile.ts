@@ -7,10 +7,14 @@ export interface Profile {
   address: string;
   description: string;
   _id?: string;
+  availability?: any;
+  rate?: number;
+  customerId?: string;
 }
 
 export interface ProfileApiDataSuccess {
-  profile: Profile;
+  profile?: Profile;
+  profiles?: Profile[];
 }
 
 export interface ProfileApiData {

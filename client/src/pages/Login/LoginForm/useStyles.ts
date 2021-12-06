@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     marginTop: 0,
     transition: theme.transitions.create(['border-color', 'box-shadow']),
-    '&:focus': {
+    '&:cfous': {
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
       borderColor: theme.palette.primary.main,
     },

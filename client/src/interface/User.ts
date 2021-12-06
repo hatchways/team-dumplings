@@ -1,3 +1,5 @@
+import { Profile } from './Profile';
+
 type role = 'owner' | 'sitter';
 
 export interface User {
@@ -7,7 +9,14 @@ export interface User {
   profile: string;
 }
 
+export interface UserFromSearch {
+  email: string;
+  username: string;
+  role: role;
+  profile: Profile;
+}
+
 export interface SearchUsersApiData {
-  users?: User[];
+  users?: UserFromSearch[];
   error?: { message: string };
 }
