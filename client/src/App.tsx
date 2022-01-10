@@ -29,6 +29,16 @@ function App(): JSX.Element {
           <AuthProvider>
             <SocketProvider>
               <Switch>
+<<<<<<< HEAD
+                <Route exact path="/signin" component={Login} />
+                <Route exact path="/signup" component={Signup} />
+                <Route path="/booking" component={Booking} />
+                <Route path="/dashboard" component={Dashboard} />
+                <Route exact path="/profile-details" component={ProfileDetails} />
+                <Route exact path="/myprofile" component={MyProfile} />
+                <Route exact path="/listing" component={Listing} />
+                <Route exact path="/sitting" component={Sitting} />
+=======
                 <Route exact path={'/signin'} component={Login} />
                 <Route exact path={'/signup'} component={Signup} />
                 <Route exact path={'/listing'} component={Listing} />
@@ -45,6 +55,7 @@ function App(): JSX.Element {
                 <ConversationProvider>
                   <Route exact path="/messages" component={Messages} />
                 </ConversationProvider>
+>>>>>>> e2d140c66ac855d486a3036a7ead634184528868
                 <Route exact path="/" component={Home} />
                 <Route path="*" component={NotFound} />
               </Switch>
