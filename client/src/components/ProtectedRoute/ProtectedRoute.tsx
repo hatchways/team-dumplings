@@ -3,7 +3,7 @@ import { useAuth } from '../../context/useAuthContext';
 
 export type ProtectedRouteProps = RouteProps;
 
-export default function ProtectedRoute({ ...routeProps }: ProtectedRouteProps) {
+export default function ProtectedRoute({ ...routeProps }: ProtectedRouteProps): JSX.Element {
   const { loggedInUser } = useAuth();
   console.log('ProtectedRoute ....');
   console.log(loggedInUser);
