@@ -49,7 +49,7 @@ const Payment = (): JSX.Element => {
         if (response.error) {
           updateSnackBarMessage(response.error);
         } else if (response.success) {
-          if (response.success.profile.customerId) {
+          if (response.success?.profile?.customerId) {
             const customerId = response.success.profile.customerId;
             listPaymentMethods(customerId).then((response) => {
               if (response.error) {
