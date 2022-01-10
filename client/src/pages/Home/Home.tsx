@@ -1,11 +1,12 @@
 import { Box, Container, Grid, InputLabel, Paper, TextField, Typography } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
-import useStyles from './useStyles';
-import clsx from 'clsx';
-import { CustomButton } from '../../components/Button/CustomButton';
-import { CustomInput } from '../../components/Input/CustomInput';
 import { styled } from '@material-ui/core/styles';
 import { spacing } from '@material-ui/system';
+import clsx from 'clsx';
+import { useState } from 'react';
+import { CustomButton } from '../../components/Button/CustomButton';
+import { CustomInput } from '../../components/Input/CustomInput';
+import useStyles from './useStyles';
+const TODAY = new Date().toLocaleDateString('en-CA');
 
 const FormElement = ({ children }: { children: JSX.Element[] | JSX.Element }): JSX.Element => {
   return (
@@ -20,6 +21,19 @@ const HomeGrid = styled(Grid)(spacing);
 const Home = (): JSX.Element => {
   const { root, leftLogoContainer, leftLogoText, leftBodyContainer, slogan, label, dateInOff, right, background } =
     useStyles();
+  const [where, setWhereValue] = useState<string>('');
+  const [dropIn, setDropIn] = useState<string>(TODAY);
+  const [dropOff, setDropOff] = useState<string>(TODAY);
+  const handleWhereChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWhereValue(e.target.value);
+  };
+  const handleDropInChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDropIn(e.target.value);
+  };
+  const handleDropOffChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDropOff(e.target.value);
+  };
+
   return (
     <>
       <HomeGrid container className={root}>
@@ -39,19 +53,38 @@ const Home = (): JSX.Element => {
                 <InputLabel htmlFor="where" className={label}>
                   Where
                 </InputLabel>
-                <CustomInput placeholder="Anywhere" id="where" />
+                <CustomInput placeholder="Anywhere" id="where" onChange={handleWhereChange} />
               </FormElement>
               <FormElement>
                 <InputLabel htmlFor="date" className={label}>
                   Drop In / Drop Off
                 </InputLabel>
                 <Box width={'100%'} display="flex">
-                  <TextField id="dateIn" type="date" defaultValue="2022-01-01" className={clsx(dateInOff, 'left')} />
-                  <TextField id="dateOff" type="date" defaultValue="2022-01-10" className={clsx(dateInOff, 'right')} />
+                  <TextField
+                    id="dateIn"
+                    type="date"
+                    defaultValue={TODAY}
+                    className={clsx(dateInOff, 'left')}
+                    onChange={handleDropInChange}
+                  />
+                  <TextField
+                    id="dateOff"
+                    type="date"
+                    defaultValue={TODAY}
+                    className={clsx(dateInOff, 'right')}
+                    onChange={handleDropOffChange}
+                  />
                 </Box>
               </FormElement>
               <FormElement>
-                <CustomButton linkTo={'/'} btnText={'Find My Dog Sitter'} style={'findMyDog'} />
+                <CustomButton
+                  linkTo={{
+                    pathname: '/listing',
+                    state: { where, dropIn, dropOff },
+                  }}
+                  btnText={'Find My Dog Sitter'}
+                  style={'findMyDog'}
+                />
               </FormElement>
             </form>
           </Container>
