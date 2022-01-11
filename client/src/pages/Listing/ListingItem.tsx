@@ -13,6 +13,7 @@ import {
 import RoomIcon from '@material-ui/icons/Room';
 import { Rating } from '@material-ui/lab';
 import _ from 'lodash';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useStyles from './useStyles';
 
@@ -40,6 +41,7 @@ interface Props {
   location: string;
   price: number;
   availability?: Availability;
+  profileId: string;
 }
 
 const dayOfWeekAsString = (dayIndex: number): string => {
@@ -55,6 +57,7 @@ export const ListingItem = ({
   location,
   price,
   availability,
+  profileId,
 }: Props): JSX.Element => {
   const {
     itemContainer,
@@ -68,10 +71,20 @@ export const ListingItem = ({
     cardStyle,
     chip,
   } = useStyles();
+
+  useEffect(() => {
+    console.log(`profileId: ${profileId}`);
+  }, [profileId]);
   return (
     <Grid item xs={12} sm={6} md={4} xl={3} className={itemContainer}>
       <Card component={Box} className={cardStyle}>
-        <Link component={CardActionArea} to={'/linkToProfile'}>
+        <Link
+          component={CardActionArea}
+          to={{
+            pathname: '/profile-details',
+            search: profileId,
+          }}
+        >
           <CardContent style={{ padding: 0 }}>
             <Box display={'flex'} flexDirection="column" alignItems="center" justifyContent="center" pt={3} pb={3}>
               <IconButton className={avatarButton}>
