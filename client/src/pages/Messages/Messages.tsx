@@ -22,6 +22,8 @@ const Messages = (): JSX.Element => {
   useEffect(() => {
     let active = true;
     loggedInUser && loggedInUser.profile && saveProfileId(loggedInUser.profile);
+    console.log(`pId: ${loggedInUser?.profile}`);
+
     return () => {
       active = false;
     };
