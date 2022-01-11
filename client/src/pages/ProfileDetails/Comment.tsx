@@ -16,7 +16,14 @@ const Comment = ({ rating, comment, createdAt, firstName, lastName }: Props): JS
   return (
     <>
       <Box>
-        <Card style={{ maxWidth: '80%', margin: 5 }} elevation={1}>
+        <Card
+          elevation={0}
+          style={{
+            maxWidth: '80%',
+            margin: 5,
+            border: '1px solid rgba(100, 100, 100, 0.1) ',
+          }}
+        >
           <CardHeader
             avatar={<Avatar aria-label="avatar">{`${firstName.slice(0, 1)}${lastName.slice(0, 1)}`}</Avatar>}
             action={
