@@ -261,7 +261,7 @@ const ProfileDetails = (): JSX.Element => {
                     </Grid>
                   </Box>
                 </Grid>
-                <Box display={'flex'} flexDirection={'column'} pl={10} pt={10}>
+                <Box display={'flex'} flexDirection={'column'} pl={10} pt={5}>
                   <Box display={'flex'}>
                     <Typography className={classes.reviewsTitle}>reviews</Typography>
                     <Box
@@ -289,7 +289,7 @@ const ProfileDetails = (): JSX.Element => {
                       </Button>
                     </Box>
                   </Box>
-                  <Box display={'flex'} flexDirection={'row'} pt={5}>
+                  <Box display={'flex'} flexDirection={'row'} pt={2}>
                     <Box mr={'auto'}>
                       <Typography className={classes.globalRatingValue}>{gRating}</Typography>
                       <Rating name="Globalrating" value={parseInt(gRating)} readOnly />
@@ -297,7 +297,7 @@ const ProfileDetails = (): JSX.Element => {
                         <PersonIcon className={classes.userIcon} /> <Typography>{comments.length} Total</Typography>
                       </Box>
                     </Box>
-                    <Box width={'60%'} pr={10}>
+                    <Box width={'60%'} pr={10} pt={1}>
                       <ProgressBar progress={ratingsByValue.sum5Ratings} value={5} style={classes.progress5} />
                       <ProgressBar progress={ratingsByValue.sum4Ratings} value={4} style={classes.progress4} />
                       <ProgressBar progress={ratingsByValue.sum3Ratings} value={3} style={classes.progress3} />
@@ -306,7 +306,7 @@ const ProfileDetails = (): JSX.Element => {
                     </Box>
                   </Box>
                 </Box>
-                <Box display={'flex'} flexDirection={'column'} pl={10} pt={10} pb={10}>
+                <Box display={'flex'} flexDirection={'column'} pl={10} pt={5} pb={10}>
                   {comments.map((comment) => (
                     <>
                       <CommentUI
