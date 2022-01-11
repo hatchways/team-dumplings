@@ -30,6 +30,7 @@ export const getProfile = async (id: string): Promise<ProfileApiData> => {
     method: 'GET',
     credentials: 'include',
   };
+
   return await fetch(`/profile/${id}`, fetchOptions)
     .then((res) => res.json())
     .catch((error) => ({ error }));
