@@ -20,8 +20,13 @@ export const ChatSideBar = ({ conversations, profileId }: Props): JSX.Element =>
   const [newChatUser, setNewChatUser] = useState<User | null>(null);
   const [options, setOptions] = useState<UserFromSearch[]>([]);
   const [selected, setSelected] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<UserFromSearch | null | string>(null);
   const { updateConversationContext, loading } = useConversation();
   const { updateSnackBarMessage } = useSnackBar();
+
+  const getSelectedUser = (event: any, value: string | UserFromSearch | null) => {
+    setSelectedUser(value);
+  };
 
   const getRecipient = (members: Profile[]): Profile => {
     return members.filter((member) => member._id != profileId)[0];
@@ -33,6 +38,8 @@ export const ChatSideBar = ({ conversations, profileId }: Props): JSX.Element =>
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, newInputValue: string) => {
     setSearch(newInputValue);
+    // console.log(`val: ${newInputValue}`);
+
     if (newChatUser) {
       setNewChatUser(null);
     }
@@ -40,10 +47,13 @@ export const ChatSideBar = ({ conversations, profileId }: Props): JSX.Element =>
 
   useEffect(() => {
     let active = true;
-    if (selected && options.length) {
-      const recipientId = options[0].profile._id;
-
+    if (selected && options.length && selectedUser && typeof selectedUser !== 'string') {
+      //const recipientId = options[0].profile._id;
+      const recipientId = selectedUser?.profile?._id;
+      //console.log(`recipientId ! `, selectedUser?.profile?._id);
       const newConversation = async () => {
+        // console.log(`creating new convs ! ${[profileId, recipientId!]}`);
+
         let response = await createConversation([profileId, recipientId!]);
         if (response.error) {
           updateSnackBarMessage(response.error);
@@ -61,7 +71,7 @@ export const ChatSideBar = ({ conversations, profileId }: Props): JSX.Element =>
     return () => {
       active = false;
     };
-  }, [options, selected, profileId, updateConversationContext, updateSnackBarMessage]);
+  }, [options, selected, profileId, updateConversationContext, updateSnackBarMessage, selectedUser]);
   const { chatSideBar } = useStyles();
   return (
     <>
@@ -79,13 +89,14 @@ export const ChatSideBar = ({ conversations, profileId }: Props): JSX.Element =>
               search={search}
               handleChange={handleChange}
               setSelected={setSelected}
+              getSelectedUser={getSelectedUser}
             />
           </Box>
         </Box>
         <Divider light orientation="horizontal" />
         <Box className={chatSideBar}>
-          {console.log(`conversation: ${conversations}  loading: ${loading}`)}
-          {console.log(conversations)}
+          {/* {console.log(`conversation: ${conversations}  loading: ${loading}`)} */}
+          {/* {console.log(conversations)} */}
           {conversations && !loading ? (
             conversations.map((conversation) => (
               <ConversationBox
