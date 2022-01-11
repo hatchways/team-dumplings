@@ -55,6 +55,9 @@ exports.getProfile = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
 
   const profile = await Profile.findById(id);
+  if (!profile) {
+    res.status(404).json({ error: "profile not found !" });
+  }
   res.status(200).json({ success: { profile } });
 });
 
