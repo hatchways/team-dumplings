@@ -209,6 +209,7 @@ const Listing = (): JSX.Element => {
                     location={address}
                     price={rate || 0}
                     availability={availability}
+                    profileId={_id!}
                   />
                 ),
               )
