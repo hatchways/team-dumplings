@@ -22,12 +22,12 @@ export default function Login(): JSX.Element {
     defaultMatches: true,
   });
   const history = useHistory();
-  /*
+
   if (loggedInUser) {
     history.push('/booking');
     return <CircularProgress />;
   }
-*/
+
   const handleSubmit = (
     { email, password }: { email: string; password: string },
     { setSubmitting }: FormikHelpers<{ email: string; password: string }>,
@@ -35,7 +35,7 @@ export default function Login(): JSX.Element {
     login(email, password).then((data) => {
       if (data.error) {
         setSubmitting(false);
-        updateSnackBarMessage(data.error.message);
+        updateSnackBarMessage(data.error);
       } else if (data.success) {
         updateLoginContext(data.success);
       } else {
