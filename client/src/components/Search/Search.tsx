@@ -13,9 +13,10 @@ interface Props {
   options: UserFromSearch[];
   setOptions: any;
   setSelected?: any;
+  getSelectedUser?: any;
 }
 
-const Search = ({ search, handleChange, options, setOptions, setSelected }: Props): JSX.Element => {
+const Search = ({ search, handleChange, options, setOptions, setSelected, getSelectedUser }: Props): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
@@ -63,7 +64,8 @@ const Search = ({ search, handleChange, options, setOptions, setSelected }: Prop
         onClose={() => {
           setOpen(false);
           setSelected(true);
-          console.log(`selected ......`);
+          // console.log(`selected ......, ${options[0].profile._id}`, options[0].profile);
+          // console.log(`options: `, options);
         }}
         getOptionSelected={(option, value) => option.username === value.username}
         getOptionLabel={(option) => `${option.profile.firstName} ${option.profile.lastName} (${option.username})`}
@@ -72,6 +74,7 @@ const Search = ({ search, handleChange, options, setOptions, setSelected }: Prop
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         onInputChange={handleChange}
+        onChange={getSelectedUser}
         inputValue={search}
         noOptionsText="No Users Found"
         freeSolo
