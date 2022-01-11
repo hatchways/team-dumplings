@@ -17,12 +17,12 @@ export default function Register(): JSX.Element {
   const { updateLoginContext, loggedInUser } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
   const history = useHistory();
-  /*
+
   if (loggedInUser) {
     history.push('/booking');
     return <CircularProgress />;
   }
-*/
+
   const handleSubmit = (
     {
       username,
@@ -36,9 +36,8 @@ export default function Register(): JSX.Element {
   ) => {
     register(username, email, password, role).then((data) => {
       if (data.error) {
-        console.error({ error: data.error.message });
         setSubmitting(false);
-        updateSnackBarMessage(data.error.message);
+        updateSnackBarMessage(data.error);
       } else if (data.success) {
         updateLoginContext(data.success);
       } else {
