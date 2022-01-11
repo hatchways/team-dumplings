@@ -1,13 +1,14 @@
 import { Avatar, Box, Button, Menu, MenuItem, Paper } from '@material-ui/core';
 import { useState } from 'react';
-import logout from '../../helpers/APICalls/logout';
+//import logout from '../../helpers/APICalls/logout';
 import { CustomButton } from '../Button/CustomButton';
 import useStyles from './useStyles';
 import { useHistory } from 'react-router-dom';
-
+import { useAuth } from '../../context/useAuthContext';
 const NavMenu = (): JSX.Element => {
   const { avatar, menu } = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
+  const { logout } = useAuth();
   const history = useHistory();
 
   const handleClick = (event: any) => {
@@ -18,18 +19,19 @@ const NavMenu = (): JSX.Element => {
     setAnchorEl(null);
   };
   const handleLogout = () => {
+    logout();
     handleClose();
-
+    /*
     logout()
       .then(() => {
         history.push('/signin');
       })
-      .catch((error) => console.error(error));
+      .catch((error) => console.error(error)); */
   };
 
   return (
     <Box display="flex" justifyContent="flex-end">
-      <CustomButton linkTo={'/sitters'} btnText={'My Sitters'} style={'mySitters'} />
+      <CustomButton linkTo={'/sitting'} btnText={'My Sitters'} style={'mySitters'} />
       <CustomButton linkTo={'/messages'} btnText={'Messages'} style={'messages'} status={'active'} />
 
       <Avatar
