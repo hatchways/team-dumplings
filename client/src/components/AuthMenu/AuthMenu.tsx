@@ -19,8 +19,8 @@ const AuthMenu = (): JSX.Element => {
   };
 
   const handleLogout = () => {
-    handleClose();
     logout();
+    handleClose();
   };
 
   return (
