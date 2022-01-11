@@ -82,6 +82,7 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
                   InputProps={{
                     classes: { input: inputs },
                     disableUnderline: true,
+                    autoComplete: 'username',
                   }}
                   name="username"
                   autoComplete="username"
@@ -102,6 +103,7 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
                   InputProps={{
                     classes: { input: inputs },
                     disableUnderline: true,
+                    autoComplete: 'email',
                   }}
                   name="email"
                   autoComplete="email"
@@ -123,9 +125,10 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
                   InputProps={{
                     classes: { input: inputs },
                     disableUnderline: true,
+                    autoComplete: 'new-password',
                   }}
                   type="password"
-                  autoComplete="current-password"
+                  autoComplete="password"
                   placeholder="Password"
                   helperText={touched.password ? errors.password : ''}
                   error={touched.password && Boolean(errors.password)}
@@ -143,9 +146,11 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
                   InputProps={{
                     classes: { input: inputs },
                     disableUnderline: true,
+                    autoComplete: 'new-password',
                   }}
                   type="password"
                   placeholder="Confirm password"
+                  autoComplete="password"
                   helperText={touched.confirmPassword ? errors.confirmPassword : ''}
                   error={touched.confirmPassword && Boolean(errors.confirmPassword)}
                   value={values.confirmPassword}
