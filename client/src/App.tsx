@@ -16,6 +16,8 @@ import NotFound from './pages/NotFound/NotFound';
 import Signup from './pages/SignUp/SignUp';
 import Sitting from './pages/Sitting/Sitting';
 import theme from './themes/theme';
+import Messages from './pages/Messages/Messages';
+import { ConversationProvider } from './context/useConversationContext';
 import Payment from './pages/Payment/Payment';
 import Checkout from './pages/Checkout/Checkout';
 import Messages from './pages/Messages/Messages';
