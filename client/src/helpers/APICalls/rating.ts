@@ -1,5 +1,5 @@
 import { FetchOptions } from '../../interface/FetchOptions';
-import { Comment, CommentApiDataSuccess } from '../../interface/Review';
+import { Comment, CommentApiDataSuccess } from '../../interface/Rating';
 
 export const createComment = async (comment: Comment): Promise<CommentApiDataSuccess> => {
   const fetchOptions: FetchOptions = {
