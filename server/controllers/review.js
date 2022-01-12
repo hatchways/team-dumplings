@@ -5,10 +5,7 @@ const Rating = require("../models/Rating");
 exports.createComment = expressAsyncHandler(async (req, res, next) => {
   const { text, rating, profile } = req.body;
   const reviewer = req.user.id;
-
   const reviewerProfile = await Profile.findOne({ user: reviewer });
-
-  console.log("reviewerProfile: ", reviewerProfile._id);
 
   const newRating = await Rating.create({
     text,
