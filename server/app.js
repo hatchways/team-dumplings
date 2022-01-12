@@ -18,6 +18,10 @@ const paymentRouter = require("./routes/stripe");
 const conversationRouter = require("./routes/conversation");
 const messageRouter = require("./routes/message");
 
+const ioCookieParser = require("socket.io-cookie-parser");
+const jwt = require("jsonwebtoken");
+const { authentication, messaging } = require("./middleware/messagingSocket");
+
 const { json, urlencoded } = express;
 
 connectDB();
@@ -29,10 +33,10 @@ const io = socketio(server, {
     origin: "*",
   },
 });
-
-io.on("connection", (socket) => {
-  console.log("connected");
-});
+io.use(ioCookieParser());
+io.use(authentication).on("connection", (socket, next) =>
+  messaging(socket, next, io)
+);
 
 if (process.env.NODE_ENV === "development") {
   app.use(logger("dev"));
