@@ -32,7 +32,7 @@ import { Profile } from '../../interface/Profile';
 import { Comment } from '../../interface/Rating';
 import CommentUI from './CommentUI';
 import ProgressBar from './ProgressBarUI';
-import useStyles from './useStyles';
+import useStyles from './style/useStyles';
 
 const baseUrl = 'https://team-dumplings.s3.amazonaws.com/';
 
