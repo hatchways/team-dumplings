@@ -15,6 +15,30 @@ exports.createComment = expressAsyncHandler(async (req, res, next) => {
   });
 
   if (newRating) {
+    const reviewedProfile = await Profile.findById(profile);
+    let { ratingsByValue, total } = reviewedProfile;
+
+    ratingsByValue[rating] = ratingsByValue[rating] + 1;
+    total = total + 1;
+
+    const updates = {
+      total,
+      ratingsByValue,
+      sumRating: parseFloat(
+        (
+          (ratingsByValue[5] * 5 +
+            ratingsByValue[4] * 4 +
+            ratingsByValue[3] * 3 +
+            ratingsByValue[2] * 2 +
+            ratingsByValue[1]) /
+          total
+        ).toFixed(1)
+      ),
+    };
+    await Profile.findByIdAndUpdate(profile, updates, {
+      new: true,
+    });
+
     res.status(201).json({
       rating: newRating,
     });
@@ -39,58 +63,6 @@ exports.loadComments = expressAsyncHandler(async (req, res, next) => {
       if (comments) {
         res.status(200).send({
           ratings: comments,
-        });
-      }
-    });
-});
-
-exports.loadStats = expressAsyncHandler(async (req, res, next) => {
-  const profile = req.params.id;
-  Rating.find({ profile })
-    .exec()
-    .then((comments) => {
-      if (comments) {
-        const sumRating = (
-          comments.reduce((a, { rating }) => a + rating, 0) / comments.length
-        ).toFixed(1);
-        const sum1Ratings =
-          (comments.filter((comment) => comment.rating == 1).length * 100) /
-          comments.length;
-        const sum2Ratings =
-          (comments.filter((comment) => comment.rating == 2).length * 100) /
-          comments.length;
-        const sum3Ratings =
-          (comments.filter((comment) => comment.rating == 3).length * 100) /
-          comments.length;
-        const sum4Ratings =
-          (comments.filter((comment) => comment.rating == 4).length * 100) /
-          comments.length;
-        const sum5Ratings =
-          (comments.filter((comment) => comment.rating == 5).length * 100) /
-          comments.length;
-        const total = comments.length;
-        res.status(200).json({
-          stats: {
-            sumRating,
-            sum1Ratings,
-            sum2Ratings,
-            sum3Ratings,
-            sum4Ratings,
-            sum5Ratings,
-            total,
-          },
-        });
-      } else {
-        res.status(200).json({
-          stats: {
-            sumRating: 0,
-            sum1Ratings: 0,
-            sum2Ratings: 0,
-            sum3Ratings: 0,
-            sum4Ratings: 0,
-            sum5Ratings: 0,
-            total: 0,
-          },
         });
       }
     });
