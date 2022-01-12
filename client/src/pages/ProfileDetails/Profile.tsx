@@ -27,24 +27,19 @@ import NavBar from '../../components/NavBar/NavBar';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import { getProfile } from '../../helpers/APICalls/profile';
-import { createComment, listComments } from '../../helpers/APICalls/reviews';
+import { createComment, listComments } from '../../helpers/APICalls/rating';
 import { Profile } from '../../interface/Profile';
-import { Comment } from '../../interface/Review';
-import CommentUI from './Comment';
-import ProgressBar from './ProgressBar';
+import { Comment } from '../../interface/Rating';
+import CommentUI from './CommentUI';
+import ProgressBar from './ProgressBarUI';
 import useStyles from './useStyles';
 
 const baseUrl = 'https://team-dumplings.s3.amazonaws.com/';
 
 const sitter = {
-  name: 'Norma Beyrs',
-  description: 'Loving pet sitter',
   aboutMe: 'animals are my passion! i will look after your pets with loving care.',
   imgUrl: baseUrl + 'dogSitter.jpg',
   backgroundImage: baseUrl + 'dogSitterBackground.jpg',
-  rate: 4,
-  price: 14,
-  location: 'Toronto Canada',
   aboutMeImgs: ['dog01.jpeg', 'dog02.jpeg', 'dog03.jpeg', 'dog04.jpeg'],
 };
 
@@ -54,11 +49,7 @@ const ProfileDetails = (): JSX.Element => {
   const [dropOffDate, setDropOffDate] = useState<Date | null>(new Date());
   const location = useLocation();
   const history = useHistory();
-  const [profile, setProfile] = useState<Profile | undefined>();
-  const [comment, setComment] = useState('');
-  const [rating, setRating] = useState(0);
-  const [gRating, setGRating] = useState('0');
-  const [canComment, setCanComment] = useState(false);
+  const { updateSnackBarMessage } = useSnackBar();
 
   const [ratingsByValue, setRatingsByValue] = useState({
     sum1Ratings: 0,
@@ -71,8 +62,49 @@ const ProfileDetails = (): JSX.Element => {
   const [comments, setComments] = useState<Comment[]>([]);
   const { loggedInUser } = useAuth();
   const [loading, setLoading] = useState(true);
-  const { updateSnackBarMessage } = useSnackBar();
 
+  const [profile, setProfile] = useState<Profile | undefined>();
+  const [comment, setComment] = useState('');
+  const [rating, setRating] = useState(0);
+  const [gRating, setGRating] = useState('0');
+  const [canComment, setCanComment] = useState(false);
+
+  const saveProfile = (profile: Profile) => {
+    setProfile(profile);
+  };
+
+  const saveComments = (comments: Comment[]) => {
+    setComments(comments);
+  };
+  const setGlobalRating = (comments: Comment[]) => {
+    const sumRating = comments.reduce((a, { rating }) => a + rating, 0);
+    const sum1Ratings = (comments.filter((comment) => comment.rating == 1).length * 100) / comments.length;
+    const sum2Ratings = (comments.filter((comment) => comment.rating == 2).length * 100) / comments.length;
+    const sum3Ratings = (comments.filter((comment) => comment.rating == 3).length * 100) / comments.length;
+    const sum4Ratings = (comments.filter((comment) => comment.rating == 4).length * 100) / comments.length;
+    const sum5Ratings = (comments.filter((comment) => comment.rating == 5).length * 100) / comments.length;
+    setRatingsByValue({ sum1Ratings, sum2Ratings, sum3Ratings, sum4Ratings, sum5Ratings });
+    if (!comments.length) {
+      setGRating('0 reviews');
+    } else setGRating((sumRating / comments.length).toFixed(1));
+  };
+  const saveCanComment = (profileId: string, userId: string, role: string) => {
+    if (profileId === userId || role === 'sitter') {
+      setCanComment(true);
+    }
+  };
+  const handleSendComment = async () => {
+    if (profile?._id) {
+      const response = await createComment({ text: comment, rating, profile: profile._id });
+      if (response.rating) {
+        setLoading(true);
+        setOpen(false);
+        updateSnackBarMessage('Comment sent succufully !');
+      } else if (response.error) {
+        updateSnackBarMessage(response.error);
+      }
+    }
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -95,54 +127,20 @@ const ProfileDetails = (): JSX.Element => {
         return 'Rating required';
     }
   };
+
   const handleClose = () => {
     setOpen(false);
     setRating(0);
     setComment('');
   };
 
+  const handleRatingChange = (e: any) => {
+    setRating(parseInt(e.target.value));
+  };
   const handleCommentChange = (e: any) => {
     setComment(e.target.value);
   };
 
-  const handleRatingChange = (e: any) => {
-    setRating(parseInt(e.target.value));
-  };
-  const saveProfile = (profile: Profile) => {
-    setProfile(profile);
-  };
-  const saveComments = (comments: Comment[]) => {
-    setComments(comments);
-  };
-  const setGlobalRating = (comments: Comment[]) => {
-    const sumRating = comments.reduce((a, { rating }) => a + rating, 0);
-    const sum1Ratings = (comments.filter((comment) => comment.rating == 1).length * 100) / comments.length;
-    const sum2Ratings = (comments.filter((comment) => comment.rating == 2).length * 100) / comments.length;
-    const sum3Ratings = (comments.filter((comment) => comment.rating == 3).length * 100) / comments.length;
-    const sum4Ratings = (comments.filter((comment) => comment.rating == 4).length * 100) / comments.length;
-    const sum5Ratings = (comments.filter((comment) => comment.rating == 5).length * 100) / comments.length;
-    setRatingsByValue({ sum1Ratings, sum2Ratings, sum3Ratings, sum4Ratings, sum5Ratings });
-    if (!comments.length) {
-      setGRating('0 reviews');
-    } else setGRating((sumRating / comments.length).toFixed(1));
-  };
-  const handleSendComment = async () => {
-    if (profile?._id) {
-      const response = await createComment({ text: comment, rating, profile: profile._id });
-      if (response.rating) {
-        setLoading(true);
-        setOpen(false);
-        updateSnackBarMessage('Comment sent succufully !');
-      } else if (response.error) {
-        updateSnackBarMessage(response.error);
-      }
-    }
-  };
-  const saveCanComment = (profileId: string, userId: string, role: string) => {
-    if (profileId === userId || role === 'sitter') {
-      setCanComment(true);
-    }
-  };
   useEffect(() => {
     let effect = true;
     if (location.search) {
@@ -175,6 +173,7 @@ const ProfileDetails = (): JSX.Element => {
       effect = false;
     };
   }, [location, history, loading, loggedInUser]);
+
   return (
     <Fragment>
       <NavBar />
@@ -230,7 +229,7 @@ const ProfileDetails = (): JSX.Element => {
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography variant="body2">{sitter.description}</Typography>
+                    <Typography variant="body2">{profile?.description}</Typography>
                   </Grid>
                   <Grid item container justify="center" className={classes.gridItemLocation}>
                     <LocationOnIcon />
@@ -330,9 +329,9 @@ const ProfileDetails = (): JSX.Element => {
             <Grid container direction="column">
               <Grid item container direction="column" alignItems="center">
                 <Typography variant="h3" align="center">
-                  ${profile?.rate}/hrS
+                  ${profile?.rate}/hr
                 </Typography>
-                <Rating name="read-only" value={sitter.rate} readOnly />
+                <Rating name="read-only" value={parseInt(gRating)} readOnly />
               </Grid>
               <Grid item className={classes.requestGridItem}>
                 <Typography variant="h4" className={classes.requestTypography}>
