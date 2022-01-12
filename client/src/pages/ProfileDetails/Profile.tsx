@@ -27,9 +27,9 @@ import NavBar from '../../components/NavBar/NavBar';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import { getProfile } from '../../helpers/APICalls/profile';
-import { createComment, listComments } from '../../helpers/APICalls/rating';
+import { createComment, listComments, loadReviewStats } from '../../helpers/APICalls/rating';
 import { Profile } from '../../interface/Profile';
-import { Comment } from '../../interface/Rating';
+import { Comment, ReviewStats } from '../../interface/Rating';
 import CommentUI from './CommentUI';
 import ProgressBar from './ProgressBarUI';
 import useStyles from './style/useStyles';
@@ -66,28 +66,36 @@ const ProfileDetails = (): JSX.Element => {
   const [profile, setProfile] = useState<Profile | undefined>();
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
+
   const [gRating, setGRating] = useState('0');
   const [canComment, setCanComment] = useState(false);
+
+  const [skip, setSkip] = useState(0);
+  const [canLoadMore, setLoadMore] = useState(false);
+  const [totalReviews, setTotalReviews] = useState(0);
 
   const saveProfile = (profile: Profile) => {
     setProfile(profile);
   };
 
   const saveComments = (comments: Comment[]) => {
-    setComments(comments);
+    setComments((prevComments) => prevComments.concat(comments));
+    setLoadMore(!Boolean(comments.length));
   };
-  const setGlobalRating = (comments: Comment[]) => {
-    const sumRating = comments.reduce((a, { rating }) => a + rating, 0);
-    const sum1Ratings = (comments.filter((comment) => comment.rating == 1).length * 100) / comments.length;
-    const sum2Ratings = (comments.filter((comment) => comment.rating == 2).length * 100) / comments.length;
-    const sum3Ratings = (comments.filter((comment) => comment.rating == 3).length * 100) / comments.length;
-    const sum4Ratings = (comments.filter((comment) => comment.rating == 4).length * 100) / comments.length;
-    const sum5Ratings = (comments.filter((comment) => comment.rating == 5).length * 100) / comments.length;
+  const saveReviewStats = ({
+    sumRating,
+    sum1Ratings,
+    sum2Ratings,
+    sum3Ratings,
+    sum4Ratings,
+    sum5Ratings,
+    total,
+  }: ReviewStats) => {
+    setTotalReviews(total);
+    setGRating(sumRating);
     setRatingsByValue({ sum1Ratings, sum2Ratings, sum3Ratings, sum4Ratings, sum5Ratings });
-    if (!comments.length) {
-      setGRating('0 reviews');
-    } else setGRating((sumRating / comments.length).toFixed(1));
   };
+
   const saveCanComment = (profileId: string, userId: string, role: string) => {
     if (profileId === userId || role === 'sitter') {
       setCanComment(true);
@@ -97,6 +105,7 @@ const ProfileDetails = (): JSX.Element => {
     if (profile?._id) {
       const response = await createComment({ text: comment, rating, profile: profile._id });
       if (response.rating) {
+        setComments([]);
         setLoading(true);
         setOpen(false);
         updateSnackBarMessage('Comment sent succufully !');
@@ -141,11 +150,48 @@ const ProfileDetails = (): JSX.Element => {
     setComment(e.target.value);
   };
 
+  const handleLoadMoreReviews = () => {
+    setSkip((prevSkip) => prevSkip + 2);
+  };
+
   useEffect(() => {
     let effect = true;
-    if (location.search) {
-      setLoading(true);
+
+    if (location.search && skip > 0) {
       const profileId = location.search.split('?')[1];
+
+      listComments(profileId, 2, skip)
+        .then((res) => {
+          if (res?.ratings) {
+            saveComments(res.ratings);
+          }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        });
+    }
+    return () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      effect = false;
+    };
+  }, [location, skip]);
+
+  useEffect(() => {
+    let effect = true;
+    if (location.search && loggedInUser && loading) {
+      const profileId = location.search.split('?')[1];
+      loadReviewStats(profileId)
+        .then((res) => {
+          if (res.stats) {
+            saveReviewStats(res.stats);
+          }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error(error);
+        });
+
       saveCanComment(profileId, loggedInUser?.profile as string, loggedInUser?.role as string);
       getProfile(profileId)
         .then((res) => {
@@ -156,11 +202,10 @@ const ProfileDetails = (): JSX.Element => {
           console.error(err);
         });
 
-      listComments(profileId)
+      listComments(profileId, 2, 0)
         .then((res) => {
           if (res?.ratings) {
             saveComments(res.ratings);
-            setGlobalRating(res.ratings);
           }
         })
         .catch((error) => {
@@ -170,9 +215,10 @@ const ProfileDetails = (): JSX.Element => {
       setLoading(false);
     }
     return () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       effect = false;
     };
-  }, [location, history, loading, loggedInUser]);
+  }, [location, history, loggedInUser, loading]);
 
   return (
     <Fragment>
@@ -293,7 +339,7 @@ const ProfileDetails = (): JSX.Element => {
                       <Typography className={classes.globalRatingValue}>{gRating}</Typography>
                       <Rating name="Globalrating" value={parseInt(gRating)} readOnly />
                       <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
-                        <PersonIcon className={classes.userIcon} /> <Typography>{comments.length} Total</Typography>
+                        <PersonIcon className={classes.userIcon} /> <Typography>{totalReviews} Total</Typography>
                       </Box>
                     </Box>
                     <Box width={'60%'} pr={10} pt={1}>
@@ -318,7 +364,17 @@ const ProfileDetails = (): JSX.Element => {
                         lastName={comment?.reviewer?.lastName as string}
                       />
                     </>
-                  ))}
+                  ))}{' '}
+                  <Box display={'flex'} alignItems={'center'} justifyContent={'center'} mr={10}>
+                    <Button
+                      onClick={handleLoadMoreReviews}
+                      disabled={canLoadMore}
+                      className={classes.reviewBtn}
+                      variant="outlined"
+                    >
+                      Read more Reviews
+                    </Button>
+                  </Box>
                 </Box>
               </Grid>
             </Grid>
