@@ -27,9 +27,9 @@ import NavBar from '../../components/NavBar/NavBar';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import { getProfile } from '../../helpers/APICalls/profile';
-import { createComment, listComments, loadReviewStats } from '../../helpers/APICalls/rating';
+import { createComment, listComments } from '../../helpers/APICalls/rating';
 import { Profile } from '../../interface/Profile';
-import { Comment, ReviewStats } from '../../interface/Rating';
+import { Comment } from '../../interface/Rating';
 import CommentUI from './CommentUI';
 import ProgressBar from './ProgressBarUI';
 import useStyles from './style/useStyles';
@@ -51,13 +51,6 @@ const ProfileDetails = (): JSX.Element => {
   const history = useHistory();
   const { updateSnackBarMessage } = useSnackBar();
 
-  const [ratingsByValue, setRatingsByValue] = useState({
-    sum1Ratings: 0,
-    sum2Ratings: 0,
-    sum3Ratings: 0,
-    sum4Ratings: 0,
-    sum5Ratings: 0,
-  });
   const [open, setOpen] = useState(false);
   const [comments, setComments] = useState<Comment[]>([]);
   const { loggedInUser } = useAuth();
@@ -67,12 +60,10 @@ const ProfileDetails = (): JSX.Element => {
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
 
-  const [gRating, setGRating] = useState('0');
   const [canComment, setCanComment] = useState(false);
 
   const [skip, setSkip] = useState(0);
   const [canLoadMore, setLoadMore] = useState(false);
-  const [totalReviews, setTotalReviews] = useState(0);
 
   const saveProfile = (profile: Profile) => {
     setProfile(profile);
@@ -81,19 +72,6 @@ const ProfileDetails = (): JSX.Element => {
   const saveComments = (comments: Comment[]) => {
     setComments((prevComments) => prevComments.concat(comments));
     setLoadMore(!Boolean(comments.length));
-  };
-  const saveReviewStats = ({
-    sumRating,
-    sum1Ratings,
-    sum2Ratings,
-    sum3Ratings,
-    sum4Ratings,
-    sum5Ratings,
-    total,
-  }: ReviewStats) => {
-    setTotalReviews(total);
-    setGRating(sumRating);
-    setRatingsByValue({ sum1Ratings, sum2Ratings, sum3Ratings, sum4Ratings, sum5Ratings });
   };
 
   const saveCanComment = (profileId: string, userId: string, role: string) => {
@@ -181,17 +159,6 @@ const ProfileDetails = (): JSX.Element => {
     let effect = true;
     if (location.search && loggedInUser && loading) {
       const profileId = location.search.split('?')[1];
-      loadReviewStats(profileId)
-        .then((res) => {
-          if (res.stats) {
-            saveReviewStats(res.stats);
-          }
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.error(error);
-        });
-
       saveCanComment(profileId, loggedInUser?.profile as string, loggedInUser?.role as string);
       getProfile(profileId)
         .then((res) => {
@@ -336,19 +303,41 @@ const ProfileDetails = (): JSX.Element => {
                   </Box>
                   <Box display={'flex'} flexDirection={'row'} pt={2}>
                     <Box mr={'auto'}>
-                      <Typography className={classes.globalRatingValue}>{gRating}</Typography>
-                      <Rating name="Globalrating" value={parseInt(gRating)} readOnly />
+                      <Typography className={classes.globalRatingValue}>{profile?.sumRating}</Typography>
+                      <Rating name="Globalrating" value={Math.round(profile?.sumRating as number)} readOnly />
                       <Box display={'flex'} flexDirection={'row'} alignItems={'center'}>
-                        <PersonIcon className={classes.userIcon} /> <Typography>{totalReviews} Total</Typography>
+                        <PersonIcon className={classes.userIcon} /> <Typography>{profile?.total} Total</Typography>
                       </Box>
                     </Box>
-                    <Box width={'60%'} pr={10} pt={1}>
-                      <ProgressBar progress={ratingsByValue.sum5Ratings} value={5} style={classes.progress5} />
-                      <ProgressBar progress={ratingsByValue.sum4Ratings} value={4} style={classes.progress4} />
-                      <ProgressBar progress={ratingsByValue.sum3Ratings} value={3} style={classes.progress3} />
-                      <ProgressBar progress={ratingsByValue.sum2Ratings} value={2} style={classes.progress2} />
-                      <ProgressBar progress={ratingsByValue.sum1Ratings} value={1} style={classes.progress1} />
-                    </Box>
+                    {profile && profile.ratingsByValue && profile.total && (
+                      <Box width={'60%'} pr={10} pt={1}>
+                        <ProgressBar
+                          progress={(profile?.ratingsByValue[5] * 100) / profile.total}
+                          value={5}
+                          style={classes.progress5}
+                        />
+                        <ProgressBar
+                          progress={(profile?.ratingsByValue[4] * 100) / profile.total}
+                          value={4}
+                          style={classes.progress4}
+                        />
+                        <ProgressBar
+                          progress={(profile?.ratingsByValue[3] * 100) / profile.total}
+                          value={3}
+                          style={classes.progress3}
+                        />
+                        <ProgressBar
+                          progress={(profile?.ratingsByValue[2] * 100) / profile.total}
+                          value={2}
+                          style={classes.progress2}
+                        />
+                        <ProgressBar
+                          progress={(profile?.ratingsByValue[1] * 100) / profile.total}
+                          value={1}
+                          style={classes.progress1}
+                        />
+                      </Box>
+                    )}
                   </Box>
                 </Box>
                 <Box display={'flex'} flexDirection={'column'} pl={10} pt={5} pb={10}>
@@ -387,7 +376,7 @@ const ProfileDetails = (): JSX.Element => {
                 <Typography variant="h3" align="center">
                   ${profile?.rate}/hr
                 </Typography>
-                <Rating name="read-only" value={parseInt(gRating)} readOnly />
+                <Rating name="globalRating" value={Math.round(profile?.sumRating as number)} readOnly />
               </Grid>
               <Grid item className={classes.requestGridItem}>
                 <Typography variant="h4" className={classes.requestTypography}>
