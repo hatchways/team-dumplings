@@ -58,6 +58,15 @@ const profileSchema = new mongoose.Schema({
   timezone: Number,
   rate: Number,
   customerId: String,
+  ratingsByValue: {
+    1: { type: Number, default: 0 },
+    2: { type: Number, default: 0 },
+    3: { type: Number, default: 0 },
+    4: { type: Number, default: 0 },
+    5: { type: Number, default: 0 },
+  },
+  sumRating: { type: Number, default: 0 },
+  total: { type: Number, default: 0 },
 });
 
 module.exports = Profile = mongoose.model("Profile", profileSchema);
