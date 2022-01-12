@@ -12,14 +12,8 @@ import { Profile } from '../../interface/Profile';
 import { ListingItem, rate } from './ListingItem';
 import useStyles from './useStyles';
 import { useDebounce } from 'use-debounce';
-import { useLocation } from 'react-router';
-import { useHistory } from 'react-router-dom';
-
-const defaultDropInOffDate = new Date().toLocaleDateString('en-CA');
 
 const Listing = (): JSX.Element => {
-  const location = useLocation();
-  const history = useHistory();
   const { root, title, search, dateInOff, iconStyle } = useStyles();
   const TODAY = new Date().getDay();
   const [loading, setLoading] = useState<undefined | boolean>(undefined);
@@ -28,9 +22,6 @@ const Listing = (): JSX.Element => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [dateIn, setDateIn] = useState<number>(TODAY);
   const [dateOff, setDateOff] = useState<number>(TODAY);
-  const [defaultDropIn, setDefaultDropIn] = useState(defaultDropInOffDate);
-  const [defaultDropOff, setDefaultDropOff] = useState(defaultDropInOffDate);
-
   const [searchString, setSearchString] = useState<string>('');
   const dateInRef = useRef<HTMLInputElement>(null);
   const dateOffRef = useRef<HTMLInputElement>(null);
@@ -63,13 +54,11 @@ const Listing = (): JSX.Element => {
 
   const handleDateInChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDateIn(new Date(event.target.value).getDay());
-    setDefaultDropIn(new Date(event.target.value).toLocaleDateString('en-CA'));
     setFilter(true);
   };
 
   const handleDateOffChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDateOff(new Date(event.target.value).getDay());
-    setDefaultDropOff(new Date(event.target.value).toLocaleDateString('en-CA'));
     setFilter(true);
   };
 
@@ -82,26 +71,7 @@ const Listing = (): JSX.Element => {
   };
 
   useEffect(() => {
-    let effect = true;
-    if (location.state) {
-      // eslint-disable-next-line
-      const { where, dropOff, dropIn }: any = location.state;
-      setDefaultDropIn(dropIn);
-      setDefaultDropOff(dropOff);
-      setDateIn(new Date(dropIn).getDay());
-      setDateOff(new Date(dropOff).getDay());
-      setSearchString(where);
-      setFilter(true);
-      history.replace('/listing', null);
-    }
-    return () => {
-      effect = false;
-    };
-  }, [location, history]);
-
-  useEffect(() => {
     let ignore = true;
-
     function getProfiles() {
       setLoading(true);
       listProfiles({ ...debouncedSearch }).then((response) => {
@@ -110,7 +80,6 @@ const Listing = (): JSX.Element => {
         } else if (response.success && response.success.profiles) {
           if (ignore) {
             saveProfiles(response.success.profiles);
-            updateSnackBarMessage('Success Loading !');
           }
         } else {
           updateSnackBarMessage('An unexpected error has occurred. Please try again later.');
@@ -143,7 +112,6 @@ const Listing = (): JSX.Element => {
                 inputRef={searchRef}
                 onChange={handleSearchChange}
                 placeholder="Toronto, Ontario"
-                value={searchString}
                 InputProps={{
                   disableUnderline: true,
                   startAdornment: (
@@ -160,8 +128,7 @@ const Listing = (): JSX.Element => {
                   disableUnderline: true,
                 }}
                 type="date"
-                defaultValue={defaultDropIn}
-                value={defaultDropIn}
+                defaultValue="2022-01-01"
                 className={clsx(dateInOff, 'left')}
                 onChange={handleDateInChange}
                 inputRef={dateInRef}
@@ -185,8 +152,7 @@ const Listing = (): JSX.Element => {
                   ),
                 }}
                 type="date"
-                defaultValue={defaultDropOff}
-                value={defaultDropOff}
+                defaultValue="2022-01-10"
                 className={clsx(dateInOff, 'right')}
                 onChange={handleDateOffChange}
                 inputRef={dateOffRef}
