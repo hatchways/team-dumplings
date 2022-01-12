@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import { AuthProvider } from './context/useAuthContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
-import ProfileDetails from './pages/ProfileDetails/ProfileDetails';
+import ProfileDetails from './pages/ProfileDetails/Profile';
 import MyProfile from './pages/MyProfile/MyProfile';
 import './App.css';
 import { SocketProvider } from './context/useSocketContext';
