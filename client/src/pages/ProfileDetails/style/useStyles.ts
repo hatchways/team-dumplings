@@ -135,6 +135,13 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'scroll',
     height: '100px',
   },
+  likes: {
+    fontSize: 10,
+    paddingTop: 8,
+  },
+  redlikeIcon: {
+    color: theme.palette.primary.main,
+  },
 }));
 
 export default useStyles;
