@@ -20,6 +20,7 @@ const ratingSchema = new mongoose.Schema(
       ref: "Profile",
       required: true,
     },
+    likes: { type: Number, default: 0 },
   },
   {
     timestamps: true,
