@@ -351,6 +351,8 @@ const ProfileDetails = (): JSX.Element => {
                         createdAt={comment.createdAt!}
                         firstName={comment?.reviewer?.firstName as string}
                         lastName={comment?.reviewer?.lastName as string}
+                        likes={comment?.likes as number}
+                        id={comment._id as string}
                       />
                     </>
                   ))}{' '}
