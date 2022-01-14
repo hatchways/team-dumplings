@@ -111,14 +111,12 @@ exports.createComment = expressAsyncHandler(async (req, res, next) => {
 
 exports.loadComments = expressAsyncHandler(async (req, res, next) => {
   const profile = req.params.id;
-  const { limit = 5, skip = 0 } = req.body;
-  Rating.find({ profile })
+  const { limit = 5, skip = 0, rating, sort } = req.body;
+  Rating.find({ profile, rating: rating ? rating : { $ne: null } })
     .populate("reviewer")
     .limit(limit)
     .skip(skip)
-    .sort({
-      createdAt: "desc",
-    })
+    .sort(sort)
     .exec()
     .then((comments) => {
       if (comments) {
