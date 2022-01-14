@@ -4,21 +4,25 @@ import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Grid,
+  Menu,
+  MenuItem,
   Paper,
   TextField,
   Typography,
 } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import ErrorIcon from '@material-ui/icons/Error';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
-import { Rating } from '@material-ui/lab';
+import { Alert, Rating } from '@material-ui/lab';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Fragment, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
@@ -52,7 +56,7 @@ const ProfileDetails = (): JSX.Element => {
   const { updateSnackBarMessage } = useSnackBar();
 
   const [open, setOpen] = useState(false);
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<Comment[] | undefined>([]);
   const { loggedInUser } = useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -70,7 +74,7 @@ const ProfileDetails = (): JSX.Element => {
   };
 
   const saveComments = (comments: Comment[]) => {
-    setComments((prevComments) => prevComments.concat(comments));
+    setComments((prevComments) => prevComments?.concat(comments));
     setLoadMore(!Boolean(comments.length));
   };
 
@@ -83,7 +87,7 @@ const ProfileDetails = (): JSX.Element => {
     if (profile?._id) {
       const response = await createComment({ text: comment, rating, profile: profile._id });
       if (response.rating) {
-        setComments([]);
+        setComments(undefined);
         setLoading(true);
         setOpen(false);
         updateSnackBarMessage('Comment sent succufully !');
@@ -132,13 +136,92 @@ const ProfileDetails = (): JSX.Element => {
     setSkip((prevSkip) => prevSkip + 2);
   };
 
+  const [ratingMenu, setRatingMenu] = useState<any>({ newset: false, rating: false, relevent: true });
+  const [starMenu, setStarMenu] = useState<any>({
+    '1star': false,
+    '2star': false,
+    '3star': false,
+    '4star': false,
+    '5star': false,
+    allStars: true,
+  });
+  const [ratingMenuText, setRatingMenuText] = useState('Most relevent');
+  const [starMenuText, setStarMenuText] = useState('All ratings');
+  const [starsFilter, setStarsFilter] = useState<number | undefined>(undefined);
+  const [sortFilter, setSortFilter] = useState<string>('-likes');
+  const [anchorElR, setAnchorElR] = useState<null | HTMLElement>(null);
+  const [anchorElR1, setAnchorElR1] = useState<null | HTMLElement>(null);
+
+  // stars menu: R1
+  const handleClickR1 = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElR1(event.currentTarget);
+  };
+
+  const getStarsFilter = (key: string): number | undefined => {
+    if (parseInt(key.slice(0, 1))) {
+      return parseInt(key.slice(0, 1));
+    }
+    return undefined;
+  };
+
+  const getSortFilter = (key: string): string => {
+    switch (key) {
+      case 'newset':
+        return '-createdAt';
+      case 'rating':
+        return '-rating';
+      case 'relevent':
+        return '-likes';
+
+      default:
+        return '-likes';
+    }
+  };
+
+  const handleCloseMenuR1 = (event: any) => {
+    if (event.target.ariaValueText) {
+      setStarMenuText(event.target.ariaValueText);
+      setStarMenu((prevSate: any) => {
+        for (const key in prevSate) prevSate[key] = event.target.id == key;
+        setStarsFilter(getStarsFilter(event.target.id));
+        setComments(undefined);
+        setSkip(0);
+        setLoadMore(false);
+        setLoading(true);
+        return prevSate;
+      });
+    }
+    setAnchorElR1(null);
+  };
+
+  // rating menu : R1
+  const handleClickR = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElR(event.currentTarget);
+  };
+
+  const handleCloseMenuR = (event: any) => {
+    if (event.target.ariaValueText) {
+      setRatingMenuText(event.target.ariaValueText);
+      setRatingMenu((prevSate: any) => {
+        for (const key in prevSate) prevSate[key] = event.target.id == key;
+        setSortFilter(getSortFilter(event.target.id));
+        setComments(undefined);
+        setSkip(0);
+        setLoadMore(false);
+        setLoading(true);
+        return prevSate;
+      });
+    }
+    setAnchorElR(null);
+  };
+
   useEffect(() => {
     let effect = true;
 
     if (location.search && skip > 0) {
       const profileId = location.search.split('?')[1];
 
-      listComments(profileId, 2, skip)
+      listComments(profileId, 2, skip, starsFilter, sortFilter)
         .then((res) => {
           if (res?.ratings) {
             saveComments(res.ratings);
@@ -153,7 +236,7 @@ const ProfileDetails = (): JSX.Element => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       effect = false;
     };
-  }, [location, skip]);
+  }, [location, skip, starsFilter, sortFilter]);
 
   useEffect(() => {
     let effect = true;
@@ -169,10 +252,10 @@ const ProfileDetails = (): JSX.Element => {
           console.error(err);
         });
 
-      listComments(profileId, 2, 0)
+      listComments(profileId, 2, 0, starsFilter, sortFilter)
         .then((res) => {
           if (res?.ratings) {
-            saveComments(res.ratings);
+            setComments(res.ratings);
           }
         })
         .catch((error) => {
@@ -185,7 +268,7 @@ const ProfileDetails = (): JSX.Element => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       effect = false;
     };
-  }, [location, history, loggedInUser, loading]);
+  }, [location, history, loggedInUser, loading, starsFilter, sortFilter]);
 
   return (
     <Fragment>
@@ -275,7 +358,138 @@ const ProfileDetails = (): JSX.Element => {
                 </Grid>
                 <Box display={'flex'} flexDirection={'column'} pl={10} pt={5}>
                   <Box display={'flex'}>
-                    <Typography className={classes.reviewsTitle}>reviews</Typography>
+                    <Box>
+                      <Typography className={classes.reviewsTitle}>reviews</Typography>
+                      <Box display={'flex'}>
+                        <Box>
+                          <Button
+                            aria-controls="r-menu"
+                            aria-haspopup="true"
+                            onClick={handleClickR}
+                            endIcon={<ExpandMoreIcon />}
+                          >
+                            {ratingMenuText}
+                          </Button>
+                          <Menu
+                            elevation={1}
+                            id="r-menu"
+                            anchorEl={anchorElR}
+                            keepMounted
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                              vertical: -40,
+                              horizontal: 'center',
+                            }}
+                            open={Boolean(anchorElR)}
+                            onClose={handleCloseMenuR}
+                          >
+                            <MenuItem
+                              id="newset"
+                              aria-valuetext="Newest"
+                              onClick={handleCloseMenuR}
+                              selected={ratingMenu.newset}
+                            >
+                              Newest
+                            </MenuItem>
+                            <MenuItem
+                              id="rating"
+                              aria-valuetext="Rating"
+                              onClick={handleCloseMenuR}
+                              selected={ratingMenu.rating}
+                            >
+                              Rating
+                            </MenuItem>
+                            <MenuItem
+                              id="relevent"
+                              aria-valuetext="Most relevent"
+                              onClick={handleCloseMenuR}
+                              selected={ratingMenu.relevent}
+                            >
+                              Most relevent
+                            </MenuItem>
+                          </Menu>
+                        </Box>
+
+                        <Box>
+                          <Button
+                            aria-controls="r1-menu"
+                            aria-haspopup="true"
+                            onClick={handleClickR1}
+                            endIcon={<ExpandMoreIcon />}
+                          >
+                            {starMenuText}
+                          </Button>
+                          <Menu
+                            elevation={1}
+                            id="r1-menu"
+                            anchorEl={anchorElR1}
+                            keepMounted
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                              vertical: -40,
+                              horizontal: 'center',
+                            }}
+                            open={Boolean(anchorElR1)}
+                            onClose={handleCloseMenuR1}
+                          >
+                            <MenuItem
+                              id="allStars"
+                              aria-valuetext="All Ratings"
+                              selected={starMenu.allStars}
+                              onClick={handleCloseMenuR1}
+                            >
+                              All Ratings
+                            </MenuItem>
+                            <MenuItem
+                              id="1star"
+                              aria-valuetext="1 Star"
+                              selected={starMenu['1star']}
+                              onClick={handleCloseMenuR1}
+                            >
+                              <Rating name="1star" value={1} readOnly />
+                            </MenuItem>
+                            <MenuItem
+                              id="2star"
+                              aria-valuetext="2 Star's"
+                              selected={starMenu['2star']}
+                              onClick={handleCloseMenuR1}
+                            >
+                              <Rating name="2star" value={2} readOnly />
+                            </MenuItem>
+                            <MenuItem
+                              id="3star"
+                              aria-valuetext="3 Star's"
+                              selected={starMenu['3star']}
+                              onClick={handleCloseMenuR1}
+                            >
+                              <Rating name="3star" value={3} readOnly />
+                            </MenuItem>
+                            <MenuItem
+                              id="4star"
+                              aria-valuetext="4 Star's"
+                              selected={starMenu['4star']}
+                              onClick={handleCloseMenuR1}
+                            >
+                              <Rating name="4star" value={4} readOnly />
+                            </MenuItem>
+                            <MenuItem
+                              id="5star"
+                              aria-valuetext="5 Star's"
+                              selected={starMenu['5star']}
+                              onClick={handleCloseMenuR1}
+                            >
+                              <Rating name="5star" value={5} readOnly />
+                            </MenuItem>
+                          </Menu>
+                        </Box>
+                      </Box>
+                    </Box>
                     <Box
                       display={'flex'}
                       flexDirection={'column'}
@@ -341,31 +555,47 @@ const ProfileDetails = (): JSX.Element => {
                   </Box>
                 </Box>
                 <Box display={'flex'} flexDirection={'column'} pl={10} pt={5} pb={10}>
-                  {comments.map((comment) => (
+                  {comments && comments?.length > 0 ? (
                     <>
-                      <CommentUI
-                        key={comment._id}
-                        rating={comment.rating}
-                        comment={comment.text}
-                        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                        createdAt={comment.createdAt!}
-                        firstName={comment?.reviewer?.firstName as string}
-                        lastName={comment?.reviewer?.lastName as string}
-                        likes={comment?.likes as number}
-                        id={comment._id as string}
-                      />
+                      {comments.map((comment) => (
+                        <>
+                          <CommentUI
+                            key={comment._id}
+                            rating={comment.rating}
+                            comment={comment.text}
+                            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                            createdAt={comment.createdAt!}
+                            firstName={comment?.reviewer?.firstName as string}
+                            lastName={comment?.reviewer?.lastName as string}
+                            likes={comment?.likes as number}
+                            id={comment._id as string}
+                          />
+                        </>
+                      ))}
+                      <Box display={'flex'} alignItems={'center'} justifyContent={'center'} mr={10}>
+                        <Button
+                          onClick={handleLoadMoreReviews}
+                          disabled={canLoadMore}
+                          className={classes.reviewBtn}
+                          variant="outlined"
+                        >
+                          Read more Reviews
+                        </Button>
+                      </Box>
                     </>
-                  ))}{' '}
-                  <Box display={'flex'} alignItems={'center'} justifyContent={'center'} mr={10}>
-                    <Button
-                      onClick={handleLoadMoreReviews}
-                      disabled={canLoadMore}
-                      className={classes.reviewBtn}
-                      variant="outlined"
-                    >
-                      Read more Reviews
-                    </Button>
-                  </Box>
+                  ) : comments ? (
+                    <>
+                      <Box display={'flex'} alignItems={'center'} justifyContent={'center'} mr={10}>
+                        <Alert severity={'error'}>{`No ${
+                          starsFilter ? `${starsFilter} stars` : ''
+                        } reviews yet, write one now? `}</Alert>
+                      </Box>
+                    </>
+                  ) : (
+                    <>
+                      Loading <CircularProgress />
+                    </>
+                  )}
                 </Box>
               </Grid>
             </Grid>
