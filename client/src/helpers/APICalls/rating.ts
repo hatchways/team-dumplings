@@ -35,12 +35,18 @@ export const likeComment = async (commentId: string, val: number): Promise<Comme
     .catch((error) => ({ error }));
 };
 
-export async function listComments(profileId: string, limit: number, skip: number): Promise<CommentApiDataSuccess> {
+export async function listComments(
+  profileId: string,
+  limit: number,
+  skip: number,
+  rating: number | undefined,
+  sort: string,
+): Promise<CommentApiDataSuccess> {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ limit, skip }),
+    body: JSON.stringify({ limit, skip, rating, sort }),
   };
   return await fetch(`/comments/${profileId}`, fetchOptions)
     .then((res) => res.json())
