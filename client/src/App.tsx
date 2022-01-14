@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import { AuthProvider } from './context/useAuthContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
-import ProfileDetails from './pages/ProfileDetails/ProfileDetails';
+import ProfileDetails from './pages/ProfileDetails/Profile';
 import MyProfile from './pages/MyProfile/MyProfile';
 import './App.css';
 import { SocketProvider } from './context/useSocketContext';
@@ -39,8 +39,8 @@ function App(): JSX.Element {
                 <Route exact path={'/payment'} component={Payment} />
                 <Route exact path={'/checkout'} component={Checkout} />
                 <Route exact path={'/myprofile'} component={MyProfile} />
-                <Route exact path="/profileDetails" component={ProfileDetails} />
                 <Route exact path="/listing" component={Listing} />
+                <Route exact path="/profile-details" component={ProfileDetails} />
                 <Route exact path="/sitting" component={Sitting} />
                 <ConversationProvider>
                   <Route exact path="/messages" component={Messages} />
