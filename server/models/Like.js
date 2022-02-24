@@ -9,7 +9,7 @@ const likeSchema = new mongoose.Schema(
     },
     likeOwner: {
       type: mongoose.ObjectId,
-      ref: "Profile",
+      ref: "User",
       required: true,
     }
   },

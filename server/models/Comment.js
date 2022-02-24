@@ -9,7 +9,7 @@ const commentSchema = new mongoose.Schema(
     },
     commentOwner: {
       type: mongoose.ObjectId,
-      ref: "Profile",
+      ref: "User",
       required: true,
     },
     title: {
