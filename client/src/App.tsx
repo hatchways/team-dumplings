@@ -20,6 +20,7 @@ import Messages from './pages/Messages/Messages';
 import { ConversationProvider } from './context/useConversationContext';
 import Payment from './pages/Payment/Payment';
 import Checkout from './pages/Checkout/Checkout';
+import ListBlogs from './pages/Blogs/ListBlogs/ListBlogs';
 
 function App(): JSX.Element {
   return (
@@ -42,6 +43,7 @@ function App(): JSX.Element {
                 <Route exact path="/profileDetails" component={ProfileDetails} />
                 <Route exact path="/listing" component={Listing} />
                 <Route exact path="/sitting" component={Sitting} />
+                <Route exact path="/blogs" component={ListBlogs} />
                 <ConversationProvider>
                   <Route exact path="/messages" component={Messages} />
                 </ConversationProvider>
