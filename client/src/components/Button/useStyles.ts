@@ -106,6 +106,12 @@ const useStyles = makeStyles((theme) => ({
       borderStyle: 'solid',
       borderColor: theme.palette.primary.main,
     },
+    '&.blogs': {
+      padding: theme.spacing(1, 4, 1, 4),
+      backgroundColor: 'transparent',
+      color: '#0000FF',
+      border: 'none',
+    },
   },
 }));
 
