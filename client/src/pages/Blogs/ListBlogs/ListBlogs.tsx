@@ -1,5 +1,5 @@
 import { Grid, Card, CardMedia, CardContent, CardActions, Button, Typography, IconButton } from '@material-ui/core';
-import { Key } from 'react';
+import { useState, useEffect } from 'react';
 import NavBar from '../../../components/NavBar/NavBar';
 import useStyles from './useStyles';
 import AddIcon from '@material-ui/icons/Add';
@@ -46,6 +46,18 @@ const blogs: any = [
 
 const ListBlogs = (): JSX.Element => {
   const { title, root, img, addIcon } = useStyles();
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    listBlogs().then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else if (data.success) {
+        setBlogs(data.success);
+      } else console.log('An expected error. please try again later!');
+    });
+  });
+
   return (
     <>
       <NavBar />
