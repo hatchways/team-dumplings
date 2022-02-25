@@ -7,7 +7,11 @@ export interface Blog {
   comments?: string;
 }
 
+export interface Blogs {
+  blogs: [Blog];
+}
+
 export interface BlogsApiData {
   error?: { message: string };
-  success?: [Blog];
+  success?: { blogs: Blog[] | undefined };
 }
