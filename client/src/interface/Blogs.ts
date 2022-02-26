@@ -20,3 +20,8 @@ export interface BlogsApiData {
     numberOfPages: number;
   };
 }
+
+export interface FetchBlogApiData {
+  error?: { message: string };
+  success?: { blog: Blog };
+}

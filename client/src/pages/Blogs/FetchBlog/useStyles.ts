@@ -20,7 +20,7 @@ const styles = makeStyles((theme) => ({
     marginBottom: 25,
   },
   body: {
-    width: 800,
+    width: 600,
     fontSize: 16,
   },
 }));
