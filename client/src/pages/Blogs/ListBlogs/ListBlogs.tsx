@@ -7,6 +7,8 @@ import { listBlogs } from '../../../helpers/APICalls/blogs';
 import { Blog } from '../../../interface/Blogs';
 import { useSnackBar } from '../../../context/useSnackbarContext';
 import AppPagination from '../../../components/Pagination/AppPagination';
+import { Link } from 'react-router-dom';
+import { CustomButton } from '../../../components/Button/CustomButton';
 
 const ListBlogs = (): JSX.Element => {
   const { title, root, img, addIcon } = useStyles();
@@ -51,7 +53,7 @@ const ListBlogs = (): JSX.Element => {
                   <Typography variant="body2">{blog.description}</Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small">Learn More</Button>
+                  <CustomButton linkTo={`/blog/${blog._id}`} btnText={'Read More'} style="readMore" />
                 </CardActions>
               </Card>
             </Grid>

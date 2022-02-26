@@ -112,6 +112,12 @@ const useStyles = makeStyles((theme) => ({
       color: '#0000FF',
       border: 'none',
     },
+    '&.readMore': {
+      size: 'small',
+      backgroundColor: 'transparent',
+      border: 'none',
+      color: theme.palette.common.black,
+    },
   },
 }));
 
