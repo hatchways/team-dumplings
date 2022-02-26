@@ -12,6 +12,7 @@ const ListBlogs = (): JSX.Element => {
   const { title, root, img, addIcon } = useStyles();
   const [blogs, setBlogs] = useState<Blog[]>();
   const [page, setPage] = useState<number>(1);
+  const [numberOfPages, setNumberOfPages] = useState<number>(1);
 
   const { updateSnackBarMessage } = useSnackBar();
 
@@ -25,6 +26,7 @@ const ListBlogs = (): JSX.Element => {
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
         setBlogs(data.success.blogs);
+        setNumberOfPages(data.success.numberOfPages);
       } else updateSnackBarMessage('An expected error. please try again later!');
     });
   }, [updateSnackBarMessage, page]);
@@ -55,7 +57,7 @@ const ListBlogs = (): JSX.Element => {
             </Grid>
           ))}
         </Grid>
-        <AppPagination handlePageChange={handlePageChange} />
+        <AppPagination count={numberOfPages} handlePageChange={handlePageChange} />
       </Grid>
     </>
   );

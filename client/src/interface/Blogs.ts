@@ -5,6 +5,7 @@ export interface Blog {
   createdAt: Date;
   likes: number;
   comments?: string;
+  numberOfPages?: number;
 }
 
 export interface Blogs {
@@ -13,5 +14,8 @@ export interface Blogs {
 
 export interface BlogsApiData {
   error?: { message: string };
-  success?: { blogs: Blog[] | undefined };
+  success?: {
+    blogs: Blog[] | undefined;
+    numberOfPages: number;
+  };
 }

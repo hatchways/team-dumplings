@@ -52,15 +52,22 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
 // @access Private
 exports.listBlogs = asyncHandler(async (req, res, next) => {
     const page = req.query.page;
-    const limit = 9;
-    const blogsToSkip = page * limit;
+    const blogsPerPage = 9;
 
-    const blogs = await Blog.find().sort().skip(blogsToSkip).limit(limit);
+    //To start from page 0
+    const blogsToSkip = (page - 1) * blogsPerPage;
+
+    const blogs = await Blog.find().sort().skip(blogsToSkip).limit(blogsPerPage);
+
+    const blogsCount = await Blog.find().count();
+
+    numberOfPages = Math.ceil(blogsCount / blogsPerPage);
 
     if (blogs) {
         res.status(200).json({
             success: {
-                blogs
+                blogs,
+                numberOfPages
             }
         })
     } else {
