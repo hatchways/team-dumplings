@@ -18,3 +18,12 @@ export const fetchBlog = async (id: string): Promise<FetchBlogApiData> => {
       error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
+
+export const postLike = async (userId: string | undefined, blogId: string): Promise<FetchBlogApiData> => {
+  return await axios
+    .post(`/blogs/like/`, { userId, blogId })
+    .then((res) => res.data)
+    .catch(() => ({
+      error: { message: 'Unable to connect to server. Please try again' },
+    }));
+};

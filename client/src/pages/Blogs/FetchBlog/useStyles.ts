@@ -23,6 +23,9 @@ const styles = makeStyles((theme) => ({
     width: 600,
     fontSize: 16,
   },
+  liked: {
+    color: theme.palette.primary.main,
+  },
 }));
 
 export default styles;

@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Blog = require("../models/Blog");
-const comment = require("../models/Comment");
+const Comment = require("../models/Comment");
+const Like = require("../models/Like");
 const asyncHandler = require("express-async-handler");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -32,13 +33,18 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 // @desc get a certin blog
 // @access Private
 exports.getBlog = asyncHandler(async (req, res, next) => {
+    const userId = req.user.id;
     const blogId = req.params.id;
+    let isLiked = false;
     const blog = await Blog.findById(blogId);
 
     if (blog) {
+        const like = await Like.findOne({ userId: ObjectId(userId), blogId: ObjectId(blogId) });
+        if (like) isLiked = true;
         res.status(200).json({
             success: {
-                blog
+                blog,
+                isLiked
             }
         })
     } else {
@@ -76,3 +82,25 @@ exports.listBlogs = asyncHandler(async (req, res, next) => {
     }
 });
 
+
+// @route POST /blogs/like
+// @desc post a like for logged in user
+// @access Private
+exports.postLike = asyncHandler(async (req, res, next) => {
+    const { userId, blogId } = req.body;
+    const like = await Like.create({
+        userId: ObjectId(userId),
+        blogId: ObjectId(blogId)
+    });
+
+    if (like) {
+        res.status(201).json({
+            success: {
+                like
+            }
+        })
+    } else {
+        res.status(500);
+        throw new Error("Internal Server Error");
+    }
+});

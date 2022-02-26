@@ -6,6 +6,7 @@ const {
     createBlog,
     getBlog,
     listBlogs,
+    postLike,
   } = require("../controllers/blog");
 
 router.route("/").post(protect, createBlog);
@@ -13,5 +14,7 @@ router.route("/").post(protect, createBlog);
 router.route("/:id").get(protect, getBlog);
 
 router.route("/").get(protect, listBlogs);
+
+router.route("/like/").post(protect, postLike);
 
 module.exports = router;

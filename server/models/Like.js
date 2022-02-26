@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 
 const likeSchema = new mongoose.Schema(
   {
-    blog: {
+    blogId: {
       type: mongoose.ObjectId,
       ref: "Blog",
       required: true,
     },
-    likeOwner: {
+    userId: {
       type: mongoose.ObjectId,
       ref: "User",
       required: true,

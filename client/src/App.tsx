@@ -45,7 +45,7 @@ function App(): JSX.Element {
                 <Route exact path="/listing" component={Listing} />
                 <Route exact path="/sitting" component={Sitting} />
                 <Route exact path="/blogs" component={ListBlogs} />
-                <Route exact path="/blog/:id" component={FetchBlog} />
+                <Route exact path="/blog/:blogId" component={FetchBlog} />
                 <ConversationProvider>
                   <Route exact path="/messages" component={Messages} />
                 </ConversationProvider>

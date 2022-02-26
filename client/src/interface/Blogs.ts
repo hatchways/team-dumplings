@@ -23,5 +23,8 @@ export interface BlogsApiData {
 
 export interface FetchBlogApiData {
   error?: { message: string };
-  success?: { blog: Blog };
+  success?: {
+    blog: Blog;
+    isLiked: boolean;
+  };
 }
