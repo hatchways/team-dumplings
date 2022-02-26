@@ -4,10 +4,12 @@ import { Pagination } from '@material-ui/lab';
 import clsx from 'clsx';
 
 interface Props {
-  style: string;
+  style?: string;
+  count?: number;
+  handlePageChange: (newPage: number) => void;
 }
 
-const AppPagination = ({ style }: Props): JSX.Element => {
+const AppPagination = ({ style, count, handlePageChange }: Props): JSX.Element => {
   const { pagination, container, root } = useStyles();
   const paginationStyle = clsx(pagination, style);
 
@@ -15,7 +17,12 @@ const AppPagination = ({ style }: Props): JSX.Element => {
     <>
       <Box className={container}>
         <Box className={root}>
-          <Pagination />
+          <Pagination
+            variant="outlined"
+            onChange={(event, newPage) => handlePageChange(newPage)}
+            className={pagination}
+            count={10}
+          />
         </Box>
       </Box>
     </>

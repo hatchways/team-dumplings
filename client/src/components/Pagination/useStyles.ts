@@ -12,9 +12,13 @@ const useStyles = makeStyles((theme) => ({
     botom: 0,
     zIndex: 200,
     padding: 10,
-    backgroundColor: 'green',
+    backgroundColor: theme.palette.primary.main,
+    width: '100%',
   },
-  pagination: {},
+  pagination: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
 }));
 
 export default useStyles;
