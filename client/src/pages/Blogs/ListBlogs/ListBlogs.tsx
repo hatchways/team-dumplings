@@ -6,6 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { listBlogs } from '../../../helpers/APICalls/blogs';
 import { Blog } from '../../../interface/Blogs';
 import { useSnackBar } from '../../../context/useSnackbarContext';
+import AppPagination from '../../../components/Pagination/AppPagination';
 
 const ListBlogs = (): JSX.Element => {
   const { title, root, img, addIcon } = useStyles();
@@ -49,6 +50,7 @@ const ListBlogs = (): JSX.Element => {
             </Grid>
           ))}
         </Grid>
+        <AppPagination />
       </Grid>
     </>
   );
