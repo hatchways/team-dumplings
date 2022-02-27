@@ -20,7 +20,7 @@ const AppPagination = ({ style, count, handlePageChange }: Props): JSX.Element =
           <Pagination
             variant="outlined"
             onChange={(event, newPage) => handlePageChange(newPage)}
-            className={pagination}
+            className={paginationStyle}
             count={count}
           />
         </Box>

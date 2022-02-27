@@ -30,3 +30,32 @@ exports.postComment = asyncHandler(async (req, res, next) => {
         throw new Error("Internal Server Error");
     }
 });
+
+// @route list /comment/:id
+// @desc list 5 comments max for logged in user
+// @access Private
+exports.listComments = asyncHandler(async (req, res, next) => {
+    const blodId = req.params.id;
+    const page = req.query.page;
+    const commentsPerPage = 5;
+    const commentsToSkip = (page - 1) * commentsPerPage;
+
+    const comments = await Comment.find({ blogId: ObjectId(blodId) })
+                        .sort({ createdAt: -1 }).skip(commentsToSkip).limit(commentsPerPage);
+    
+    const commentsCount = await Comment.find({ blogId: ObjectId(blodId) }).count();
+
+    const numberOfPages = Math.ceil(commentsCount / commentsPerPage);
+
+    if (comments) {
+        res.status(201).json({
+            success: {
+                comments,
+                numberOfPages
+            }
+        })
+    } else {
+        res.status(500);
+        throw new Error("Internal Server Error");
+    }
+});

@@ -6,7 +6,11 @@ import { Box, TextField, IconButton } from '@material-ui/core';
 import { useSnackBar } from '../../../context/useSnackbarContext';
 import { postComment } from '../../../helpers/APICalls/comment';
 
-const AddComment = () => {
+interface Props {
+  launchUseEffect: () => void;
+}
+
+const AddComment = ({ launchUseEffect }: Props) => {
   const { input, disabledStyle, addIconStyle, addCommentContainer, iconButtonStyle } = useStyles();
   const [text, setText] = useState<string>('');
   const [title, setTitle] = useState<string>('');
@@ -30,8 +34,11 @@ const AddComment = () => {
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
         updateSnackBarMessage('Comment has been added successfully!');
+        launchUseEffect();
       } else updateSnackBarMessage('An expected error. please try again later!');
     });
+    setTitle('');
+    setText('');
   };
 
   return (

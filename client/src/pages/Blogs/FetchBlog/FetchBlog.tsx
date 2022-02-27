@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useStyles from './useStyles';
-import { Typography, IconButton, Box, Dialog } from '@material-ui/core';
+import { Typography, IconButton, Box, Dialog, DialogContent } from '@material-ui/core';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import { useParams } from 'react-router-dom';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -11,7 +11,7 @@ import { useAuth } from '../../../context/useAuthContext';
 import ListComments from '../Comments/ListComments';
 
 const FetchBlog = (): JSX.Element => {
-  const { root, img, title, body, liked } = useStyles();
+  const { root, img, title, body, liked, dialogStyle } = useStyles();
 
   const [isLiked, setIsLiked] = useState(false);
   const [blog, setBlog] = useState<Blog>();
@@ -38,7 +38,7 @@ const FetchBlog = (): JSX.Element => {
   };
 
   const handleClose = () => {
-    setOpen(!open);
+    setOpen(false);
   };
 
   const handleCommentClick = () => {
@@ -70,7 +70,7 @@ const FetchBlog = (): JSX.Element => {
             <CommentIcon />
           </IconButton>
         </Box>
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={open} onClose={handleClose} className={dialogStyle} style={{ overflow: 'hidden' }}>
           <ListComments />
         </Dialog>
       </Box>

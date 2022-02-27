@@ -8,6 +8,7 @@ const styles = makeStyles((theme) => ({
   container: {
     alignItems: 'center',
     padding: theme.spacing(7),
+    position: 'relative',
   },
   img: {
     height: 300,
@@ -26,6 +27,7 @@ const styles = makeStyles((theme) => ({
     width: '100%',
     maxWidth: 360,
     backgroundColor: 'background.paper',
+    position: 'relative',
   },
   input: {
     width: 200,
@@ -45,6 +47,10 @@ const styles = makeStyles((theme) => ({
     width: 25,
     borderRadius: 50,
     color: '#808080',
+  },
+  paginationContainer: {
+    position: 'relative',
+    marginTop: 30,
   },
 }));
 

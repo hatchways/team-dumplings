@@ -26,6 +26,10 @@ const styles = makeStyles((theme) => ({
   liked: {
     color: theme.palette.primary.main,
   },
+  dialogStyle: {
+    minHeight: '50vh',
+    overflow: 'hidden',
+  },
 }));
 
 export default styles;
