@@ -16,7 +16,7 @@ const styles = makeStyles((theme) => ({
     borderRadius: 50,
     marginBottom: 25,
   },
-  addIcon: {
+  addIconStyle: {
     height: 25,
     width: 25,
     borderRadius: 50,
@@ -39,6 +39,12 @@ const styles = makeStyles((theme) => ({
   },
   iconButtonStyle: {
     marginBottom: 1,
+  },
+  disabledStyle: {
+    height: 25,
+    width: 25,
+    borderRadius: 50,
+    color: '#808080',
   },
 }));
 
