@@ -9,6 +9,7 @@ import { useSnackBar } from '../../../context/useSnackbarContext';
 import { Blog } from '../../../interface/Blogs';
 import { useAuth } from '../../../context/useAuthContext';
 import ListComments from '../Comments/ListComments';
+import CustomDialog from '../../../components/CustomDialog/CustomDialog';
 
 const FetchBlog = (): JSX.Element => {
   const { root, img, title, body, liked, dialogStyle } = useStyles();
@@ -70,9 +71,9 @@ const FetchBlog = (): JSX.Element => {
             <CommentIcon />
           </IconButton>
         </Box>
-        <Dialog open={open} onClose={handleClose} className={dialogStyle} style={{ overflow: 'hidden' }}>
+        <CustomDialog open={open} onClose={handleClose} style="comment">
           <ListComments />
-        </Dialog>
+        </CustomDialog>
       </Box>
     </>
   );

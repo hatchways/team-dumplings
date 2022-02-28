@@ -9,7 +9,6 @@ const ObjectId = require("mongoose").Types.ObjectId;
 // @access Private
 exports.postComment = asyncHandler(async (req, res, next) => {
     const newComment = { title, text } = req.body;
-    console.log(title, text)
     const { blogId } = req.body;
     const commentOwner = req.user.id;
 
