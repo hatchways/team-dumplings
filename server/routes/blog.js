@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const protect = require("../middleware/auth");
+const { validatePostLike } = require('../validators/blog');
 
 const {
     createBlog,
@@ -15,6 +16,6 @@ router.route("/:id").get(protect, getBlog);
 
 router.route("/").get(protect, listBlogs);
 
-router.route("/like/").post(protect, postLike);
+router.route("/like/").post(protect, validatePostLike, postLike);
 
 module.exports = router;
