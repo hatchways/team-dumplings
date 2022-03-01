@@ -1,6 +1,6 @@
 import useStyles from './useStyles';
 import AddBlogForm from './AddBlogForm/AddBlogForm';
-import { Grid, Typography, Paper } from '@material-ui/core';
+import { Grid, Typography, Paper, Box } from '@material-ui/core';
 
 import { useSnackBar } from '../../../context/useSnackbarContext';
 import { createBlog } from '../../../helpers/APICalls/blogs';
@@ -28,14 +28,16 @@ function AddBlog({ useEffectTrigger }: Props): JSX.Element {
   };
   return (
     <>
-      <Grid container direction="column" alignItems="center" component={Paper} spacing={2} className={classes.root}>
-        <Grid item>
-          <Typography variant="h2" className={classes.title}>
-            Add Blog
-          </Typography>
-          <AddBlogForm handleSubmit={handleSubmit} />
+      <Box>
+        <Grid container direction="column" alignItems="center" component={Paper} spacing={2} className={classes.root}>
+          <Grid item>
+            <Typography variant="h2" className={classes.title}>
+              Add Blog
+            </Typography>
+            <AddBlogForm handleSubmit={handleSubmit} />
+          </Grid>
         </Grid>
-      </Grid>
+      </Box>
     </>
   );
 }

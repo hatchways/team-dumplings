@@ -42,7 +42,7 @@ function AddBlogForm({ handleSubmit }: Props): JSX.Element {
       >
         {({ handleSubmit, handleChange, values, errors, setFieldValue }) => (
           <Form onSubmit={handleSubmit} className={classes.form} noValidate>
-            <Grid container direction="column" spacing={2}>
+            <Grid container direction="column" alignItems="center" spacing={2}>
               <Grid item container justifyContent="space-evenly">
                 <label htmlFor="icon-button-file">
                   <InputLabel className={classes.label}>upload image</InputLabel>
@@ -112,7 +112,7 @@ function AddBlogForm({ handleSubmit }: Props): JSX.Element {
                   />
                 </Grid>
               </Grid>
-              <Grid item container justifyContent="center">
+              <Grid item>
                 <Button type="submit" className={classes.submit}>
                   Publish
                 </Button>

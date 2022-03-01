@@ -78,8 +78,8 @@ const ListBlogs = (): JSX.Element => {
         <CustomDialog open={open} onClose={onClose}>
           <AddBlog useEffectTrigger={useEffectTrigger} />
         </CustomDialog>
-        <AppPagination count={numberOfPages} handlePageChange={handlePageChange} />
       </Grid>
+      <AppPagination count={numberOfPages} handlePageChange={handlePageChange} />
     </>
   );
 };
