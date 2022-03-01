@@ -1,6 +1,15 @@
 import axios from 'axios';
 import { BlogsApiData, FetchBlogApiData } from '../../interface/Blogs';
 
+export const createBlog = async (data: FormData): Promise<FetchBlogApiData> => {
+  return await axios
+    .post(`/blogs/`, data)
+    .then((res) => res.data)
+    .catch(() => ({
+      error: { message: 'Unable to connect to server. Please try again' },
+    }));
+};
+
 export const listBlogs = async (page: number): Promise<BlogsApiData> => {
   return await axios
     .get('/blogs/', { params: { page } })
